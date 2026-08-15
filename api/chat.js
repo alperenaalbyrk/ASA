@@ -9,91 +9,128 @@ const MEMORY_KEY = "asa:memory";
 const REDIS_URL = process.env.KV_REST_API_URL;
 const REDIS_TOKEN = process.env.KV_REST_API_TOKEN;
 
-
-// =====================================================
-// REDIS KOMUTU
-// =====================================================
+// --------------------------------------------------
+// REDIS
+// --------------------------------------------------
 
 async function redisCommand(command) {
   if (!REDIS_URL || !REDIS_TOKEN) {
-    throw new Error("Redis bağlantısı bulunamadı.");
+    throw new Error("Redis bağlantı bilgileri bulunamadı.");
   }
 
   const response = await fetch(REDIS_URL, {
     method: "POST",
-
     headers: {
       Authorization: `Bearer ${REDIS_TOKEN}`,
       "Content-Type": "application/json",
     },
-
     body: JSON.stringify(command),
   });
 
   if (!response.ok) {
-    throw new Error(
-      `Redis hatası: ${response.status}`
-    );
+    const text = await response.text();
+    throw new Error(`Redis hatası: ${text}`);
   }
 
   return response.json();
 }
 
-
-// =====================================================
-// HAFIZA OKU
-// =====================================================
+// --------------------------------------------------
+// HAFIZAYI OKU
+// --------------------------------------------------
 
 async function getMemory() {
   try {
-    const data = await redisCommand([
+    const result = await redisCommand([
       "GET",
       MEMORY_KEY,
     ]);
 
-    if (!data.result) {
-      return {};
+    if (!result.result) {
+      return [];
     }
 
-    return JSON.parse(data.result);
-
+    try {
+      return JSON.parse(result.result);
+    } catch {
+      return [];
+    }
   } catch (error) {
-    console.error(
-      "HAFIZA OKUMA HATASI:",
-      error
-    );
-
-    return {};
+    console.error("HAFIZA OKUMA HATASI:", error);
+    return [];
   }
 }
 
+// --------------------------------------------------
+// HAFIZAYI KAYDET
+// --------------------------------------------------
 
-// =====================================================
-// HAFIZA KAYDET
-// =====================================================
-
-async function saveMemory(memory) {
+async function saveMemory(messages) {
   try {
+    // Son 60 mesajı sakla.
+    // Böylece hafıza gereksiz şekilde büyümez.
+    const limitedMessages = messages.slice(-60);
+
     await redisCommand([
       "SET",
       MEMORY_KEY,
-      JSON.stringify(memory),
+      JSON.stringify(limitedMessages),
     ]);
   } catch (error) {
-    console.error(
-      "HAFIZA KAYDETME HATASI:",
-      error
-    );
+    console.error("HAFIZA KAYDETME HATASI:", error);
   }
 }
 
+// --------------------------------------------------
+// MESAJLARI TEMİZLE
+// --------------------------------------------------
 
-// =====================================================
+function cleanMessages(messages) {
+  if (!Array.isArray(messages)) {
+    return [];
+  }
+
+  return messages
+    .filter((message) => {
+      return (
+        message &&
+        typeof message === "object" &&
+        (message.role === "user" || message.role === "assistant") &&
+        typeof message.content === "string" &&
+        message.content.trim().length > 0
+      );
+    })
+    .map((message) => ({
+      role: message.role,
+      content: message.content.trim(),
+    }));
+}
+
+// --------------------------------------------------
+// TEKRAR EDEN MESAJLARI ENGELLE
+// --------------------------------------------------
+
+function mergeMessages(oldMessages, newMessages) {
+  const combined = [];
+  const seen = new Set();
+
+  for (const message of [...oldMessages, ...newMessages]) {
+    const key = `${message.role}:${message.content}`;
+
+    if (!seen.has(key)) {
+      seen.add(key);
+      combined.push(message);
+    }
+  }
+
+  return combined;
+}
+
+// --------------------------------------------------
 // API
-// =====================================================
+// --------------------------------------------------
 
 export default async function handler(req, res) {
-
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Sadece POST isteği kabul edilir.",
@@ -101,234 +138,108 @@ export default async function handler(req, res) {
   }
 
   try {
+    const incomingMessages = cleanMessages(req.body?.messages);
 
-    const { messages } =
-      req.body || {};
-
-    if (
-      !Array.isArray(messages) ||
-      messages.length === 0
-    ) {
+    if (incomingMessages.length === 0) {
       return res.status(400).json({
-        error:
-          "Mesaj geçmişi gönderilmedi.",
+        error: "Mesaj gönderilmedi.",
       });
     }
 
+    // Redis'teki eski hafızayı getir
+    const oldMemory = await getMemory();
 
-    // =================================================
-    // HAFIZA
-    // =================================================
+    // Yeni mesajlarla birleştir
+    const allMessages = mergeMessages(
+      oldMemory,
+      incomingMessages
+    );
 
-    const memory =
-      await getMemory();
+    // Çok büyümesini engelle
+    const conversation = allMessages.slice(-60);
 
+    // --------------------------------------------------
+    // ASA TALİMATLARI
+    // --------------------------------------------------
 
-    // =================================================
-    // SON 12 MESAJ
-    // =================================================
-
-    const recentMessages =
-      messages.slice(-12);
-
-
-    // =================================================
-    // ASA + HAFIZA
-    // =================================================
-
-    const response =
-      await openai.responses.create({
-
-        model: "gpt-5",
-
-        instructions: `
+    const instructions = `
 Sen ASA'sın.
 
 Kullanıcının adı Alperen.
 
 Türkçe konuş.
-
 Samimi, doğal, sıcak ve yardımcı ol.
-
-Kısa ve net cevaplar ver.
+Gereksiz uzun cevaplar verme.
+Kullanıcıya gerektiğinde "Alperen" diye hitap et.
 
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 
-KALICI HAFIZA:
+ÖNEMLİ HAFIZA KURALI:
 
-${JSON.stringify(
-  memory,
-  null,
-  2
-)}
+Sana verilen konuşma geçmişini dikkatlice kullan.
 
-HAFIZA KURALLARI:
+Kullanıcı daha önce kendisiyle ilgili bir bilgi söylediyse
+ve bu bilgi konuşma geçmişinde bulunuyorsa,
+o bilgiyi hatırla ve sonraki konuşmalarda kullan.
 
-- Hafızadaki bilgiler doğrudur.
-- Eski sohbet mesajları hafızanın önüne geçemez.
-- Kullanıcı yeni bir bilgi verirse yeni bilgi önceliklidir.
-- Kullanıcı mevcut bir bilgisini değiştirirse eski bilgiyi
-  yeni bilgiyle güncelle.
-- Hafızada olmayan bilgileri uydurma.
-- Kullanıcı "benim hakkımda ne biliyorsun?" derse
-  hafızadaki bilgileri kullan.
-- Gereksiz uzun cevap verme.
+Örneğin kullanıcı:
+- en sevdiği rengin siyah olduğunu,
+- en sevdiği oyunun God of War olduğunu,
+- kız arkadaşının adının Sıla olduğunu,
+- en sevdiği yemeğin İskender olduğunu
+söylediyse, bunları sonraki konuşmalarda hatırlamalısın.
 
-ÖNEMLİ:
+Bir bilgiyi bilmiyorsan uydurma.
 
-Kullanıcı açıkça kalıcı bir kişisel bilgi verirse,
-cevabının sonunda aşağıdaki özel formatta bir hafıza
-güncellemesi üret.
+Kullanıcı daha önce söylediği bir şeyi tekrar sorarsa,
+konuşma geçmişinden bul ve doğru cevabı ver.
 
-Normal cevap:
+Kendini ASA olarak tanıt.
+`;
 
-{
-  "answer": "normal ASA cevabı",
-  "memory_update": {
-    "key": "deger"
-  }
-}
+    // --------------------------------------------------
+    // OPENAI
+    // --------------------------------------------------
 
-Eğer hafızaya kaydedilecek bilgi yoksa:
-
-{
-  "answer": "normal ASA cevabı",
-  "memory_update": {}
-}
-
-Örnek:
-
-Kullanıcı:
-"En sevdiğim yemek kebap."
-
-Çıktı:
-
-{
-  "answer": "Tamam Alperen, kebabı sevdiğini hatırlayacağım.",
-  "memory_update": {
-    "favoriteFood": "kebap"
-  }
-}
-
-Başka açıklama yazma.
-`,
-
-        input: recentMessages,
-
-        text: {
-          format: {
-            type: "json_schema",
-
-            name: "asa_response",
-
-            strict: true,
-
-            schema: {
-              type: "object",
-
-              properties: {
-
-                answer: {
-                  type: "string",
-                },
-
-                memory_update: {
-                  type: "object",
-
-                  additionalProperties: {
-                    type: "string",
-                  },
-                },
-              },
-
-              required: [
-                "answer",
-                "memory_update",
-              ],
-
-              additionalProperties: false,
-            },
-          },
-        },
-      });
-
-
-    // =================================================
-    // CEVABI OKU
-    // =================================================
-
-    let result;
-
-    try {
-
-      result =
-        JSON.parse(
-          response.output_text
-        );
-
-    } catch {
-
-      return res.status(200).json({
-        answer:
-          response.output_text ||
-          "Şu anda cevap oluşturamadım.",
-      });
-
-    }
-
-
-    // =================================================
-    // HAFIZA GÜNCELLE
-    // =================================================
-
-    if (
-      result.memory_update &&
-      typeof result.memory_update ===
-        "object"
-    ) {
-
-      const updates =
-        result.memory_update;
-
-      const keys =
-        Object.keys(updates);
-
-      if (keys.length > 0) {
-
-        const updatedMemory = {
-          ...memory,
-          ...updates,
-        };
-
-        await saveMemory(
-          updatedMemory
-        );
-      }
-    }
-
-
-    // =================================================
-    // CEVAP
-    // =================================================
-
-    return res.status(200).json({
-      answer:
-        result.answer ||
-        "Şu anda cevap oluşturamadım.",
+    const response = await openai.responses.create({
+      model: "gpt-5.6",
+      instructions,
+      input: conversation,
     });
 
+    const answer =
+      response.output_text?.trim() ||
+      "Şu anda cevap oluşturamadım.";
+
+    // --------------------------------------------------
+    // HAFIZAYA KAYDET
+    // --------------------------------------------------
+
+    const updatedMemory = [
+      ...conversation,
+      {
+        role: "assistant",
+        content: answer,
+      },
+    ];
+
+    await saveMemory(updatedMemory);
+
+    // --------------------------------------------------
+    // CEVAP
+    // --------------------------------------------------
+
+    return res.status(200).json({
+      answer,
+    });
 
   } catch (error) {
-
-    console.error(
-      "ASA API HATASI:",
-      error
-    );
+    console.error("ASA API HATASI:", error);
 
     return res.status(500).json({
       error:
         error?.message ||
-        "ASA bağlantısında hata oluştu.",
+        "ASA bağlantısında bilinmeyen bir hata oluştu.",
     });
   }
 }
