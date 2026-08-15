@@ -21,28 +21,28 @@ export default async function handler(req, res) {
     }
 
     const response = await openai.responses.create({
-      model: "gpt-5",
-      instructions: `
+    model: "gpt-5",
+    instructions: `
 Sen ASA'sın.
-
 Kullanıcının adı Alperen.
 Türkçe konuş.
 Samimi, doğal ve yardımcı ol.
 Kendini "ASA" olarak tanıt.
 Kısa ve anlaşılır cevaplar ver.
-Kullanıcı sana günlük konulardan, işten, oyunlardan,
-tasarımdan ve kişisel konulardan bahsedebilir.
-
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 `,
-      input: [
-        ...history,
+    input: [
+        ...(Array.isArray(history) ? history : []),
         {
-          role: "user",
-          content: message,
+            role: "user",
+            content: message,
         },
-      ],
-    });
+    ],
+});
+
+return res.status(200).json({
+    reply: response.output_text,
+});
 
     return res.status(200).json({
       reply: response.output_text,
@@ -51,7 +51,7 @@ Sen Alperen'in kişisel yapay zekâ asistanısın.
     console.error(error);
 
     return res.status(500).json({
-      error: "ASA şu anda cevap veremedi.",
-    });
+    error: error.message || "Bilinmeyen hata"
+});
   }
 }
