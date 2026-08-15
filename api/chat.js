@@ -4,24 +4,21 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Upstash değişkenlerini farklı isimlendirmelere karşı destekle
+// Vercel + Upstash Redis bağlantısı
 const redisUrl =
-  process.env.STORAGE_URL ||
-  process.env.UPSTASH_REDIS_REST_URL ||
-  process.env.UPSTASH_REDIS_URL;
+  process.env.KV_REST_API_URL ||
+  process.env.KV_URL;
 
 const redisToken =
-  process.env.STORAGE_TOKEN ||
-  process.env.UPSTASH_REDIS_REST_TOKEN ||
-  process.env.UPSTASH_REDIS_TOKEN;
+  process.env.KV_REST_API_TOKEN;
 
-// ASA'nın hafıza anahtarı
+// ASA hafıza anahtarı
 const MEMORY_KEY = "asa:memory:alperen";
 
-// Redis GET
+// Redis'ten hafızayı oku
 async function getMemory() {
   if (!redisUrl || !redisToken) {
-    console.warn("Upstash environment variables bulunamadı.");
+    console.error("Redis değişkenleri bulunamadı.");
     return [];
   }
 
@@ -36,7 +33,10 @@ async function getMemory() {
   );
 
   if (!response.ok) {
-    throw new Error("ASA hafızası okunamadı.");
+    const errorText = await response.text();
+    throw new Error(
+      `Redis hafızası okunamadı: ${errorText}`
+    );
   }
 
   const data = await response.json();
@@ -52,27 +52,33 @@ async function getMemory() {
   }
 }
 
-// Redis SET
+// Redis'e hafızayı kaydet
 async function saveMemory(memory) {
   if (!redisUrl || !redisToken) {
-    console.warn("Upstash environment variables bulunamadı.");
-    return;
+    throw new Error(
+      "KV_REST_API_URL veya KV_REST_API_TOKEN bulunamadı."
+    );
   }
 
-  const response = await fetch(
-    `${redisUrl}/set/${encodeURIComponent(MEMORY_KEY)}/${encodeURIComponent(
-      JSON.stringify(memory)
-    )}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${redisToken}`,
-      },
-    }
-  );
+  const response = await fetch(redisUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${redisToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify([
+      "SET",
+      MEMORY_KEY,
+      JSON.stringify(memory),
+    ]),
+  });
 
   if (!response.ok) {
-    throw new Error("ASA hafızası kaydedilemedi.");
+    const errorText = await response.text();
+
+    throw new Error(
+      `Redis hafızası kaydedilemedi: ${errorText}`
+    );
   }
 }
 
@@ -86,7 +92,6 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
 
-    // Frontend ister "message" ister "messages" gönderebilsin
     const newMessage =
       typeof body.message === "string"
         ? body.message.trim()
@@ -96,7 +101,7 @@ export default async function handler(req, res) {
       ? body.messages
       : [];
 
-    // Eğer tek mesaj geldiyse hafızaya ekle
+    // Tek mesaj geldiyse konuşmaya ekle
     if (newMessage) {
       messages = [
         ...messages,
@@ -113,14 +118,14 @@ export default async function handler(req, res) {
       });
     }
 
-    // Redis'ten eski konuşmaları getir
+    // Kalıcı hafızayı Redis'ten getir
     let memory = await getMemory();
 
     if (!Array.isArray(memory)) {
       memory = [];
     }
 
-    // Sadece geçerli mesajları al
+    // Geçerli mesajları temizle
     const cleanMessages = messages
       .filter(
         (message) =>
@@ -135,27 +140,23 @@ export default async function handler(req, res) {
         content: message.content,
       }));
 
-    // Son kullanıcı mesajını bul
-    const latestUserMessage =
-      [...cleanMessages]
-        .reverse()
-        .find((message) => message.role === "user");
-
-    if (!latestUserMessage) {
+    if (!cleanMessages.length) {
       return res.status(400).json({
-        error: "Kullanıcı mesajı bulunamadı.",
+        error: "Geçerli mesaj bulunamadı.",
       });
     }
 
-    // Önceki hafıza + mevcut konuşma
+    // Redis hafızası + mevcut konuşma
     const conversation = [
       ...memory,
       ...cleanMessages,
     ];
 
-    // Çok büyümesini engelle
-    const limitedConversation = conversation.slice(-30);
+    // Son 30 mesajı tut
+    const limitedConversation =
+      conversation.slice(-30);
 
+    // OpenAI
     const response = await openai.responses.create({
       model: "gpt-5.6",
 
@@ -168,22 +169,20 @@ Türkçe konuş.
 
 Samimi, doğal, sıcak ve yardımcı ol.
 
-Kendini gerektiğinde "ASA" olarak tanıt.
-
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 
-Alperen'le konuşurken önceki konuşmaların bağlamını dikkate al.
+Önceki konuşmalardan gelen bilgileri dikkate al.
 
-Alperen aynı bilgiyi daha önce söylediyse bunu hatırlıyormuş gibi davran.
+Alperen daha önce bir bilgi verdiyse ve bu bilgi konuşma hafızasında varsa,
+bunu hatırla ve gerektiğinde kullan.
 
 Cevaplarını gereksiz yere uzatma.
-Sorunun gerektirdiği kadar cevap ver.
 
-Alperen teknik bir işlem yapıyorsa adım adım ve net şekilde yönlendir.
+Teknik işlemlerde Alperen'e adım adım ve net şekilde yardımcı ol.
 
-Kod verirken çalışabilir, eksiksiz kod ver.
+Kod verirken eksiksiz ve çalışabilir kod ver.
 
-Bilmediğin bir şeyi uydurma.
+Bilmediğin bilgileri uydurma.
 `,
 
       input: limitedConversation,
@@ -193,7 +192,7 @@ Bilmediğin bir şeyi uydurma.
       response.output_text?.trim() ||
       "Şu anda cevap oluşturamadım.";
 
-    // Hafızaya yeni konuşmayı ekle
+    // Yeni konuşmayı kalıcı hafızaya ekle
     const updatedMemory = [
       ...limitedConversation,
       {
@@ -202,7 +201,7 @@ Bilmediğin bir şeyi uydurma.
       },
     ].slice(-30);
 
-    // Hafızayı kaydet
+    // Redis'e kaydet
     await saveMemory(updatedMemory);
 
     return res.status(200).json({
