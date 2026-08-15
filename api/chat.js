@@ -6,72 +6,94 @@ const openai = new OpenAI({
 
 const MEMORY_KEY = "asa:memory";
 
+const REDIS_URL = process.env.KV_REST_API_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN;
+
+
 // =====================================================
-// REDIS'TEN HAFIZAYI OKU
+// REDIS KOMUTU
+// =====================================================
+
+async function redisCommand(command) {
+  if (!REDIS_URL || !REDIS_TOKEN) {
+    throw new Error("Redis bağlantısı bulunamadı.");
+  }
+
+  const response = await fetch(REDIS_URL, {
+    method: "POST",
+
+    headers: {
+      Authorization: `Bearer ${REDIS_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify(command),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Redis hatası: ${response.status}`
+    );
+  }
+
+  return response.json();
+}
+
+
+// =====================================================
+// HAFIZA OKU
 // =====================================================
 
 async function getMemory() {
   try {
-    const response = await fetch(
-      `${process.env.KV_REST_API_URL}/get/${encodeURIComponent(MEMORY_KEY)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      console.error("Redis okuma hatası:", response.status);
-      return {};
-    }
-
-    const data = await response.json();
+    const data = await redisCommand([
+      "GET",
+      MEMORY_KEY,
+    ]);
 
     if (!data.result) {
       return {};
     }
 
     return JSON.parse(data.result);
+
   } catch (error) {
-    console.error("HAFIZA OKUMA HATASI:", error);
+    console.error(
+      "HAFIZA OKUMA HATASI:",
+      error
+    );
+
     return {};
   }
 }
 
+
 // =====================================================
-// REDIS'E HAFIZAYI KAYDET
+// HAFIZA KAYDET
 // =====================================================
 
 async function saveMemory(memory) {
   try {
-    const response = await fetch(
-      `${process.env.KV_REST_API_URL}/set/${encodeURIComponent(MEMORY_KEY)}`,
-      {
-        method: "POST",
-
-        headers: {
-          Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(memory),
-      }
-    );
-
-    if (!response.ok) {
-      console.error("Redis kaydetme hatası:", response.status);
-    }
+    await redisCommand([
+      "SET",
+      MEMORY_KEY,
+      JSON.stringify(memory),
+    ]);
   } catch (error) {
-    console.error("HAFIZA KAYDETME HATASI:", error);
+    console.error(
+      "HAFIZA KAYDETME HATASI:",
+      error
+    );
   }
 }
 
+
 // =====================================================
-// ANA API
+// API
 // =====================================================
 
 export default async function handler(req, res) {
+
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Sadece POST isteği kabul edilir.",
@@ -79,329 +101,234 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { messages } = req.body || {};
 
-    if (!Array.isArray(messages) || messages.length === 0) {
+    const { messages } =
+      req.body || {};
+
+    if (
+      !Array.isArray(messages) ||
+      messages.length === 0
+    ) {
       return res.status(400).json({
-        error: "Mesaj geçmişi gönderilmedi.",
+        error:
+          "Mesaj geçmişi gönderilmedi.",
       });
     }
 
-    // =================================================
-    // MEVCUT KALICI HAFIZAYI AL
-    // =================================================
-
-    const currentMemory = await getMemory();
-
-    // Son kullanıcı mesajını bul
-    const lastUserMessage = [...messages]
-      .reverse()
-      .find((message) => message.role === "user");
-
-    const userText = lastUserMessage?.content || "";
 
     // =================================================
-    // HAFIZA YÖNETİCİSİ
+    // HAFIZA
     // =================================================
 
-    const memoryResponse = await openai.responses.create({
-      model: "gpt-5",
+    const memory =
+      await getMemory();
 
-      instructions: `
-Sen ASA'nın hafıza yöneticisisin.
-
-Görevin, kullanıcının SON MESAJINDA açıkça verdiği
-kalıcı kişisel bilgileri tespit etmek ve mevcut hafızayı
-güncellemektir.
-
-TAKİP EDİLEN BİLGİLER:
-
-- fullName
-- favoriteColor
-- favoriteGame
-- girlfriendName
-- favoriteFood
-- assistantNameMeaning
-
-MEVCUT KALICI HAFIZA:
-
-${JSON.stringify(currentMemory, null, 2)}
-
-SON KULLANICI MESAJI:
-
-${userText}
-
-KURALLAR:
-
-1. Kullanıcı son mesajında yeni bir kişisel bilgi verirse
-   mevcut bilgiyi yeni bilgiyle değiştir.
-
-2. Kullanıcı mevcut bilgisini değiştirirse eski bilgiyi
-   kesinlikle koruma.
-
-   Örnek:
-   Mevcut:
-   favoriteFood = "İskender"
-
-   Kullanıcı:
-   "Artık en sevdiğim yemek kebap."
-
-   Sonuç:
-   favoriteFood = "kebap"
-
-3. Kullanıcı son mesajında belirli bir bilgi hakkında
-   hiçbir şey söylemiyorsa mevcut değeri değiştirme.
-
-4. Eski sohbet mesajlarına bakarak yeni bilgi üretme.
-
-5. Tahmin yapma.
-
-6. Kullanıcının açıkça söylemediği hiçbir bilgiyi kaydetme.
-
-7. Bir bilgi mevcut hafızada varsa ve kullanıcı o bilgiyi
-   son mesajında değiştirmediyse aynen koru.
-
-8. Kullanıcı bir bilgiyi açıkça unutmanı/silmeni isterse
-   o alanı null yap.
-
-9. Çıktıda bütün alanları mutlaka gönder.
-
-10. Son kullanıcı mesajı hafıza ile çelişiyorsa,
-    kullanıcının SON MESAJI önceliklidir.
-
-Ama eski sohbet geçmişindeki mesajlar hafızayı değiştiremez.
-Sadece SON KULLANICI MESAJI yeni bilgi kaynağıdır.
-`,
-
-      input: "Mevcut hafızayı son kullanıcı mesajına göre güncelle.",
-
-      text: {
-        format: {
-          type: "json_schema",
-
-          name: "asa_memory",
-
-          strict: true,
-
-          schema: {
-            type: "object",
-
-            properties: {
-              fullName: {
-                anyOf: [
-                  {
-                    type: "string"
-                  },
-                  {
-                    type: "null"
-                  }
-                ]
-              },
-
-              favoriteColor: {
-                anyOf: [
-                  {
-                    type: "string"
-                  },
-                  {
-                    type: "null"
-                  }
-                ]
-              },
-
-              favoriteGame: {
-                anyOf: [
-                  {
-                    type: "string"
-                  },
-                  {
-                    type: "null"
-                  }
-                ]
-              },
-
-              girlfriendName: {
-                anyOf: [
-                  {
-                    type: "string"
-                  },
-                  {
-                    type: "null"
-                  }
-                ]
-              },
-
-              favoriteFood: {
-                anyOf: [
-                  {
-                    type: "string"
-                  },
-                  {
-                    type: "null"
-                  }
-                ]
-              },
-
-              assistantNameMeaning: {
-                anyOf: [
-                  {
-                    type: "string"
-                  },
-                  {
-                    type: "null"
-                  }
-                ]
-              }
-            },
-
-            required: [
-              "fullName",
-              "favoriteColor",
-              "favoriteGame",
-              "girlfriendName",
-              "favoriteFood",
-              "assistantNameMeaning"
-            ],
-
-            additionalProperties: false
-          }
-        }
-      }
-    });
 
     // =================================================
-    // YENİ HAFIZAYI OLUŞTUR
+    // SON 12 MESAJ
     // =================================================
 
-    let updatedMemory = {
-      ...currentMemory
-    };
+    const recentMessages =
+      messages.slice(-12);
 
-    try {
-      const memoryUpdate = JSON.parse(
-        memoryResponse.output_text
-      );
-
-      for (const key of Object.keys(memoryUpdate)) {
-        const value = memoryUpdate[key];
-
-        if (value === null) {
-          delete updatedMemory[key];
-        } else {
-          updatedMemory[key] = value;
-        }
-      }
-
-      await saveMemory(updatedMemory);
-
-    } catch (error) {
-      console.error(
-        "HAFIZA JSON OKUMA HATASI:",
-        error
-      );
-    }
 
     // =================================================
-    // NORMAL ASA CEVABI
+    // ASA + HAFIZA
     // =================================================
 
-    const response = await openai.responses.create({
-      model: "gpt-5",
+    const response =
+      await openai.responses.create({
 
-      instructions: `
+        model: "gpt-5",
+
+        instructions: `
 Sen ASA'sın.
 
 Kullanıcının adı Alperen.
 
 Türkçe konuş.
 
-Samimi, doğal ve yardımcı ol.
+Samimi, doğal, sıcak ve yardımcı ol.
 
-Kendini gerektiğinde "ASA" olarak tanıt.
-
-Kısa, net ve doğal cevaplar ver.
+Kısa ve net cevaplar ver.
 
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 
-==================================================
-KALICI HAFIZA
-==================================================
+KALICI HAFIZA:
 
-${JSON.stringify(updatedMemory, null, 2)}
+${JSON.stringify(
+  memory,
+  null,
+  2
+)}
 
-==================================================
-ÇOK ÖNEMLİ HAFIZA KURALLARI
-==================================================
+HAFIZA KURALLARI:
 
-1. KALICI HAFIZA, kullanıcı hakkındaki temel bilgiler
-   için ana kaynaktır.
+- Hafızadaki bilgiler doğrudur.
+- Eski sohbet mesajları hafızanın önüne geçemez.
+- Kullanıcı yeni bir bilgi verirse yeni bilgi önceliklidir.
+- Kullanıcı mevcut bir bilgisini değiştirirse eski bilgiyi
+  yeni bilgiyle güncelle.
+- Hafızada olmayan bilgileri uydurma.
+- Kullanıcı "benim hakkımda ne biliyorsun?" derse
+  hafızadaki bilgileri kullan.
+- Gereksiz uzun cevap verme.
 
-2. Sohbet geçmişindeki eski bilgiler KALICI HAFIZANIN
-   önüne geçemez.
+ÖNEMLİ:
 
-3. Örneğin hafızada:
+Kullanıcı açıkça kalıcı bir kişisel bilgi verirse,
+cevabının sonunda aşağıdaki özel formatta bir hafıza
+güncellemesi üret.
 
-   favoriteColor = "siyah"
+Normal cevap:
 
-   varsa ve eski sohbet geçmişinde "kırmızı" yazıyorsa,
-   kullanıcının favori rengi SIYAHTIR.
+{
+  "answer": "normal ASA cevabı",
+  "memory_update": {
+    "key": "deger"
+  }
+}
 
-4. Kullanıcı mevcut mesajında yeni bir bilgi verirse,
-   yeni bilgi önceliklidir.
+Eğer hafızaya kaydedilecek bilgi yoksa:
 
-5. Kullanıcı "en sevdiğim renk ne?" diye sorarsa,
-   önce KALICI HAFIZAYA bak.
+{
+  "answer": "normal ASA cevabı",
+  "memory_update": {}
+}
 
-6. Hafızada favoriteColor varsa doğrudan onu kullan.
+Örnek:
 
-7. Hafızada bilgi yoksa:
-   "Bunu henüz bilmiyorum." de.
+Kullanıcı:
+"En sevdiğim yemek kebap."
 
-8. Eski sohbet mesajlarından tahmin ederek eksik hafızayı
-   doldurma.
+Çıktı:
 
-9. Kullanıcı "benim hakkımda ne biliyorsun?" derse
-   yalnızca KALICI HAFIZADAKİ bilgileri kullan.
+{
+  "answer": "Tamam Alperen, kebabı sevdiğini hatırlayacağım.",
+  "memory_update": {
+    "favoriteFood": "kebap"
+  }
+}
 
-10. Kullanıcı daha önce söylediği bir bilgiyi değiştirdiyse
-    yalnızca yeni bilgiyi kullan.
-
-11. Kullanıcı yeni bilgi verdiğinde eski bilgiyi cevapta
-    tekrar etme.
-
-12. Bilmediğin şeyi biliyormuş gibi söyleme.
-
-==================================================
-ASA KİMLİĞİ
-==================================================
-
-Sen ASA'sın.
-
-ASA ismi:
-Alperen + Sıla + Albayrak
-
-Kullanıcı bunu daha önce kaydettiyse hafızadaki değeri kullan.
+Başka açıklama yazma.
 `,
 
-      input: messages,
-    });
+        input: recentMessages,
+
+        text: {
+          format: {
+            type: "json_schema",
+
+            name: "asa_response",
+
+            strict: true,
+
+            schema: {
+              type: "object",
+
+              properties: {
+
+                answer: {
+                  type: "string",
+                },
+
+                memory_update: {
+                  type: "object",
+
+                  additionalProperties: {
+                    type: "string",
+                  },
+                },
+              },
+
+              required: [
+                "answer",
+                "memory_update",
+              ],
+
+              additionalProperties: false,
+            },
+          },
+        },
+      });
+
+
+    // =================================================
+    // CEVABI OKU
+    // =================================================
+
+    let result;
+
+    try {
+
+      result =
+        JSON.parse(
+          response.output_text
+        );
+
+    } catch {
+
+      return res.status(200).json({
+        answer:
+          response.output_text ||
+          "Şu anda cevap oluşturamadım.",
+      });
+
+    }
+
+
+    // =================================================
+    // HAFIZA GÜNCELLE
+    // =================================================
+
+    if (
+      result.memory_update &&
+      typeof result.memory_update ===
+        "object"
+    ) {
+
+      const updates =
+        result.memory_update;
+
+      const keys =
+        Object.keys(updates);
+
+      if (keys.length > 0) {
+
+        const updatedMemory = {
+          ...memory,
+          ...updates,
+        };
+
+        await saveMemory(
+          updatedMemory
+        );
+      }
+    }
+
 
     // =================================================
     // CEVAP
     // =================================================
 
     return res.status(200).json({
-      answer: response.output_text,
-      memory: updatedMemory,
+      answer:
+        result.answer ||
+        "Şu anda cevap oluşturamadım.",
     });
 
+
   } catch (error) {
-    console.error("ASA API HATASI:", error);
+
+    console.error(
+      "ASA API HATASI:",
+      error
+    );
 
     return res.status(500).json({
       error:
         error?.message ||
-        "ASA bağlantısında bilinmeyen bir hata oluştu.",
+        "ASA bağlantısında hata oluştu.",
     });
   }
 }
