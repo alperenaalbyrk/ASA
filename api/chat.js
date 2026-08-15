@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, history = [] } = req.body;
+    const { message } = req.body || {};
 
     if (!message) {
       return res.status(400).json({
@@ -21,9 +21,10 @@ export default async function handler(req, res) {
     }
 
     const response = await openai.responses.create({
-    model: "gpt-5",
-    instructions: `
+      model: "gpt-5.5",
+      instructions: `
 Sen ASA'sın.
+
 Kullanıcının adı Alperen.
 Türkçe konuş.
 Samimi, doğal ve yardımcı ol.
@@ -31,25 +32,18 @@ Kendini "ASA" olarak tanıt.
 Kısa ve anlaşılır cevaplar ver.
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 `,
-    input: [
-        ...(Array.isArray(history) ? history : []),
-        {
-            role: "user",
-            content: message,
-        },
-    ],
-});
+      input: message,
+    });
 
-return res.status(200).json({
-    reply: response.output_text,
-});
+    return res.status(200).json({
+      answer: response.output_text,
+    });
 
-    
   } catch (error) {
-    console.error(error);
+    console.error("ASA API HATASI:", error);
 
     return res.status(500).json({
-    error: error.message || "Bilinmeyen hata"
-});
+      error: error.message || "Bilinmeyen hata",
+    });
   }
 }
