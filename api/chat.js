@@ -4,15 +4,16 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Redis / Upstash ayarları
 const REDIS_URL = process.env.KV_REST_API_URL;
 const REDIS_TOKEN = process.env.KV_REST_API_TOKEN;
 
 const MEMORY_KEY = "asa:memory";
 
-/**
- * Redis'ten ASA'nın kalıcı hafızasını getirir.
- */
+
+// =====================================================
+// REDIS - HAFIZAYI OKU
+// =====================================================
+
 async function getMemory() {
   if (!REDIS_URL || !REDIS_TOKEN) {
     console.error("Redis environment variables eksik.");
@@ -50,9 +51,11 @@ async function getMemory() {
   }
 }
 
-/**
- * ASA'nın hafızasını Redis'e kaydeder.
- */
+
+// =====================================================
+// REDIS - HAFIZAYI KAYDET
+// =====================================================
+
 async function saveMemory(memory) {
   if (!REDIS_URL || !REDIS_TOKEN) {
     console.error("Redis environment variables eksik.");
@@ -63,9 +66,9 @@ async function saveMemory(memory) {
     const value = JSON.stringify(memory);
 
     const response = await fetch(
-      `${REDIS_URL}/set/${encodeURIComponent(MEMORY_KEY)}/${encodeURIComponent(
-        value
-      )}`,
+      `${REDIS_URL}/set/${encodeURIComponent(
+        MEMORY_KEY
+      )}/${encodeURIComponent(value)}`,
       {
         method: "POST",
         headers: {
@@ -77,16 +80,19 @@ async function saveMemory(memory) {
     if (!response.ok) {
       throw new Error(`Redis SET hatası: ${response.status}`);
     }
+
+    console.log("ASA hafızası kaydedildi.");
   } catch (error) {
     console.error("Hafıza kayıt hatası:", error);
   }
 }
 
-/**
- * Kullanıcının mesajından kalıcı olarak hatırlanması
- * gereken kişisel bilgileri çıkarır.
- */
-async function extractMemory(userMessage) {
+
+// =====================================================
+// YENİ BİLGİLERİ HAFIZADAN ÇIKAR
+// =====================================================
+
+async function analyzeMemory(userMessage, currentMemory) {
   try {
     const response = await openai.responses.create({
       model: "gpt-5.6",
@@ -96,46 +102,136 @@ Sen ASA'nın hafıza yöneticisisin.
 
 Kullanıcının adı Alperen.
 
-Görevin, kullanıcının mesajından gelecekte de
-işe yarayacak kalıcı kişisel bilgileri tespit etmektir.
+Görevin, kullanıcının mesajını analiz ederek
+kalıcı kişisel bilgileri tespit etmektir.
 
-SADECE gerçekten kalıcı ve kişisel bilgileri kaydet.
-
-Örnekler:
-- En sevdiğim renk mor.
-- En sevdiğim oyun God of War.
-- Ben reklam işi yapıyorum.
-- Çay dükkanım var.
-- Sıla benim kız arkadaşım.
-- En sevdiğim takım Galatasaray.
-- Bilgisayarımın ekran kartı RTX 4070.
-
-Bunlar kaydedilebilir.
-
-Şunları kaydetme:
-- Bugün hava çok sıcak.
-- Şu an acıktım.
-- Birazdan işe gideceğim.
-- Bugün moralim bozuk.
-- Merhaba.
-- Nasılsın?
-- Geçici günlük konuşmalar.
-
-ÖNEMLİ:
 Kullanıcı açıkça "hatırla" demese bile,
-mesaj kalıcı bir kişisel bilgi içeriyorsa kaydet.
+kalıcı ve önemli bir kişisel bilgi söylüyorsa kaydet.
 
-Çıktıyı SADECE geçerli JSON olarak ver.
+Hafıza kategorileri:
 
-Eğer kaydedilecek bilgi yoksa:
-{}
+profile:
+Kullanıcının temel kişisel bilgileri.
 
-Eğer bilgi varsa örnek:
+preferences:
+Sevdiği/sevmediği şeyler.
+
+relationships:
+Önemli kişiler ve ilişkiler.
+
+work:
+İş, meslek, çalışma hayatı.
+
+games:
+Oyunlar ve oyun tercihleri.
+
+other:
+Diğer önemli kalıcı bilgiler.
+
+ÖRNEK:
+
+Kullanıcı:
+"Benim en sevdiğim renk siyah."
+
+Çıktı:
+
 {
-  "favorite_color": "mor"
+  "action": "update",
+  "memory": {
+    "preferences": {
+      "favorite_color": "siyah"
+    }
+  }
 }
 
-Başka açıklama yazma.
+Kullanıcı:
+"En sevdiğim oyun God of War."
+
+Çıktı:
+
+{
+  "action": "update",
+  "memory": {
+    "games": {
+      "favorite_game": "God of War"
+    }
+  }
+}
+
+Kullanıcı:
+"Ben reklam işi yapıyorum."
+
+Çıktı:
+
+{
+  "action": "update",
+  "memory": {
+    "work": {
+      "occupation": "reklam işi"
+    }
+  }
+}
+
+Kullanıcı:
+"Sıla benim kız arkadaşım."
+
+Çıktı:
+
+{
+  "action": "update",
+  "memory": {
+    "relationships": {
+      "girlfriend": "Sıla"
+    }
+  }
+}
+
+Kullanıcı:
+"Artık en sevdiğim renk mavi."
+
+Bu durumda eski rengi güncelle:
+
+{
+  "action": "update",
+  "memory": {
+    "preferences": {
+      "favorite_color": "mavi"
+    }
+  }
+}
+
+Kullanıcı:
+"En sevdiğim rengi unut."
+
+Bu durumda:
+
+{
+  "action": "delete",
+  "path": "preferences.favorite_color"
+}
+
+Geçici konuşmaları kaydetme.
+
+Örneğin:
+
+"Bugün yoruldum."
+"Şimdi işe gidiyorum."
+"Hava çok sıcak."
+"Birazdan yemek yiyeceğim."
+
+Bunlar hafızaya girmemeli.
+
+Eğer mesajda kalıcı bilgi yoksa:
+
+{
+  "action": "none"
+}
+
+SADECE geçerli JSON döndür.
+
+Mevcut hafıza:
+
+${JSON.stringify(currentMemory, null, 2)}
 `,
 
       input: userMessage,
@@ -144,20 +240,46 @@ Başka açıklama yazma.
     const text = response.output_text?.trim();
 
     if (!text) {
-      return {};
+      return { action: "none" };
     }
 
     try {
       return JSON.parse(text);
     } catch {
-      console.error("Hafıza JSON olarak okunamadı:", text);
-      return {};
+      console.error("Hafıza JSON hatası:", text);
+      return { action: "none" };
     }
   } catch (error) {
     console.error("Hafıza analiz hatası:", error);
-    return {};
+    return { action: "none" };
   }
 }
+
+
+// =====================================================
+// NOKTA NOTASYONUYLA SİLME
+// =====================================================
+
+function deletePath(object, path) {
+  const parts = path.split(".");
+
+  let current = object;
+
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!current[parts[i]]) {
+      return;
+    }
+
+    current = current[parts[i]];
+  }
+
+  delete current[parts[parts.length - 1]];
+}
+
+
+// =====================================================
+// ANA API
+// =====================================================
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -175,7 +297,18 @@ export default async function handler(req, res) {
       });
     }
 
-    // Son kullanıcı mesajını bul
+
+    // -------------------------------------------------
+    // MEVCUT HAFIZA
+    // -------------------------------------------------
+
+    const memory = await getMemory();
+
+
+    // -------------------------------------------------
+    // SON KULLANICI MESAJI
+    // -------------------------------------------------
+
     const lastUserMessage = [...messages]
       .reverse()
       .find((message) => message?.role === "user");
@@ -185,10 +318,11 @@ export default async function handler(req, res) {
         ? lastUserMessage.content
         : "";
 
-    // Mevcut kalıcı hafızayı getir
-    const memory = await getMemory();
 
-    // ASA'nın cevabını oluştur
+    // -------------------------------------------------
+    // ASA CEVABI
+    // -------------------------------------------------
+
     const response = await openai.responses.create({
       model: "gpt-5.6",
 
@@ -196,25 +330,46 @@ export default async function handler(req, res) {
 Sen ASA'sın.
 
 Kullanıcının adı Alperen.
+
 Türkçe konuş.
 Samimi, doğal ve yardımcı ol.
 Kendini ASA olarak tanıt.
-Kısa ve anlaşılır cevaplar ver.
+Gereksiz uzun cevaplar verme.
 
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 
-Sana gönderilen messages dizisi önceki konuşma geçmişidir.
-Önceki mesajları dikkate al ve konuşmanın bağlamını koru.
+Sana gönderilen messages dizisi konuşma geçmişidir.
+Konuşmanın bağlamını koru.
 
-Aşağıdaki bilgiler ASA'nın kalıcı hafızasıdır.
-Cevap verirken gerektiğinde bunları kullan:
+Ayrıca aşağıdaki bilgiler ASA'nın kalıcı hafızasıdır:
 
 ${JSON.stringify(memory, null, 2)}
 
-Hafızadaki bilgileri kullanıcı sormadan gereksiz yere
-listeleme.
+Hafızadaki bilgileri gerektiğinde doğal şekilde kullan.
 
-Bir bilgi hafızada varsa onu biliyormuş gibi doğal şekilde kullan.
+Örneğin hafızada:
+
+{
+  "preferences": {
+    "favorite_color": "siyah"
+  }
+}
+
+varsa kullanıcı:
+
+"En sevdiğim renk ne?"
+
+diye sorduğunda:
+
+"En sevdiğin renk siyah, Alperen. 🖤"
+
+şeklinde cevap ver.
+
+Kullanıcı "Benim hakkımda neler biliyorsun?"
+diye sorarsa hafızadaki önemli bilgileri
+kategorilere ayırarak özetleyebilirsin.
+
+Hafızada olmayan bir şeyi biliyormuş gibi uydurma.
 `,
 
       input: messages,
@@ -223,34 +378,111 @@ Bir bilgi hafızada varsa onu biliyormuş gibi doğal şekilde kullan.
     const answer =
       response.output_text || "Şu anda cevap oluşturamadım.";
 
-    // Yeni kişisel bilgi var mı kontrol et
-    if (userText) {
-      const newMemory = await extractMemory(userText);
 
-      if (
-        newMemory &&
-        typeof newMemory === "object" &&
-        Object.keys(newMemory).length > 0
-      ) {
+    // -------------------------------------------------
+    // HAFIZA ANALİZİ
+    // -------------------------------------------------
+
+    if (userText) {
+      const memoryResult = await analyzeMemory(
+        userText,
+        memory
+      );
+
+
+      // -------------------------------------------------
+      // YENİ BİLGİ
+      // -------------------------------------------------
+
+      if (memoryResult.action === "update") {
+        const newMemory = memoryResult.memory || {};
+
         const updatedMemory = {
           ...memory,
+
           ...newMemory,
+
+          profile: {
+            ...(memory.profile || {}),
+            ...(newMemory.profile || {}),
+          },
+
+          preferences: {
+            ...(memory.preferences || {}),
+            ...(newMemory.preferences || {}),
+          },
+
+          relationships: {
+            ...(memory.relationships || {}),
+            ...(newMemory.relationships || {}),
+          },
+
+          work: {
+            ...(memory.work || {}),
+            ...(newMemory.work || {}),
+          },
+
+          games: {
+            ...(memory.games || {}),
+            ...(newMemory.games || {}),
+          },
+
+          other: {
+            ...(memory.other || {}),
+            ...(newMemory.other || {}),
+          },
         };
 
         await saveMemory(updatedMemory);
 
-        console.log("ASA HAFIZASI GÜNCELLENDİ:", updatedMemory);
+        console.log(
+          "ASA HAFIZASI GÜNCELLENDİ:",
+          updatedMemory
+        );
+      }
+
+
+      // -------------------------------------------------
+      // BİLGİ SİLME
+      // -------------------------------------------------
+
+      if (memoryResult.action === "delete") {
+        const updatedMemory = {
+          ...memory,
+        };
+
+        if (memoryResult.path) {
+          deletePath(
+            updatedMemory,
+            memoryResult.path
+          );
+        }
+
+        await saveMemory(updatedMemory);
+
+        console.log(
+          "ASA HAFIZASINDAN SİLİNDİ:",
+          memoryResult.path
+        );
       }
     }
+
+
+    // -------------------------------------------------
+    // CEVABI GÖNDER
+    // -------------------------------------------------
 
     return res.status(200).json({
       answer,
     });
+
   } catch (error) {
     console.error("ASA API HATASI:", error);
 
     return res.status(500).json({
-      error: error.message || "Bilinmeyen hata",
+      error:
+        error.message ||
+        "Bilinmeyen hata",
     });
   }
 }
