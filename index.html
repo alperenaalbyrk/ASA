@@ -2,1536 +2,2956 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#070812">
-<title>ASA — Kişisel Yapay Zekâ</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>ASA — Kişisel Asistan</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
 
 :root {
-  --bg: #05060b;
-  --panel: rgba(15, 17, 29, 0.82);
-  --panel-strong: #10121e;
-  --border: rgba(255,255,255,0.08);
-  --text: #f7f7fb;
-  --muted: #8e93a6;
-  --purple: #9b4dff;
-  --purple-2: #d13cff;
-  --user: linear-gradient(135deg, #7541e8, #b33fd1);
-  --shadow: 0 20px 60px rgba(0,0,0,.45);
+    --bg: #05050b;
+    --panel: rgba(15, 15, 27, 0.92);
+    --panel2: rgba(20, 19, 35, 0.96);
+    --border: rgba(255,255,255,.09);
+
+    --purple: #a83cff;
+    --purple2: #d348ff;
+    --purple3: #792cff;
+
+    --text: #f7f7fb;
+    --muted: #9697a9;
+
+    --user1: #7438e8;
+    --user2: #c044d9;
+
+    --danger: #ff4d67;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-  width: 100%;
-  min-height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "SF Pro Text",
-    "Segoe UI",
-    sans-serif;
-}
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
 
-body {
-  overflow-x: hidden;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Segoe UI",
+        sans-serif;
 }
 
 button,
+input,
 textarea {
-  font: inherit;
+    font: inherit;
 }
 
 button {
-  border: 0;
-  cursor: pointer;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
 }
 
-.app {
-  min-height: 100vh;
-  min-height: 100dvh;
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 80% 10%, rgba(157, 57, 255, .13), transparent 28%),
-    radial-gradient(circle at 10% 90%, rgba(83, 46, 255, .08), transparent 30%),
-    #05060b;
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(155, 48, 255, .18),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(101, 42, 255, .10),
+            transparent 40%
+        );
+
+    pointer-events: none;
 }
 
-/* =========================
-   BACKGROUND
-========================= */
+/* --------------------------------------------------
+   APP
+-------------------------------------------------- */
 
-.glow {
-  position: fixed;
-  width: 420px;
-  height: 420px;
-  border-radius: 50%;
-  filter: blur(120px);
-  pointer-events: none;
-  opacity: .16;
-  z-index: 0;
+#app {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+    z-index: 1;
 }
 
-.glow.one {
-  top: -180px;
-  right: -120px;
-  background: #a238ff;
-}
-
-.glow.two {
-  bottom: -220px;
-  left: -140px;
-  background: #4f38ff;
-}
-
-/* =========================
+/* --------------------------------------------------
    HEADER
-========================= */
+-------------------------------------------------- */
 
 .header {
-  height: 76px;
-  position: relative;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 28px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(5,6,11,.72);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+    height: 82px;
+    min-height: 82px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 18px;
+
+    border-bottom: 1px solid var(--border);
+
+    background: rgba(5,5,11,.82);
+
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    position: relative;
+    z-index: 20;
+}
+
+.menu-btn,
+.header-btn {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 17px;
+
+    background: rgba(255,255,255,.035);
+
+    border: 1px solid var(--border);
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+
+    transition: .2s;
+}
+
+.menu-btn:active,
+.header-btn:active {
+    transform: scale(.94);
 }
 
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 13px;
+    display: flex;
+    align-items: center;
+
+    margin-left: 15px;
+
+    gap: 14px;
+
+    flex: 1;
 }
 
 .logo {
-  width: 45px;
-  height: 45px;
-  border-radius: 15px;
-  display: grid;
-  place-items: center;
-  font-size: 24px;
-  font-weight: 800;
-  color: white;
-  background: linear-gradient(145deg, #8d3cff, #e23cff);
-  box-shadow:
-    0 0 25px rgba(177, 54, 255, .32),
-    inset 0 1px 0 rgba(255,255,255,.3);
+    width: 54px;
+    height: 54px;
+
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 29px;
+    font-weight: 900;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a52cff,
+            #e14bff
+        );
+
+    box-shadow:
+        0 0 30px rgba(174,50,255,.35);
 }
 
 .brand-name {
-  font-size: 23px;
-  font-weight: 750;
-  letter-spacing: 2px;
+    font-size: 31px;
+    font-weight: 900;
+
+    letter-spacing: 5px;
 }
 
 .header-actions {
-  display: flex;
-  gap: 9px;
+    display: flex;
+    gap: 9px;
 }
 
-.icon-btn {
-  width: 43px;
-  height: 43px;
-  border-radius: 13px;
-  display: grid;
-  place-items: center;
-  color: #d9dbe8;
-  background: rgba(255,255,255,.035);
-  border: 1px solid var(--border);
-  transition: .2s ease;
+/* --------------------------------------------------
+   CHAT AREA
+-------------------------------------------------- */
+
+.chat-area {
+    flex: 1;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 20px 15px 150px;
+
+    scroll-behavior: smooth;
+
+    -webkit-overflow-scrolling: touch;
 }
 
-.icon-btn:hover {
-  background: rgba(155,77,255,.13);
-  border-color: rgba(155,77,255,.35);
-  transform: translateY(-1px);
+.chat-area::-webkit-scrollbar {
+    width: 4px;
 }
 
-.icon {
-  font-size: 20px;
+.chat-area::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.14);
+    border-radius: 10px;
 }
 
-/* =========================
-   MAIN
-========================= */
-
-.main {
-  position: relative;
-  z-index: 2;
-  width: min(100%, 1050px);
-  margin: 0 auto;
-  padding: 58px 24px 150px;
-}
-
-/* =========================
+/* --------------------------------------------------
    WELCOME
-========================= */
+-------------------------------------------------- */
 
 .welcome {
-  text-align: center;
-  padding: 35px 0 45px;
+    padding: 8px 0 22px;
 }
 
-.welcome-orb {
-  width: 90px;
-  height: 90px;
-  margin: 0 auto 25px;
-  border-radius: 29px;
-  display: grid;
-  place-items: center;
-  font-size: 42px;
-  font-weight: 800;
-  background:
-    linear-gradient(145deg, #8e42ff, #dc3dff);
-  box-shadow:
-    0 0 55px rgba(164, 62, 255, .3),
-    inset 0 2px 5px rgba(255,255,255,.25);
+.welcome-title {
+    font-size: 25px;
+    font-weight: 800;
+
+    margin-bottom: 6px;
 }
 
-.welcome h1 {
-  font-size: clamp(32px, 6vw, 52px);
-  line-height: 1.05;
-  letter-spacing: -1.8px;
-  margin-bottom: 13px;
+.welcome-subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.5;
 }
 
-.gradient-text {
-  background: linear-gradient(90deg, #fff, #c98aff, #ff74ed);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.welcome p {
-  color: var(--muted);
-  font-size: 16px;
-}
-
-/* =========================
+/* --------------------------------------------------
    QUICK ACTIONS
-========================= */
+-------------------------------------------------- */
 
-.quick-actions {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 35px;
+.quick-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
 }
 
-.quick {
-  min-height: 100px;
-  padding: 18px;
-  text-align: left;
-  color: white;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: rgba(15,17,29,.72);
-  backdrop-filter: blur(18px);
-  transition: .2s ease;
+.quick-card {
+    min-height: 145px;
+
+    padding: 20px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(23,22,40,.95),
+            rgba(10,10,19,.95)
+        );
+
+    border: 1px solid var(--border);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.03),
+        0 12px 40px rgba(0,0,0,.16);
+
+    text-align: left;
+
+    color: white;
+
+    transition:
+        transform .2s,
+        border-color .2s,
+        box-shadow .2s;
 }
 
-.quick:hover {
-  transform: translateY(-3px);
-  border-color: rgba(170,75,255,.35);
-  box-shadow: 0 12px 35px rgba(0,0,0,.25);
+.quick-card:active {
+    transform: scale(.97);
+}
+
+.quick-card:hover {
+    border-color: rgba(177,62,255,.35);
+
+    box-shadow:
+        0 0 30px rgba(144,44,255,.10);
 }
 
 .quick-icon {
-  font-size: 23px;
-  margin-bottom: 12px;
+    font-size: 31px;
+    margin-bottom: 17px;
 }
 
 .quick-title {
-  font-size: 14px;
-  font-weight: 650;
+    font-size: 19px;
+    font-weight: 800;
+
+    margin-bottom: 5px;
 }
 
-.quick-description {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 12px;
+.quick-desc {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.4;
 }
 
-/* =========================
-   CHAT
-========================= */
+/* --------------------------------------------------
+   MESSAGE
+-------------------------------------------------- */
 
-.chat {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.message-row {
+    width: 100%;
+
+    display: flex;
+
+    margin: 13px 0;
+}
+
+.message-row.user {
+    justify-content: flex-end;
+}
+
+.message-row.assistant {
+    justify-content: flex-start;
 }
 
 .message {
-  max-width: 78%;
-  padding: 17px 19px;
-  border-radius: 20px;
-  line-height: 1.6;
-  font-size: 15px;
-  white-space: pre-wrap;
-  animation: messageIn .25s ease;
-}
+    max-width: 88%;
 
-@keyframes messageIn {
-  from {
-    opacity: 0;
-    transform: translateY(7px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    padding: 16px 18px;
+
+    border-radius: 23px;
+
+    font-size: 16px;
+    line-height: 1.62;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    position: relative;
 }
 
 .message.user {
-  align-self: flex-end;
-  border-bottom-right-radius: 6px;
-  background: var(--user);
-  box-shadow: 0 12px 35px rgba(120,50,230,.18);
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--user1),
+            var(--user2)
+        );
+
+    border-bottom-right-radius: 7px;
+
+    box-shadow:
+        0 8px 28px rgba(132,47,255,.18);
 }
 
-.message.asa {
-  align-self: flex-start;
-  border-bottom-left-radius: 6px;
-  background: rgba(16,18,30,.88);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+.message.assistant {
+    color: #f5f5f9;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(19,19,32,.97),
+            rgba(12,12,23,.97)
+        );
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    border-bottom-left-radius: 7px;
+
+    box-shadow:
+        0 8px 28px rgba(0,0,0,.18);
 }
 
 .message-label {
-  display: block;
-  margin-bottom: 7px;
-  color: #b96cff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+    color: #b54aff;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 9px;
 }
 
-/* =========================
-   TYPING
-========================= */
-
-.typing {
-  display: none;
-  align-items: center;
-  gap: 5px;
-  width: fit-content;
-  padding: 15px 18px;
-  border-radius: 18px;
-  background: rgba(16,18,30,.9);
-  border: 1px solid var(--border);
+.message p {
+    margin-bottom: 10px;
 }
 
-.typing.show {
-  display: flex;
+.message p:last-child {
+    margin-bottom: 0;
 }
 
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #b66aff;
-  animation: bounce 1s infinite;
+.message ul {
+    margin: 8px 0 8px 20px;
 }
 
-.dot:nth-child(2) {
-  animation-delay: .15s;
+.message li {
+    margin: 5px 0;
 }
 
-.dot:nth-child(3) {
-  animation-delay: .3s;
+.message a {
+    color: #c46cff;
+    text-decoration: none;
 }
 
-@keyframes bounce {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: .4;
-  }
-  30% {
-    transform: translateY(-5px);
-    opacity: 1;
-  }
+.message a:hover {
+    text-decoration: underline;
 }
 
-/* =========================
-   COMPOSER
-========================= */
-
-.composer-wrap {
-  position: fixed;
-  z-index: 30;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 18px 22px calc(18px + env(safe-area-inset-bottom));
-  background:
-    linear-gradient(
-      to top,
-      rgba(5,6,11,.98),
-      rgba(5,6,11,.88),
-      transparent
-    );
+.message strong {
+    font-weight: 800;
 }
 
-.composer {
-  width: min(100%, 920px);
-  margin: 0 auto;
-  min-height: 67px;
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  padding: 9px;
-  border-radius: 23px;
-  border: 1px solid rgba(255,255,255,.1);
-  background: rgba(15,17,29,.94);
-  box-shadow:
-    0 20px 70px rgba(0,0,0,.55),
-    0 0 0 1px rgba(155,77,255,.04);
-  backdrop-filter: blur(25px);
+/* --------------------------------------------------
+   THINKING
+-------------------------------------------------- */
+
+.thinking {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+
+    margin: 10px 5px;
 }
 
-textarea {
-  flex: 1;
-  resize: none;
-  min-height: 47px;
-  max-height: 140px;
-  padding: 13px 12px;
-  border: 0;
-  outline: none;
-  color: white;
-  background: transparent;
-  line-height: 1.45;
+.thinking-dots {
+    display: flex;
+    gap: 4px;
 }
 
-textarea::placeholder {
-  color: #777c8d;
+.thinking-dots span {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--purple);
+
+    animation: pulse 1s infinite;
 }
 
-.send-btn,
-.mic-btn {
-  flex: 0 0 auto;
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  color: white;
-  font-size: 20px;
+.thinking-dots span:nth-child(2) {
+    animation-delay: .15s;
 }
 
-.mic-btn {
-  background: rgba(255,255,255,.06);
-  border: 1px solid var(--border);
+.thinking-dots span:nth-child(3) {
+    animation-delay: .3s;
+}
+
+@keyframes pulse {
+    0%,100% {
+        opacity: .25;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+}
+
+/* --------------------------------------------------
+   INPUT AREA
+-------------------------------------------------- */
+
+.input-area {
+    position: absolute;
+
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+
+    z-index: 30;
+}
+
+.input-shell {
+    display: flex;
+    align-items: center;
+
+    min-height: 72px;
+
+    padding: 8px;
+
+    border-radius: 25px;
+
+    background:
+        rgba(15,15,27,.94);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    box-shadow:
+        0 15px 60px rgba(0,0,0,.45),
+        0 0 40px rgba(131,38,255,.07);
+
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+.voice-btn,
+.send-btn {
+    width: 54px;
+    height: 54px;
+
+    flex: 0 0 54px;
+
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+
+    color: white;
+
+    transition: .2s;
+}
+
+.voice-btn {
+    background: rgba(255,255,255,.045);
+    border: 1px solid var(--border);
+}
+
+.voice-btn.listening {
+    background: rgba(255,65,90,.15);
+    border-color: rgba(255,65,90,.5);
 }
 
 .send-btn {
-  background: linear-gradient(135deg, #8c42ff, #d23cff);
-  box-shadow: 0 8px 25px rgba(167,55,255,.25);
+    background:
+        linear-gradient(
+            135deg,
+            #9131ff,
+            #c841ff
+        );
+
+    box-shadow:
+        0 0 25px rgba(174,53,255,.25);
 }
 
-/* =========================
-   SIDEBAR
-========================= */
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  display: none;
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(5px);
+.voice-btn:active,
+.send-btn:active {
+    transform: scale(.92);
 }
 
-.overlay.open {
-  display: block;
+#messageInput {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 54px;
+
+    resize: none;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: white;
+
+    padding: 14px 12px;
+
+    font-size: 16px;
+
+    line-height: 26px;
 }
 
-.sidebar {
-  position: fixed;
-  z-index: 90;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: min(340px, 88vw);
-  padding: 25px 18px;
-  transform: translateX(-105%);
-  transition: transform .28s ease;
-  background: #0b0d16;
-  border-right: 1px solid var(--border);
-  box-shadow: 25px 0 70px rgba(0,0,0,.45);
+#messageInput::placeholder {
+    color: #747587;
 }
 
-.sidebar.open {
-  transform: translateX(0);
+/* --------------------------------------------------
+   SIDE MENU
+-------------------------------------------------- */
+
+.menu-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.55);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: .25s;
+
+    z-index: 80;
 }
 
-.sidebar-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
+.menu-overlay.open {
+    opacity: 1;
+    visibility: visible;
 }
 
-.sidebar-title {
-  font-size: 21px;
-  font-weight: 750;
+.side-menu {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: min(330px, 86vw);
+
+    background:
+        linear-gradient(
+            180deg,
+            #11101c,
+            #080810
+        );
+
+    border-right: 1px solid var(--border);
+
+    transform: translateX(-105%);
+
+    transition: transform .28s ease;
+
+    z-index: 90;
+
+    padding: 25px 18px;
+
+    box-shadow:
+        20px 0 60px rgba(0,0,0,.35);
+}
+
+.side-menu.open {
+    transform: translateX(0);
+}
+
+.menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+}
+
+.menu-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.menu-logo {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 900;
+    font-size: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #9d32ff,
+            #df4dff
+        );
+}
+
+.menu-title {
+    font-weight: 900;
+    letter-spacing: 3px;
+}
+
+.close-menu {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.05);
+
+    color: white;
+
+    font-size: 22px;
+}
+
+.menu-section-title {
+    color: #77788b;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    margin:
+        20px 8px 9px;
 }
 
 .menu-item {
-  width: 100%;
-  min-height: 55px;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 0 15px;
-  margin-bottom: 7px;
-  color: #dfe1eb;
-  text-align: left;
-  border-radius: 15px;
-  background: transparent;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 15px 13px;
+
+    border-radius: 17px;
+
+    color: #eee;
+
+    background: transparent;
+
+    text-align: left;
+
+    margin-bottom: 5px;
 }
 
-.menu-item:hover {
-  background: rgba(155,77,255,.1);
+.menu-item:hover,
+.menu-item:active {
+    background: rgba(166,55,255,.10);
 }
 
-.menu-icon {
-  width: 25px;
-  text-align: center;
-  font-size: 19px;
+.menu-item-icon {
+    width: 34px;
+
+    font-size: 21px;
+
+    text-align: center;
 }
 
-.menu-label {
-  font-size: 14px;
+.menu-item-text {
+    font-size: 15px;
+    font-weight: 650;
 }
 
-.sidebar-divider {
-  height: 1px;
-  margin: 17px 4px;
-  background: var(--border);
+.menu-footer {
+    position: absolute;
+
+    left: 20px;
+    right: 20px;
+    bottom: 25px;
+
+    color: #5d5e70;
+
+    font-size: 12px;
+
+    text-align: center;
 }
 
-/* =========================
-   PANELS
-========================= */
+/* --------------------------------------------------
+   MODAL
+-------------------------------------------------- */
 
-.panel {
-  position: fixed;
-  z-index: 100;
-  top: 50%;
-  left: 50%;
-  width: min(92vw, 480px);
-  max-height: 80vh;
-  overflow: auto;
-  transform: translate(-50%, -46%) scale(.97);
-  opacity: 0;
-  pointer-events: none;
-  transition: .2s ease;
-  padding: 23px;
-  border-radius: 25px;
-  background: #0d0f19;
-  border: 1px solid var(--border);
-  box-shadow: 0 30px 100px rgba(0,0,0,.65);
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.62);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: .2s;
+
+    z-index: 100;
 }
 
-.panel.open {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-  pointer-events: auto;
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
 }
 
-.panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 25px;
+.modal {
+    width: 100%;
+    max-width: 430px;
+
+    max-height: 80vh;
+
+    overflow-y: auto;
+
+    padding: 23px;
+
+    border-radius: 27px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #171624,
+            #0b0b13
+        );
+
+    border: 1px solid var(--border);
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.55);
 }
 
-.panel-title {
-  font-size: 22px;
-  font-weight: 750;
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
 }
 
-.close-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  color: #ddd;
-  background: rgba(255,255,255,.06);
+.modal-title {
+    font-size: 20px;
+    font-weight: 850;
+}
+
+.modal-close {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.05);
+
+    color: white;
+
+    font-size: 20px;
+}
+
+.modal-text {
+    color: #b0b1c0;
+
+    line-height: 1.6;
+
+    font-size: 14px;
 }
 
 .setting {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid var(--border);
 }
 
 .setting:last-child {
-  border-bottom: 0;
+    border-bottom: 0;
 }
 
-.setting-title {
-  font-weight: 650;
-  margin-bottom: 5px;
+.setting-name {
+    font-size: 15px;
+    font-weight: 700;
 }
 
-.setting-description {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.5;
+.setting-desc {
+    color: #7f8090;
+
+    font-size: 12px;
+
+    margin-top: 4px;
 }
 
-.memory-card {
-  padding: 15px;
-  margin-top: 10px;
-  border-radius: 15px;
-  background: rgba(255,255,255,.035);
-  border: 1px solid var(--border);
+.danger-btn {
+    margin-top: 18px;
+
+    width: 100%;
+
+    padding: 14px;
+
+    border-radius: 15px;
+
+    background: rgba(255,70,90,.10);
+
+    border: 1px solid rgba(255,70,90,.25);
+
+    color: #ff7183;
+
+    font-weight: 700;
 }
 
-.memory-card strong {
-  color: #c27bff;
+/* --------------------------------------------------
+   CHAT LIST
+-------------------------------------------------- */
+
+.chat-list-item {
+    padding: 15px;
+
+    border-radius: 16px;
+
+    background: rgba(255,255,255,.035);
+
+    border: 1px solid var(--border);
+
+    margin-bottom: 9px;
+
+    cursor: pointer;
 }
 
-/* =========================
+.chat-list-title {
+    font-weight: 750;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-list-date {
+    color: #747587;
+
+    font-size: 11px;
+
+    margin-top: 5px;
+}
+
+/* --------------------------------------------------
    TOAST
-========================= */
+-------------------------------------------------- */
 
 .toast {
-  position: fixed;
-  z-index: 200;
-  left: 50%;
-  bottom: 105px;
-  transform: translate(-50%, 20px);
-  opacity: 0;
-  pointer-events: none;
-  padding: 11px 16px;
-  border-radius: 13px;
-  color: white;
-  background: #191b29;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  transition: .25s ease;
-  font-size: 13px;
+    position: fixed;
+
+    left: 50%;
+    bottom: 100px;
+
+    transform:
+        translate(-50%, 20px);
+
+    padding: 12px 17px;
+
+    border-radius: 15px;
+
+    background: rgba(20,20,31,.96);
+
+    border: 1px solid var(--border);
+
+    color: white;
+
+    font-size: 13px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: .25s;
+
+    z-index: 200;
+
+    white-space: nowrap;
 }
 
 .toast.show {
-  opacity: 1;
-  transform: translate(-50%, 0);
+    opacity: 1;
+    visibility: visible;
+
+    transform:
+        translate(-50%, 0);
 }
 
-/* =========================
+/* --------------------------------------------------
    MOBILE
-========================= */
+-------------------------------------------------- */
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
 
-  .header {
-    height: 68px;
-    padding: 0 16px;
-  }
+    .header {
+        height: 76px;
+        min-height: 76px;
 
-  .logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 13px;
-    font-size: 21px;
-  }
+        padding: 0 10px;
+    }
 
-  .brand-name {
-    font-size: 20px;
-  }
+    .menu-btn,
+    .header-btn {
+        width: 48px;
+        height: 48px;
 
-  .header-actions {
-    gap: 6px;
-  }
+        border-radius: 16px;
+    }
 
-  .icon-btn {
-    width: 39px;
-    height: 39px;
-  }
+    .brand {
+        margin-left: 10px;
+        gap: 10px;
+    }
 
-  .main {
-    padding: 28px 14px 145px;
-  }
+    .logo {
+        width: 48px;
+        height: 48px;
 
-  .welcome {
-    padding: 30px 0 28px;
-  }
+        border-radius: 16px;
+    }
 
-  .welcome-orb {
-    width: 70px;
-    height: 70px;
-    border-radius: 22px;
-    font-size: 32px;
-    margin-bottom: 19px;
-  }
+    .brand-name {
+        font-size: 27px;
+        letter-spacing: 4px;
+    }
 
-  .welcome h1 {
-    font-size: 34px;
-  }
+    .header-actions {
+        gap: 6px;
+    }
 
-  .welcome p {
-    font-size: 14px;
-    padding: 0 15px;
-  }
+    .quick-grid {
+        gap: 9px;
+    }
 
-  .quick-actions {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 9px;
-  }
+    .quick-card {
+        min-height: 125px;
 
-  .quick {
-    min-height: 90px;
-    padding: 14px;
-    border-radius: 17px;
-  }
+        padding: 16px;
 
-  .message {
-    max-width: 88%;
-    font-size: 14px;
-    padding: 14px 15px;
-  }
+        border-radius: 21px;
+    }
 
-  .composer-wrap {
-    padding: 12px 10px calc(11px + env(safe-area-inset-bottom));
-  }
+    .quick-icon {
+        font-size: 26px;
+        margin-bottom: 11px;
+    }
 
-  .composer {
-    min-height: 62px;
-    border-radius: 20px;
-  }
+    .quick-title {
+        font-size: 17px;
+    }
 
-  textarea {
-    font-size: 15px;
-  }
+    .quick-desc {
+        font-size: 12px;
+    }
 
-  .mic-btn,
-  .send-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-  }
+    .message {
+        max-width: 92%;
+
+        font-size: 15.5px;
+
+        padding: 14px 16px;
+    }
+
+    .input-area {
+        left: 9px;
+        right: 9px;
+        bottom: 8px;
+    }
+
+    .input-shell {
+        min-height: 68px;
+        border-radius: 23px;
+    }
+
+    .voice-btn,
+    .send-btn {
+        width: 50px;
+        height: 50px;
+
+        flex-basis: 50px;
+
+        border-radius: 17px;
+    }
+
+    #messageInput {
+        font-size: 15px;
+    }
 }
 
-@media (max-width: 380px) {
-  .quick-description {
-    display: none;
-  }
-
-  .quick {
-    min-height: 75px;
-  }
-}
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div id="app">
 
-  <div class="glow one"></div>
-  <div class="glow two"></div>
+    <!-- HEADER -->
 
-  <!-- HEADER -->
-  <header class="header">
+    <header class="header">
 
-    <div class="brand">
-      <button class="icon-btn" id="menuBtn" aria-label="Menü">
-        <span class="icon">☰</span>
-      </button>
+        <button
+            class="menu-btn"
+            id="menuButton"
+            aria-label="Menü">
+            ☰
+        </button>
 
-      <div class="logo">A</div>
-      <div class="brand-name">ASA</div>
-    </div>
+        <div class="brand">
 
-    <div class="header-actions">
+            <div class="logo">
+                A
+            </div>
 
-      <button class="icon-btn" id="memoryBtn" aria-label="Hafıza">
-        <span class="icon">🧠</span>
-      </button>
+            <div class="brand-name">
+                ASA
+            </div>
 
-      <button class="icon-btn" id="settingsBtn" aria-label="Ayarlar">
-        <span class="icon">⚙️</span>
-      </button>
+        </div>
 
-    </div>
+        <div class="header-actions">
 
-  </header>
+            <button
+                class="header-btn"
+                id="memoryButton"
+                aria-label="Hafıza">
+                🧠
+            </button>
 
-  <!-- MAIN -->
-  <main class="main">
+            <button
+                class="header-btn"
+                id="settingsButton"
+                aria-label="Ayarlar">
+                ⚙️
+            </button>
 
-    <section class="welcome" id="welcome">
+        </div>
 
-      <div class="welcome-orb">A</div>
+    </header>
 
-      <h1>
-        Merhaba <span class="gradient-text">Alperen.</span>
-      </h1>
-
-      <p>
-        Bugün senin için ne yapabilirim?
-      </p>
-
-    </section>
-
-    <!-- QUICK ACTIONS -->
-    <section class="quick-actions">
-
-      <button class="quick" data-prompt="Hafızanda benim hakkımda neler var?">
-        <div class="quick-icon">🧠</div>
-        <div class="quick-title">Hafızam</div>
-        <div class="quick-description">Benim hakkımda bildiklerin</div>
-      </button>
-
-      <button class="quick" data-prompt="Bana bugün için güzel bir fikir ver.">
-        <div class="quick-icon">💡</div>
-        <div class="quick-title">Fikir üret</div>
-        <div class="quick-description">Yeni bir şey düşünelim</div>
-      </button>
-
-      <button class="quick" data-prompt="Bugün benimle biraz sohbet et.">
-        <div class="quick-icon">💬</div>
-        <div class="quick-title">Sohbet</div>
-        <div class="quick-description">Biraz konuşalım</div>
-      </button>
-
-      <button class="quick" data-prompt="Oyunlar hakkında konuşalım.">
-        <div class="quick-icon">🎮</div>
-        <div class="quick-title">Oyun</div>
-        <div class="quick-description">Oyun dünyasına geç</div>
-      </button>
-
-    </section>
 
     <!-- CHAT -->
-    <section class="chat" id="chat"></section>
 
-    <div class="typing" id="typing">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+    <main
+        class="chat-area"
+        id="chatArea">
+
+        <section
+            class="welcome"
+            id="welcome">
+
+            <div class="welcome-title">
+                Hoş geldin Alperen.
+            </div>
+
+            <div class="welcome-subtitle">
+                ASA burada. Ne yapmak istiyorsun?
+            </div>
+
+        </section>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <section
+            class="quick-grid"
+            id="quickGrid">
+
+            <button
+                class="quick-card"
+                data-prompt="Hafızanda benim hakkımda neler biliyorsun?">
+
+                <div class="quick-icon">
+                    🧠
+                </div>
+
+                <div class="quick-title">
+                    Hafızam
+                </div>
+
+                <div class="quick-desc">
+                    Benim hakkımda bildiklerin
+                </div>
+
+            </button>
+
+
+            <button
+                class="quick-card"
+                data-prompt="Bana bugün için yaratıcı bir fikir üret.">
+
+                <div class="quick-icon">
+                    💡
+                </div>
+
+                <div class="quick-title">
+                    Fikir üret
+                </div>
+
+                <div class="quick-desc">
+                    Yeni bir şey düşünelim
+                </div>
+
+            </button>
+
+
+            <button
+                class="quick-card"
+                data-prompt="Biraz sohbet edelim.">
+
+                <div class="quick-icon">
+                    💬
+                </div>
+
+                <div class="quick-title">
+                    Sohbet
+                </div>
+
+                <div class="quick-desc">
+                    Biraz konuşalım
+                </div>
+
+            </button>
+
+
+            <button
+                class="quick-card"
+                data-prompt="Bana bugün oynayabileceğim güzel bir oyun öner.">
+
+                <div class="quick-icon">
+                    🎮
+                </div>
+
+                <div class="quick-title">
+                    Oyun
+                </div>
+
+                <div class="quick-desc">
+                    Oyun dünyasına geç
+                </div>
+
+            </button>
+
+        </section>
+
+
+        <div id="messages"></div>
+
+    </main>
+
+
+    <!-- INPUT -->
+
+    <div class="input-area">
+
+        <div class="input-shell">
+
+            <button
+                class="voice-btn"
+                id="voiceButton"
+                aria-label="Sesli giriş">
+                🎙️
+            </button>
+
+            <textarea
+                id="messageInput"
+                rows="1"
+                autocomplete="off"
+                placeholder="ASA'ya bir şey sor..."></textarea>
+
+            <button
+                class="send-btn"
+                id="sendButton"
+                aria-label="Gönder">
+                ➤
+            </button>
+
+        </div>
+
     </div>
-
-  </main>
-
-  <!-- COMPOSER -->
-  <div class="composer-wrap">
-
-    <form class="composer" id="chatForm">
-
-      <button
-        type="button"
-        class="mic-btn"
-        id="micBtn"
-        aria-label="Sesli giriş"
-      >
-        🎙️
-      </button>
-
-      <textarea
-        id="messageInput"
-        rows="1"
-        placeholder="ASA'ya bir şey sor..."
-        autocomplete="off"
-      ></textarea>
-
-      <button
-        type="submit"
-        class="send-btn"
-        aria-label="Gönder"
-      >
-        ➤
-      </button>
-
-    </form>
-
-  </div>
 
 </div>
 
-<!-- OVERLAY -->
-<div class="overlay" id="overlay"></div>
 
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
+<!-- SIDE MENU -->
 
-  <div class="sidebar-head">
-    <div class="sidebar-title">ASA</div>
+<div
+    class="menu-overlay"
+    id="menuOverlay">
+</div>
 
-    <button class="close-btn" id="closeMenu">
-      ✕
+<aside
+    class="side-menu"
+    id="sideMenu">
+
+    <div class="menu-top">
+
+        <div class="menu-brand">
+
+            <div class="menu-logo">
+                A
+            </div>
+
+            <div class="menu-title">
+                ASA
+            </div>
+
+        </div>
+
+        <button
+            class="close-menu"
+            id="closeMenu">
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="menu-section-title">
+        SOHBET
+    </div>
+
+
+    <button
+        class="menu-item"
+        id="newChatButton">
+
+        <div class="menu-item-icon">
+            ＋
+        </div>
+
+        <div class="menu-item-text">
+            Yeni Sohbet
+        </div>
+
     </button>
-  </div>
 
-  <button class="menu-item" id="newChatBtn">
-    <span class="menu-icon">＋</span>
-    <span class="menu-label">Yeni sohbet</span>
-  </button>
 
-  <button class="menu-item" id="sidebarMemoryBtn">
-    <span class="menu-icon">🧠</span>
-    <span class="menu-label">Hafızam</span>
-  </button>
+    <button
+        class="menu-item"
+        id="chatsButton">
 
-  <div class="sidebar-divider"></div>
+        <div class="menu-item-icon">
+            💬
+        </div>
 
-  <button class="menu-item" id="sidebarSettingsBtn">
-    <span class="menu-icon">⚙️</span>
-    <span class="menu-label">Ayarlar</span>
-  </button>
+        <div class="menu-item-text">
+            Sohbetler
+        </div>
 
-  <button class="menu-item" id="themeBtn">
-    <span class="menu-icon">🌙</span>
-    <span class="menu-label">Tema</span>
-  </button>
+    </button>
 
-  <button class="menu-item" id="aboutBtn">
-    <span class="menu-icon">ⓘ</span>
-    <span class="menu-label">ASA hakkında</span>
-  </button>
+
+    <div class="menu-section-title">
+        ASA
+    </div>
+
+
+    <button
+        class="menu-item"
+        id="menuMemoryButton">
+
+        <div class="menu-item-icon">
+            🧠
+        </div>
+
+        <div class="menu-item-text">
+            Hafızam
+        </div>
+
+    </button>
+
+
+    <button
+        class="menu-item"
+        id="menuSettingsButton">
+
+        <div class="menu-item-icon">
+            ⚙️
+        </div>
+
+        <div class="menu-item-text">
+            Ayarlar
+        </div>
+
+    </button>
+
+
+    <div class="menu-footer">
+        ASA v1.0 • Alperen'in kişisel asistanı
+    </div>
 
 </aside>
 
-<!-- MEMORY PANEL -->
-<section class="panel" id="memoryPanel">
 
-  <div class="panel-head">
-    <div class="panel-title">🧠 ASA Hafızası</div>
+<!-- MODAL -->
 
-    <button class="close-btn" data-close>
-      ✕
-    </button>
-  </div>
+<div
+    class="modal-overlay"
+    id="modalOverlay">
 
-  <div class="setting">
+    <div
+        class="modal"
+        id="modal">
 
-    <div class="setting-title">
-      Kalıcı hafıza
+        <div class="modal-header">
+
+            <div
+                class="modal-title"
+                id="modalTitle">
+                ASA
+            </div>
+
+            <button
+                class="modal-close"
+                id="modalClose">
+                ×
+            </button>
+
+        </div>
+
+        <div id="modalContent"></div>
+
     </div>
 
-    <div class="setting-description">
-      ASA'nın senin hakkında öğrendiği bilgiler sunucudaki
-      hafıza sisteminde tutulur.
-    </div>
+</div>
 
-  </div>
 
-  <div class="memory-card">
-    <strong>ASA</strong>
-    <br>
-    Kişisel yapay zekâ asistanın.
-  </div>
+<!-- TOAST -->
 
-  <div class="memory-card">
-    <strong>Not:</strong>
-    <br>
-    Hafızayı değiştirmek için ASA'ya neyi hatırlamasını
-    istediğini söyleyebilirsin.
-  </div>
+<div
+    class="toast"
+    id="toast">
+</div>
 
-</section>
-
-<!-- SETTINGS PANEL -->
-<section class="panel" id="settingsPanel">
-
-  <div class="panel-head">
-    <div class="panel-title">⚙️ Ayarlar</div>
-
-    <button class="close-btn" data-close>
-      ✕
-    </button>
-  </div>
-
-  <div class="setting">
-
-    <div class="setting-title">
-      Sohbet geçmişi
-    </div>
-
-    <div class="setting-description">
-      Bu cihazdaki sohbet geçmişini temizleyebilirsin.
-    </div>
-
-    <button
-      class="menu-item"
-      id="clearHistoryBtn"
-      style="margin-top:12px;background:rgba(255,70,100,.08);"
-    >
-      🗑️ Sohbet geçmişini temizle
-    </button>
-
-  </div>
-
-  <div class="setting">
-
-    <div class="setting-title">
-      ASA sürümü
-    </div>
-
-    <div class="setting-description">
-      ASA v0.3 • Kişisel Yapay Zekâ
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ABOUT PANEL -->
-<section class="panel" id="aboutPanel">
-
-  <div class="panel-head">
-
-    <div class="panel-title">
-      ✨ ASA
-    </div>
-
-    <button class="close-btn" data-close>
-      ✕
-    </button>
-
-  </div>
-
-  <div class="setting">
-
-    <div class="setting-title">
-      Alperen'in kişisel yapay zekâ asistanı
-    </div>
-
-    <div class="setting-description">
-      Sohbet, hafıza, fikir üretme ve günlük yardımcı görevler
-      için tasarlanmış kişisel AI sistemi.
-    </div>
-
-  </div>
-
-  <div class="memory-card">
-    <strong>ASA</strong>
-    <br>
-    Alperen • Sıla • Albayrak
-  </div>
-
-</section>
-
-<div class="toast" id="toast"></div>
 
 <script>
-/* =========================================
-   ASA CHAT
-========================================= */
 
-const chat = document.getElementById("chat");
-const form = document.getElementById("chatForm");
-const input = document.getElementById("messageInput");
-const typing = document.getElementById("typing");
-const welcome = document.getElementById("welcome");
+/* ==================================================
+   ASA FRONTEND
+================================================== */
 
-const menuBtn = document.getElementById("menuBtn");
-const closeMenu = document.getElementById("closeMenu");
-const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
+const API_URL = "/api/chat";
 
-const memoryBtn = document.getElementById("memoryBtn");
-const settingsBtn = document.getElementById("settingsBtn");
+const STORAGE_CURRENT =
+    "asa_current_conversation";
 
-const memoryPanel = document.getElementById("memoryPanel");
-const settingsPanel = document.getElementById("settingsPanel");
-const aboutPanel = document.getElementById("aboutPanel");
+const STORAGE_CHATS =
+    "asa_chat_list";
+
+
+/* --------------------------------------------------
+   ELEMENTLER
+-------------------------------------------------- */
+
+const chatArea =
+    document.getElementById("chatArea");
+
+const messagesElement =
+    document.getElementById("messages");
+
+const messageInput =
+    document.getElementById("messageInput");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const voiceButton =
+    document.getElementById("voiceButton");
+
+const welcome =
+    document.getElementById("welcome");
+
+const quickGrid =
+    document.getElementById("quickGrid");
+
+const menuButton =
+    document.getElementById("menuButton");
+
+const closeMenu =
+    document.getElementById("closeMenu");
+
+const menuOverlay =
+    document.getElementById("menuOverlay");
+
+const sideMenu =
+    document.getElementById("sideMenu");
+
+const memoryButton =
+    document.getElementById("memoryButton");
+
+const settingsButton =
+    document.getElementById("settingsButton");
+
+const newChatButton =
+    document.getElementById("newChatButton");
+
+const chatsButton =
+    document.getElementById("chatsButton");
+
+const menuMemoryButton =
+    document.getElementById("menuMemoryButton");
+
+const menuSettingsButton =
+    document.getElementById("menuSettingsButton");
+
+const modalOverlay =
+    document.getElementById("modalOverlay");
+
+const modalClose =
+    document.getElementById("modalClose");
+
+const modalTitle =
+    document.getElementById("modalTitle");
+
+const modalContent =
+    document.getElementById("modalContent");
+
+const toast =
+    document.getElementById("toast");
+
+
+/* --------------------------------------------------
+   STATE
+-------------------------------------------------- */
+
+let conversationId =
+    localStorage.getItem(STORAGE_CURRENT);
 
 let messages = [];
 
-/* =========================================
-   LOCAL CHAT HISTORY
-========================================= */
+let isSending = false;
 
-try {
-  const saved = localStorage.getItem("asa_chat");
 
-  if (saved) {
-    const parsed = JSON.parse(saved);
+/* --------------------------------------------------
+   ID OLUŞTUR
+-------------------------------------------------- */
 
-    if (Array.isArray(parsed)) {
-      messages = parsed;
-    }
-  }
-} catch (error) {
-  messages = [];
+function createConversationId() {
+
+    return (
+        "chat-" +
+        Date.now() +
+        "-" +
+        Math.random()
+            .toString(36)
+            .slice(2, 9)
+    );
+
 }
 
-/* =========================================
-   RENDER
-========================================= */
 
-function renderMessages() {
+/* --------------------------------------------------
+   CURRENT CHAT
+-------------------------------------------------- */
 
-  chat.innerHTML = "";
+function ensureConversation() {
 
-  messages.forEach(message => {
+    if (!conversationId) {
 
-    const box = document.createElement("div");
+        conversationId =
+            createConversationId();
 
-    box.className =
-      "message " +
-      (message.role === "user" ? "user" : "asa");
+        localStorage.setItem(
+            STORAGE_CURRENT,
+            conversationId
+        );
 
-    if (message.role !== "user") {
-
-      const label = document.createElement("span");
-
-      label.className = "message-label";
-      label.textContent = "ASA";
-
-      box.appendChild(label);
     }
 
-    const content = document.createElement("div");
-
-    content.textContent = message.content;
-
-    box.appendChild(content);
-
-    chat.appendChild(box);
-  });
-
-  if (messages.length > 0) {
-    welcome.style.display = "none";
-  } else {
-    welcome.style.display = "block";
-  }
-
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: "smooth"
-  });
 }
 
-/* =========================================
-   SAVE
-========================================= */
 
-function saveMessages() {
+/* --------------------------------------------------
+   CHAT LİSTESİ
+-------------------------------------------------- */
 
-  try {
+function getChatList() {
+
+    try {
+
+        const list =
+            JSON.parse(
+                localStorage.getItem(STORAGE_CHATS) || "[]"
+            );
+
+        return Array.isArray(list)
+            ? list
+            : [];
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+function saveChatList(list) {
+
     localStorage.setItem(
-      "asa_chat",
-      JSON.stringify(messages)
+        STORAGE_CHATS,
+        JSON.stringify(list.slice(0, 30))
     );
-  } catch (error) {
-    console.log("Local kayıt yapılamadı.");
-  }
+
 }
 
-/* =========================================
-   SEND MESSAGE
-========================================= */
 
-async function sendMessage(text) {
+function registerChat(title) {
 
-  const message = text.trim();
+    const list = getChatList();
 
-  if (!message) return;
+    const existing =
+        list.find(
+            item =>
+                item.id === conversationId
+        );
 
-  input.value = "";
+    if (existing) {
 
-  input.style.height = "auto";
+        if (
+            title &&
+            title.trim() &&
+            existing.title === "Yeni Sohbet"
+        ) {
+            existing.title =
+                title.trim().slice(0, 60);
+        }
 
-  messages.push({
-    role: "user",
-    content: message
-  });
+        existing.updatedAt =
+            Date.now();
 
-  saveMessages();
-  renderMessages();
+    } else {
 
-  typing.classList.add("show");
+        list.unshift({
+            id: conversationId,
+            title:
+                title?.trim()
+                    ? title.trim().slice(0, 60)
+                    : "Yeni Sohbet",
+            updatedAt: Date.now()
+        });
 
-  try {
-
-    const response = await fetch("/api/chat", {
-
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        messages: messages
-      })
-
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        data.error || "ASA bağlantısında bir sorun oluştu."
-      );
     }
 
-    const answer =
-      data.answer ||
-      data.output_text ||
-      data.message ||
-      "ASA cevap veremedi.";
-
-    messages.push({
-      role: "assistant",
-      content: answer
-    });
-
-    saveMessages();
-    renderMessages();
-
-  } catch (error) {
-
-    messages.pop();
-
-    saveMessages();
-    renderMessages();
-
-    addTemporaryError(
-      error.message || "Bilinmeyen bir hata oluştu."
-    );
-
-  } finally {
-
-    typing.classList.remove("show");
-
-  }
-}
-
-/* =========================================
-   ERROR
-========================================= */
-
-function addTemporaryError(text) {
-
-  const box = document.createElement("div");
-
-  box.className = "message asa";
-
-  const label = document.createElement("span");
-
-  label.className = "message-label";
-  label.textContent = "ASA";
-
-  box.appendChild(label);
-
-  const content = document.createElement("div");
-
-  content.textContent = "Bağlantıda bir sorun oluştu: " + text;
-
-  box.appendChild(content);
-
-  chat.appendChild(box);
+    saveChatList(list);
 
 }
 
-/* =========================================
-   FORM
-========================================= */
 
-form.addEventListener("submit", event => {
-
-  event.preventDefault();
-
-  sendMessage(input.value);
-
-});
-
-/* =========================================
-   ENTER
-========================================= */
-
-input.addEventListener("keydown", event => {
-
-  if (
-    event.key === "Enter" &&
-    !event.shiftKey
-  ) {
-
-    event.preventDefault();
-
-    sendMessage(input.value);
-  }
-
-});
-
-/* =========================================
-   AUTO RESIZE
-========================================= */
-
-input.addEventListener("input", () => {
-
-  input.style.height = "auto";
-
-  input.style.height =
-    Math.min(input.scrollHeight, 140) + "px";
-
-});
-
-/* =========================================
-   QUICK ACTIONS
-========================================= */
-
-document.querySelectorAll("[data-prompt]").forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    sendMessage(button.dataset.prompt);
-
-  });
-
-});
-
-/* =========================================
-   SIDEBAR
-========================================= */
-
-function openSidebar() {
-
-  sidebar.classList.add("open");
-  overlay.classList.add("open");
-
-}
-
-function closeSidebar() {
-
-  sidebar.classList.remove("open");
-  overlay.classList.remove("open");
-
-}
-
-menuBtn.addEventListener("click", openSidebar);
-
-closeMenu.addEventListener("click", closeSidebar);
-
-overlay.addEventListener("click", () => {
-
-  closeSidebar();
-  closePanels();
-
-});
-
-/* =========================================
-   PANELS
-========================================= */
-
-function openPanel(panel) {
-
-  closePanels();
-
-  panel.classList.add("open");
-
-  overlay.classList.add("open");
-
-}
-
-function closePanels() {
-
-  memoryPanel.classList.remove("open");
-  settingsPanel.classList.remove("open");
-  aboutPanel.classList.remove("open");
-
-  overlay.classList.remove("open");
-
-}
-
-memoryBtn.addEventListener("click", () => {
-
-  openPanel(memoryPanel);
-
-});
-
-settingsBtn.addEventListener("click", () => {
-
-  openPanel(settingsPanel);
-
-});
-
-document
-  .getElementById("sidebarMemoryBtn")
-  .addEventListener("click", () => {
-
-    closeSidebar();
-    openPanel(memoryPanel);
-
-  });
-
-document
-  .getElementById("sidebarSettingsBtn")
-  .addEventListener("click", () => {
-
-    closeSidebar();
-    openPanel(settingsPanel);
-
-  });
-
-document
-  .getElementById("aboutBtn")
-  .addEventListener("click", () => {
-
-    closeSidebar();
-    openPanel(aboutPanel);
-
-  });
-
-document.querySelectorAll("[data-close]").forEach(button => {
-
-  button.addEventListener("click", closePanels);
-
-});
-
-/* =========================================
-   NEW CHAT
-========================================= */
-
-document
-  .getElementById("newChatBtn")
-  .addEventListener("click", () => {
-
-    messages = [];
-
-    localStorage.removeItem("asa_chat");
-
-    renderMessages();
-
-    closeSidebar();
-
-    showToast("Yeni sohbet başlatıldı.");
-
-  });
-
-/* =========================================
-   CLEAR HISTORY
-========================================= */
-
-document
-  .getElementById("clearHistoryBtn")
-  .addEventListener("click", () => {
-
-    messages = [];
-
-    localStorage.removeItem("asa_chat");
-
-    renderMessages();
-
-    closePanels();
-
-    showToast("Sohbet geçmişi temizlendi.");
-
-  });
-
-/* =========================================
-   THEME
-========================================= */
-
-document
-  .getElementById("themeBtn")
-  .addEventListener("click", () => {
-
-    showToast("ASA şu anda karanlık temada.");
-
-  });
-
-/* =========================================
-   MICROPHONE
-========================================= */
-
-const micBtn = document.getElementById("micBtn");
-
-micBtn.addEventListener("click", () => {
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition) {
-
-    showToast("Bu cihazda sesli giriş desteklenmiyor.");
-
-    return;
-  }
-
-  const recognition = new SpeechRecognition();
-
-  recognition.lang = "tr-TR";
-  recognition.interimResults = false;
-  recognition.continuous = false;
-
-  recognition.onstart = () => {
-
-    showToast("Seni dinliyorum...");
-
-  };
-
-  recognition.onresult = event => {
-
-    const text =
-      event.results[0][0].transcript;
-
-    input.value = text;
-
-    input.dispatchEvent(new Event("input"));
-
-  };
-
-  recognition.onerror = () => {
-
-    showToast("Sesli giriş kullanılamadı.");
-
-  };
-
-  recognition.start();
-
-});
-
-/* =========================================
+/* --------------------------------------------------
    TOAST
-========================================= */
+-------------------------------------------------- */
 
 let toastTimer;
 
 function showToast(text) {
 
-  const toast =
-    document.getElementById("toast");
+    toast.textContent = text;
 
-  toast.textContent = text;
+    toast.classList.add("show");
 
-  toast.classList.add("show");
+    clearTimeout(toastTimer);
 
-  clearTimeout(toastTimer);
+    toastTimer =
+        setTimeout(() => {
 
-  toastTimer = setTimeout(() => {
+            toast.classList.remove("show");
 
-    toast.classList.remove("show");
-
-  }, 2200);
+        }, 2300);
 
 }
 
-/* =========================================
-   START
-========================================= */
 
-renderMessages();
+/* --------------------------------------------------
+   MENU
+-------------------------------------------------- */
+
+function openMenu() {
+
+    sideMenu.classList.add("open");
+
+    menuOverlay.classList.add("open");
+
+}
+
+
+function closeSideMenu() {
+
+    sideMenu.classList.remove("open");
+
+    menuOverlay.classList.remove("open");
+
+}
+
+menuButton.addEventListener(
+    "click",
+    openMenu
+);
+
+closeMenu.addEventListener(
+    "click",
+    closeSideMenu
+);
+
+menuOverlay.addEventListener(
+    "click",
+    closeSideMenu
+);
+
+
+/* --------------------------------------------------
+   MODAL
+-------------------------------------------------- */
+
+function openModal(title, html) {
+
+    modalTitle.textContent = title;
+
+    modalContent.innerHTML = html;
+
+    modalOverlay.classList.add("open");
+
+}
+
+
+function closeModal() {
+
+    modalOverlay.classList.remove("open");
+
+}
+
+
+modalClose.addEventListener(
+    "click",
+    closeModal
+);
+
+modalOverlay.addEventListener(
+    "click",
+    event => {
+
+        if (event.target === modalOverlay) {
+            closeModal();
+        }
+
+    }
+);
+
+
+/* --------------------------------------------------
+   HTML ESCAPE
+-------------------------------------------------- */
+
+function escapeHtml(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* --------------------------------------------------
+   MARKDOWN BENZERİ GÖRÜNÜM
+-------------------------------------------------- */
+
+function formatAnswer(text) {
+
+    let safe =
+        escapeHtml(text || "");
+
+    /*
+      URL'leri tıklanabilir yap.
+    */
+
+    safe =
+        safe.replace(
+            /(https?:\/\/[^\s<]+)/g,
+            '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+        );
+
+    /*
+      Kalın yazılar.
+    */
+
+    safe =
+        safe.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+    /*
+      Satırları paragraf haline getir.
+    */
+
+    const lines =
+        safe.split(/\n+/);
+
+    let html = "";
+
+    let inList = false;
+
+    for (const rawLine of lines) {
+
+        const line =
+            rawLine.trim();
+
+        if (!line) continue;
+
+
+        if (
+            line.startsWith("- ") ||
+            line.startsWith("• ")
+        ) {
+
+            if (!inList) {
+
+                html += "<ul>";
+                inList = true;
+
+            }
+
+            html +=
+                "<li>" +
+                line.slice(2) +
+                "</li>";
+
+            continue;
+
+        }
+
+
+        if (inList) {
+
+            html += "</ul>";
+            inList = false;
+
+        }
+
+
+        html +=
+            "<p>" +
+            line +
+            "</p>";
+
+    }
+
+
+    if (inList) {
+        html += "</ul>";
+    }
+
+
+    return html;
+
+}
+
+
+/* --------------------------------------------------
+   MESAJ EKLE
+-------------------------------------------------- */
+
+function addMessage(
+    role,
+    content,
+    save = false
+) {
+
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "message-row " + role;
+
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "message " + role;
+
+
+    if (role === "assistant") {
+
+        bubble.innerHTML =
+            '<div class="message-label">ASA</div>' +
+            formatAnswer(content);
+
+    } else {
+
+        bubble.innerHTML =
+            formatAnswer(content);
+
+    }
+
+
+    row.appendChild(bubble);
+
+    messagesElement.appendChild(row);
+
+
+    if (save) {
+
+        messages.push({
+            role,
+            content
+        });
+
+    }
+
+}
+
+
+/* --------------------------------------------------
+   GEÇMİŞİ RENDER
+-------------------------------------------------- */
+
+function renderHistory(history) {
+
+    messagesElement.innerHTML = "";
+
+    messages = [];
+
+
+    if (
+        !Array.isArray(history) ||
+        history.length === 0
+    ) {
+
+        welcome.style.display = "";
+        quickGrid.style.display = "";
+
+        return;
+
+    }
+
+
+    welcome.style.display = "none";
+    quickGrid.style.display = "none";
+
+
+    for (const message of history) {
+
+        if (
+            !message ||
+            !message.role ||
+            !message.content
+        ) {
+            continue;
+        }
+
+        addMessage(
+            message.role,
+            message.content,
+            true
+        );
+
+    }
+
+
+    scrollToBottom();
+
+}
+
+
+/* --------------------------------------------------
+   SCROLL
+-------------------------------------------------- */
+
+function scrollToBottom() {
+
+    requestAnimationFrame(() => {
+
+        chatArea.scrollTop =
+            chatArea.scrollHeight;
+
+    });
+
+}
+
+
+/* --------------------------------------------------
+   THINKING
+-------------------------------------------------- */
+
+function showThinking() {
+
+    removeThinking();
+
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "message-row assistant";
+
+    row.id =
+        "thinkingRow";
+
+
+    row.innerHTML = `
+        <div class="message assistant">
+            <div class="message-label">ASA</div>
+            <div class="thinking">
+                <div class="thinking-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span>Düşünüyor...</span>
+            </div>
+        </div>
+    `;
+
+    messagesElement.appendChild(row);
+
+    scrollToBottom();
+
+}
+
+
+function removeThinking() {
+
+    const element =
+        document.getElementById(
+            "thinkingRow"
+        );
+
+    if (element) {
+        element.remove();
+    }
+
+}
+
+
+/* --------------------------------------------------
+   MESAJ GÖNDER
+-------------------------------------------------- */
+
+async function sendMessage(text = null) {
+
+    if (isSending) return;
+
+
+    const value =
+        (
+            text !== null
+                ? text
+                : messageInput.value
+        )
+        .trim();
+
+
+    if (!value) return;
+
+
+    ensureConversation();
+
+
+    isSending = true;
+
+    sendButton.style.opacity = ".55";
+
+
+    /*
+      Kullanıcı mesajını hemen göster.
+    */
+
+    welcome.style.display = "none";
+    quickGrid.style.display = "none";
+
+
+    addMessage(
+        "user",
+        value,
+        true
+    );
+
+
+    /*
+      İlk mesajı sohbet listesine kaydet.
+    */
+
+    if (messages.length === 1) {
+
+        registerChat(value);
+
+    } else {
+
+        registerChat();
+
+    }
+
+
+    messageInput.value = "";
+
+    autoResize();
+
+    scrollToBottom();
+
+    showThinking();
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        conversationId,
+
+                        /*
+                          Backend zaten Redis'ten
+                          geçmişi alıyor.
+                        */
+
+                        messages: [
+                            {
+                                role: "user",
+                                content: value
+                            }
+                        ]
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        removeThinking();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.error ||
+                "ASA API cevap vermedi."
+            );
+
+        }
+
+
+        if (
+            data.conversationId &&
+            data.conversationId !== conversationId
+        ) {
+
+            conversationId =
+                data.conversationId;
+
+            localStorage.setItem(
+                STORAGE_CURRENT,
+                conversationId
+            );
+
+        }
+
+
+        /*
+          Backend'den gelen gerçek geçmişi
+          tekrar state'e al.
+        */
+
+        if (
+            Array.isArray(data.history)
+        ) {
+
+            messages =
+                data.history;
+
+        }
+
+
+        /*
+          Sadece cevabı ekrana ekle.
+
+          Kullanıcı mesajı zaten ekranda.
+        */
+
+        if (data.answer) {
+
+            addMessage(
+                "assistant",
+                data.answer,
+                false
+            );
+
+        } else {
+
+            addMessage(
+                "assistant",
+                "Şu anda cevap oluşturamadım.",
+                false
+            );
+
+        }
+
+
+        scrollToBottom();
+
+
+    } catch (error) {
+
+        removeThinking();
+
+
+        addMessage(
+            "assistant",
+            "Bir bağlantı sorunu oluştu: " +
+            error.message,
+            false
+        );
+
+
+        showToast(
+            "ASA bağlantısında sorun oluştu."
+        );
+
+    } finally {
+
+        isSending = false;
+
+        sendButton.style.opacity = "1";
+
+    }
+
+}
+
+
+/* --------------------------------------------------
+   SEND EVENTS
+-------------------------------------------------- */
+
+sendButton.addEventListener(
+    "click",
+    () => sendMessage()
+);
+
+
+messageInput.addEventListener(
+    "keydown",
+    event => {
+
+        /*
+          Enter gönderir.
+          Shift + Enter yeni satır.
+        */
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* --------------------------------------------------
+   AUTO RESIZE
+-------------------------------------------------- */
+
+function autoResize() {
+
+    messageInput.style.height =
+        "54px";
+
+    messageInput.style.height =
+        Math.min(
+            messageInput.scrollHeight,
+            120
+        ) + "px";
+
+}
+
+
+messageInput.addEventListener(
+    "input",
+    autoResize
+);
+
+
+/* --------------------------------------------------
+   QUICK BUTTONS
+-------------------------------------------------- */
+
+document
+    .querySelectorAll(".quick-card")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const prompt =
+                    button.dataset.prompt;
+
+                sendMessage(prompt);
+
+            }
+        );
+
+    });
+
+
+/* --------------------------------------------------
+   YENİ SOHBET
+-------------------------------------------------- */
+
+async function startNewChat() {
+
+    if (isSending) {
+
+        showToast(
+            "Önce mevcut cevabın bitmesini bekle."
+        );
+
+        return;
+
+    }
+
+
+    /*
+      Eski sohbet silinmiyor.
+
+      Sadece yeni conversation ID oluşturuyoruz.
+    */
+
+    conversationId =
+        createConversationId();
+
+
+    localStorage.setItem(
+        STORAGE_CURRENT,
+        conversationId
+    );
+
+
+    messages = [];
+
+
+    messagesElement.innerHTML = "";
+
+    welcome.style.display = "";
+
+    quickGrid.style.display = "";
+
+
+    closeSideMenu();
+
+    showToast(
+        "Yeni sohbet hazır."
+    );
+
+}
+
+
+newChatButton.addEventListener(
+    "click",
+    startNewChat
+);
+
+
+/* --------------------------------------------------
+   SOHBETLER
+-------------------------------------------------- */
+
+async function showChats() {
+
+    closeSideMenu();
+
+
+    const list =
+        getChatList();
+
+
+    if (list.length === 0) {
+
+        openModal(
+            "Sohbetler",
+            `
+            <div class="modal-text">
+                Henüz kayıtlı bir sohbet yok.
+            </div>
+            `
+        );
+
+        return;
+
+    }
+
+
+    let html = "";
+
+
+    for (const chat of list) {
+
+        const date =
+            chat.updatedAt
+                ? new Date(chat.updatedAt)
+                    .toLocaleString("tr-TR")
+                : "";
+
+
+        html += `
+            <div
+                class="chat-list-item"
+                data-chat-id="${escapeHtml(chat.id)}">
+
+                <div class="chat-list-title">
+                    ${escapeHtml(chat.title || "Sohbet")}
+                </div>
+
+                <div class="chat-list-date">
+                    ${escapeHtml(date)}
+                </div>
+
+            </div>
+        `;
+
+    }
+
+
+    openModal(
+        "Sohbetler",
+        html
+    );
+
+
+    document
+        .querySelectorAll(".chat-list-item")
+        .forEach(item => {
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    const id =
+                        item.dataset.chatId;
+
+                    loadConversation(id);
+
+                    closeModal();
+
+                }
+            );
+
+        });
+
+}
+
+
+chatsButton.addEventListener(
+    "click",
+    showChats
+);
+
+
+/* --------------------------------------------------
+   KONUŞMA YÜKLE
+-------------------------------------------------- */
+
+async function loadConversation(id) {
+
+    conversationId = id;
+
+
+    localStorage.setItem(
+        STORAGE_CURRENT,
+        conversationId
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        conversationId,
+
+                        getHistory: true,
+
+                        messages: []
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.error ||
+                "Geçmiş yüklenemedi."
+            );
+
+        }
+
+
+        renderHistory(
+            data.history || []
+        );
+
+
+        showToast(
+            "Sohbet yüklendi."
+        );
+
+
+    } catch (error) {
+
+        showToast(
+            "Sohbet yüklenemedi."
+        );
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* --------------------------------------------------
+   SAYFA AÇILINCA GEÇMİŞ
+-------------------------------------------------- */
+
+async function loadCurrentConversation() {
+
+    ensureConversation();
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        conversationId,
+
+                        getHistory: true,
+
+                        messages: []
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.error ||
+                "Geçmiş alınamadı."
+            );
+
+        }
+
+
+        renderHistory(
+            data.history || []
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "ASA geçmiş yükleme hatası:",
+            error
+        );
+
+    }
+
+}
+
+
+/* --------------------------------------------------
+   HAFIZA
+-------------------------------------------------- */
+
+function showMemory() {
+
+    closeSideMenu();
+
+
+    openModal(
+        "ASA Hafızası",
+        `
+        <div class="modal-text">
+
+            ASA'nın seninle yaptığı konuşmalar,
+            oluşturduğumuz sohbet sistemi üzerinden
+            saklanabilir ve tekrar yüklenebilir.
+
+            <br><br>
+
+            Kişisel bilgilerini konuşma sırasında
+            paylaştığında ASA bunları mevcut sohbet
+            bağlamında kullanabilir.
+
+            <br><br>
+
+            <strong style="color:#c35cff">
+                Not:
+            </strong>
+
+            Kalıcı kişisel hafıza ile sohbet geçmişi
+            teknik olarak farklı şeylerdir.
+            Bir sonraki aşamada bunları da birbirinden
+            ayırabiliriz.
+
+        </div>
+        `
+    );
+
+}
+
+
+memoryButton.addEventListener(
+    "click",
+    showMemory
+);
+
+menuMemoryButton.addEventListener(
+    "click",
+    showMemory
+);
+
+
+/* --------------------------------------------------
+   AYARLAR
+-------------------------------------------------- */
+
+function showSettings() {
+
+    closeSideMenu();
+
+
+    openModal(
+        "Ayarlar",
+        `
+        <div>
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-name">
+                        ASA
+                    </div>
+
+                    <div class="setting-desc">
+                        Kişisel yapay zeka asistanı
+                    </div>
+                </div>
+
+                <div>
+                    🟣
+                </div>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-name">
+                        Web bilgileri
+                    </div>
+
+                    <div class="setting-desc">
+                        Güncel bilgiler gerektiğinde
+                        ASA web araması kullanabilir.
+                    </div>
+                </div>
+
+                <div>
+                    🌐
+                </div>
+
+            </div>
+
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-name">
+                        Sohbet geçmişi
+                    </div>
+
+                    <div class="setting-desc">
+                        Redis üzerinde saklanan
+                        konuşmalar.
+                    </div>
+                </div>
+
+                <div>
+                    🧠
+                </div>
+
+            </div>
+
+
+            <button
+                class="danger-btn"
+                id="clearLocalChats">
+
+                Bu cihazdaki sohbet listesini temizle
+
+            </button>
+
+        </div>
+        `
+    );
+
+
+    setTimeout(() => {
+
+        const clearButton =
+            document.getElementById(
+                "clearLocalChats"
+            );
+
+
+        if (clearButton) {
+
+            clearButton.addEventListener(
+                "click",
+                () => {
+
+                    localStorage.removeItem(
+                        STORAGE_CHATS
+                    );
+
+                    showToast(
+                        "Cihazdaki sohbet listesi temizlendi."
+                    );
+
+                    closeModal();
+
+                }
+            );
+
+        }
+
+    }, 0);
+
+}
+
+
+settingsButton.addEventListener(
+    "click",
+    showSettings
+);
+
+menuSettingsButton.addEventListener(
+    "click",
+    showSettings
+);
+
+
+/* --------------------------------------------------
+   SESLİ GİRİŞ
+-------------------------------------------------- */
+
+let recognition = null;
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if (SpeechRecognition) {
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        "tr-TR";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+
+    recognition.onstart =
+        () => {
+
+            voiceButton.classList.add(
+                "listening"
+            );
+
+            showToast(
+                "Dinliyorum..."
+            );
+
+        };
+
+
+    recognition.onresult =
+        event => {
+
+            const transcript =
+                event.results[0][0].transcript;
+
+            messageInput.value =
+                transcript;
+
+            autoResize();
+
+        };
+
+
+    recognition.onend =
+        () => {
+
+            voiceButton.classList.remove(
+                "listening"
+            );
+
+        };
+
+
+    recognition.onerror =
+        () => {
+
+            voiceButton.classList.remove(
+                "listening"
+            );
+
+            showToast(
+                "Sesli giriş kullanılamadı."
+            );
+
+        };
+
+
+    voiceButton.addEventListener(
+        "click",
+        () => {
+
+            try {
+
+                recognition.start();
+
+            } catch {
+
+                recognition.stop();
+
+            }
+
+        }
+    );
+
+} else {
+
+    voiceButton.addEventListener(
+        "click",
+        () => {
+
+            showToast(
+                "Bu tarayıcı sesli girişi desteklemiyor."
+            );
+
+        }
+    );
+
+}
+
+
+/* --------------------------------------------------
+   İLK AÇILIŞ
+-------------------------------------------------- */
+
+loadCurrentConversation();
+
+
+/* --------------------------------------------------
+   SAYFA GERİ GELDİĞİNDE
+-------------------------------------------------- */
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (
+            document.visibilityState === "visible"
+        ) {
+
+            /*
+              Sayfa tekrar görünür olduğunda
+              mevcut sohbeti Redis'ten kontrol et.
+
+              Ancak kullanıcı mesaj yazıyorsa
+              müdahale etme.
+            */
+
+            if (
+                !isSending &&
+                !messageInput.value.trim()
+            ) {
+
+                loadCurrentConversation();
+
+            }
+
+        }
+
+    }
+);
 
 </script>
 
