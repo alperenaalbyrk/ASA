@@ -6,6 +6,9 @@ const openai = new OpenAI({
 
 const MEMORY_KEY = "asa:memory";
 
+// ===============================
+// HAFIZAYI OKU
+// ===============================
 async function getMemory() {
   try {
     const response = await fetch(
@@ -18,6 +21,7 @@ async function getMemory() {
     );
 
     if (!response.ok) {
+      console.error("Redis okuma hatası:", response.status);
       return {};
     }
 
@@ -34,9 +38,12 @@ async function getMemory() {
   }
 }
 
+// ===============================
+// HAFIZAYI KAYDET
+// ===============================
 async function saveMemory(memory) {
   try {
-    await fetch(
+    const response = await fetch(
       `${process.env.KV_REST_API_URL}/set/${encodeURIComponent(MEMORY_KEY)}`,
       {
         method: "POST",
@@ -47,11 +54,18 @@ async function saveMemory(memory) {
         body: JSON.stringify(memory),
       }
     );
+
+    if (!response.ok) {
+      console.error("Redis kaydetme hatası:", response.status);
+    }
   } catch (error) {
     console.error("HAFIZA KAYDETME HATASI:", error);
   }
 }
 
+// ===============================
+// API
+// ===============================
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
@@ -69,7 +83,7 @@ export default async function handler(req, res) {
     }
 
     // Mevcut hafızayı getir
-    let memory = await getMemory();
+    const oldMemory = await getMemory();
 
     // Son kullanıcı mesajını bul
     const lastUserMessage = [...messages]
@@ -78,18 +92,19 @@ export default async function handler(req, res) {
 
     const userText = lastUserMessage?.content || "";
 
-    /*
-     * 1) Kullanıcının yeni bir kişisel bilgi verip vermediğini belirle.
-     */
+    // ===============================
+    // 1. HAFIZA ANALİZİ
+    // ===============================
     const memoryResponse = await openai.responses.create({
       model: "gpt-5",
 
       instructions: `
 Sen ASA'nın hafıza yöneticisisin.
 
-Kullanıcı hakkında kalıcı olabilecek kişisel bilgileri tespit et.
+Kullanıcı hakkında açıkça söylenen ve gelecekte hatırlanması
+faydalı olan kalıcı kişisel bilgileri tespit et.
 
-Özellikle şu alanları takip et:
+Takip edilen alanlar:
 
 - fullName
 - favoriteColor
@@ -98,79 +113,107 @@ Kullanıcı hakkında kalıcı olabilecek kişisel bilgileri tespit et.
 - favoriteFood
 - assistantNameMeaning
 
-Kurallar:
+MEVCUT HAFIZA:
+${JSON.stringify(oldMemory, null, 2)}
 
-1. Kullanıcı yeni bir bilgi verirse onu güncelle.
-2. Kullanıcı eski bilgisini değiştirirse eski bilgiyi yenisiyle değiştir.
-3. Kullanıcı bir bilgiyi açıkça silerse o alanı null yap.
-4. Kullanıcı bilgi vermediyse hiçbir alanı değiştirme.
-5. Tahminde bulunma.
-6. Sadece açıkça söylenen bilgileri kaydet.
-
-Mevcut hafıza:
-
-${JSON.stringify(memory, null, 2)}
-
-Kullanıcının son mesajı:
-
+KULLANICININ SON MESAJI:
 ${userText}
+
+KURALLAR:
+
+1. Kullanıcı yeni bir bilgi verirse o bilgiyi kaydet.
+2. Kullanıcı mevcut bir bilgiyi değiştirirse eski bilgiyi yenisiyle değiştir.
+3. Kullanıcı açıkça bir bilgiyi silmek isterse o alanı null yap.
+4. Kullanıcı bir alan hakkında hiçbir şey söylemiyorsa mevcut değeri koru.
+5. Tahminde bulunma.
+6. Kullanıcının söylediği bilgiyi aynen ve doğru şekilde aktar.
 `,
 
-      input: "Hafızayı analiz et.",
-      
+      input: "Hafıza güncellemesini oluştur.",
+
       text: {
         format: {
           type: "json_schema",
           name: "asa_memory_update",
           strict: true,
+
           schema: {
             type: "object",
+
             properties: {
               fullName: {
                 type: ["string", "null"]
               },
+
               favoriteColor: {
                 type: ["string", "null"]
               },
+
               favoriteGame: {
                 type: ["string", "null"]
               },
+
               girlfriendName: {
                 type: ["string", "null"]
               },
+
               favoriteFood: {
                 type: ["string", "null"]
               },
+
               assistantNameMeaning: {
                 type: ["string", "null"]
               }
             },
+
+            required: [
+              "fullName",
+              "favoriteColor",
+              "favoriteGame",
+              "girlfriendName",
+              "favoriteFood",
+              "assistantNameMeaning"
+            ],
+
             additionalProperties: false
           }
         }
       }
     });
 
-    /*
-     * Modelin döndürdüğü hafıza güncellemesini oku.
-     */
+    // ===============================
+    // 2. HAFIZAYI GÜNCELLE
+    // ===============================
     try {
       const update = JSON.parse(memoryResponse.output_text);
 
+      const newMemory = {
+        ...oldMemory
+      };
+
       for (const key of Object.keys(update)) {
-        if (update[key] !== null) {
-          memory[key] = update[key];
+        // null ise kullanıcı o bilgiyi silmek istemiş olabilir
+        if (update[key] === null) {
+          if (Object.prototype.hasOwnProperty.call(oldMemory, key)) {
+            delete newMemory[key];
+          }
+        } else {
+          newMemory[key] = update[key];
         }
       }
 
-      await saveMemory(memory);
+      await saveMemory(newMemory);
+
+      // Cevap oluştururken güncel hafızayı kullan
+      Object.assign(oldMemory, newMemory);
+
     } catch (memoryError) {
       console.error("HAFIZA GÜNCELLEME HATASI:", memoryError);
     }
 
-    /*
-     * 2) ASA'nın normal cevabını oluştur.
-     */
+    // ===============================
+    // 3. ASA'NIN NORMAL CEVABI
+    // ===============================
     const response = await openai.responses.create({
       model: "gpt-5",
 
@@ -185,20 +228,17 @@ Kısa ve anlaşılır cevaplar ver.
 
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 
-Aşağıdaki bilgiler kalıcı hafızanda bulunmaktadır.
-Cevap verirken gerektiğinde bunları kullan.
+KALICI HAFIZAN:
 
-HAFIZA:
+${JSON.stringify(oldMemory, null, 2)}
 
-${JSON.stringify(memory, null, 2)}
+Kurallar:
 
-Önemli:
-
-- Hafızadaki bilgileri doğru kabul et.
-- Kullanıcı yeni bir bilgi verirse yeni bilgi önceliklidir.
-- Eski bilgi ile yeni bilgi çelişirse yeni bilgiyi kullan.
-- Bilmediğin bir şeyi biliyormuş gibi söyleme.
-- Kullanıcı "benim hakkımda ne biliyorsun?" diye sorarsa hafızadaki bilgileri listele.
+- Hafızadaki bilgileri gerektiğinde kullan.
+- Kullanıcı yeni bir bilgi verdiyse güncel bilgiyi kullan.
+- Eski ve yeni bilgi çelişiyorsa yeni bilgi doğrudur.
+- Bilmediğin bir şeyi uydurma.
+- Kullanıcı "benim hakkımda ne biliyorsun?" derse hafızandaki bilgileri listele.
 `,
 
       input: messages,
@@ -206,7 +246,7 @@ ${JSON.stringify(memory, null, 2)}
 
     return res.status(200).json({
       answer: response.output_text,
-      memory,
+      memory: oldMemory,
     });
 
   } catch (error) {
