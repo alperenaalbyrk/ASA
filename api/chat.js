@@ -15,23 +15,25 @@ const REDIS_TOKEN =
 const DEFAULT_CONVERSATION = "alperen-main";
 const MEMORY_KEY = "asa:memory:alperen";
 
+const MODEL = "gpt-5.6-luna";
+
 /* =====================================================
    REDIS
 ===================================================== */
 
 async function redisCommand(command) {
   if (!REDIS_URL || !REDIS_TOKEN) {
-    throw new Error(
-      "Redis bağlantısı bulunamadı."
-    );
+    throw new Error("Redis bağlantısı bulunamadı.");
   }
 
   const response = await fetch(REDIS_URL, {
     method: "POST",
+
     headers: {
       Authorization: `Bearer ${REDIS_TOKEN}`,
       "Content-Type": "application/json",
     },
+
     body: JSON.stringify(command),
   });
 
@@ -44,22 +46,31 @@ async function redisCommand(command) {
 }
 
 /* =====================================================
-   KONUŞMA
+   CONVERSATION
 ===================================================== */
+
+function conversationKey(id) {
+  return `asa:conversation:${id}`;
+}
 
 async function getConversation(conversationId) {
   const result = await redisCommand([
     "GET",
-    `asa:conversation:${conversationId}`,
+    conversationKey(conversationId),
   ]);
 
   const value = result?.result;
 
-  if (!value) return [];
+  if (!value) {
+    return [];
+  }
 
   try {
     const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed : [];
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
   } catch {
     return [];
   }
@@ -70,36 +81,48 @@ async function saveConversation(
   messages
 ) {
   const cleanMessages = messages
-    .filter(
-      (message) =>
-        message &&
-        typeof message === "object" &&
-        (message.role === "user" ||
-          message.role === "assistant") &&
-        typeof message.content === "string" &&
-        message.content.trim()
-    )
+    .filter(Boolean)
     .slice(-100);
 
   await redisCommand([
     "SET",
-    `asa:conversation:${conversationId}`,
+    conversationKey(conversationId),
     JSON.stringify(cleanMessages),
   ]);
 
   return cleanMessages;
 }
 
-async function deleteConversation(conversationId) {
+async function deleteConversation(
+  conversationId
+) {
+  if (!conversationId) {
+    return;
+  }
+
   await redisCommand([
     "DEL",
-    `asa:conversation:${conversationId}`,
+    conversationKey(conversationId),
   ]);
 }
 
 /* =====================================================
-   KALICI ASA HAFIZASI
+   MEMORY
 ===================================================== */
+
+function emptyMemory() {
+  return {
+    user: {
+      name: "Alperen",
+    },
+
+    facts: [],
+
+    preferences: [],
+
+    important: [],
+  };
+}
 
 async function getMemory() {
   const result = await redisCommand([
@@ -110,44 +133,35 @@ async function getMemory() {
   const value = result?.result;
 
   if (!value) {
-    return {
-      user: {
-        name: "Alperen",
-      },
-      facts: [],
-      preferences: [],
-      important: [],
-    };
+    return emptyMemory();
   }
 
   try {
     const parsed = JSON.parse(value);
 
     return {
-      user: parsed.user || {
-        name: "Alperen",
-      },
-      facts: Array.isArray(parsed.facts)
-        ? parsed.facts
-        : [],
-      preferences: Array.isArray(
-        parsed.preferences
-      )
-        ? parsed.preferences
-        : [],
-      important: Array.isArray(parsed.important)
-        ? parsed.important
-        : [],
+      user:
+        parsed.user || {
+          name: "Alperen",
+        },
+
+      facts:
+        Array.isArray(parsed.facts)
+          ? parsed.facts
+          : [],
+
+      preferences:
+        Array.isArray(parsed.preferences)
+          ? parsed.preferences
+          : [],
+
+      important:
+        Array.isArray(parsed.important)
+          ? parsed.important
+          : [],
     };
   } catch {
-    return {
-      user: {
-        name: "Alperen",
-      },
-      facts: [],
-      preferences: [],
-      important: [],
-    };
+    return emptyMemory();
   }
 }
 
@@ -162,7 +176,146 @@ async function saveMemory(memory) {
 }
 
 /* =====================================================
-   MESAJ NORMALİZASYONU
+   MEMORY UPDATE
+===================================================== */
+
+async function updateMemory(
+  currentMemory,
+  userMessage
+) {
+  if (!userMessage) {
+    return currentMemory;
+  }
+
+  try {
+    const response =
+      await openai.responses.create({
+        model: MODEL,
+
+        reasoning: {
+          effort: "low",
+        },
+
+        instructions: `
+Sen ASA'nın kalıcı hafıza yöneticisisin.
+
+Kullanıcının adı Alperen.
+
+Kullanıcının mesajından gelecekte
+işe yarayabilecek KALICI kişisel bilgileri
+tespit et.
+
+Sadece gerçekten kalıcı ve yararlı
+bilgileri kaydet.
+
+Örnek:
+
+"En sevdiğim renk siyah."
+=> preferences
+
+"Bir reklam dükkanım var."
+=> facts
+
+"Sevgilimin adı Sıla."
+=> important
+
+"Bugün işe geç kaldım."
+=> kaydetme
+
+"Şimdi çay içiyorum."
+=> kaydetme
+
+Sonucu SADECE geçerli JSON olarak döndür.
+
+Format:
+
+{
+  "facts": [],
+  "preferences": [],
+  "important": []
+}
+`,
+
+        input: `
+MEVCUT HAFIZA:
+
+${JSON.stringify(
+  currentMemory,
+  null,
+  2
+)}
+
+YENİ MESAJ:
+
+${userMessage}
+`,
+      });
+
+    const text =
+      response.output_text || "{}";
+
+    const cleaned =
+      text
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+
+    const updates =
+      JSON.parse(cleaned);
+
+    const memory = {
+      ...currentMemory,
+
+      facts: [
+        ...new Set([
+          ...(currentMemory.facts || []),
+
+          ...(Array.isArray(updates.facts)
+            ? updates.facts
+            : []),
+        ]),
+      ].slice(-100),
+
+      preferences: [
+        ...new Set([
+          ...(currentMemory.preferences || []),
+
+          ...(Array.isArray(
+            updates.preferences
+          )
+            ? updates.preferences
+            : []),
+        ]),
+      ].slice(-100),
+
+      important: [
+        ...new Set([
+          ...(currentMemory.important || []),
+
+          ...(Array.isArray(
+            updates.important
+          )
+            ? updates.important
+            : []),
+        ]),
+      ].slice(-100),
+    };
+
+    await saveMemory(memory);
+
+    return memory;
+  } catch (error) {
+    console.error(
+      "MEMORY UPDATE ERROR:",
+      error
+    );
+
+    return currentMemory;
+  }
+}
+
+/* =====================================================
+   MESSAGE NORMALIZATION
 ===================================================== */
 
 function normalizeMessages(messages) {
@@ -178,20 +331,126 @@ function normalizeMessages(messages) {
         (message.role === "user" ||
           message.role === "assistant")
     )
-    .map((message) => ({
-      role: message.role,
-      content: String(
-        message.content || ""
-      ).trim(),
-    }))
-    .filter(
-      (message) =>
-        message.content.length > 0
-    );
+    .map((message) => {
+
+      /*
+        Normal text message
+      */
+
+      if (
+        typeof message.content ===
+        "string"
+      ) {
+        const text =
+          message.content.trim();
+
+        if (!text) {
+          return null;
+        }
+
+        return {
+          role: message.role,
+          content: text,
+        };
+      }
+
+      /*
+        Multimodal message
+      */
+
+      if (
+        Array.isArray(
+          message.content
+        )
+      ) {
+        const content =
+          message.content.filter(
+            (item) => {
+
+              if (!item) {
+                return false;
+              }
+
+              if (
+                item.type ===
+                "input_text"
+              ) {
+                return (
+                  typeof item.text ===
+                    "string" &&
+                  item.text.trim()
+                );
+              }
+
+              if (
+                item.type ===
+                "input_image"
+              ) {
+                return (
+                  typeof item.image_url ===
+                  "string"
+                );
+              }
+
+              return false;
+            }
+          );
+
+        if (!content.length) {
+          return null;
+        }
+
+        return {
+          role: message.role,
+          content,
+        };
+      }
+
+      return null;
+    })
+    .filter(Boolean);
 }
 
 /* =====================================================
-   ASA KİŞİLİĞİ
+   TEXT FOR MEMORY
+===================================================== */
+
+function extractTextFromMessage(
+  message
+) {
+  if (!message) {
+    return "";
+  }
+
+  if (
+    typeof message.content ===
+    "string"
+  ) {
+    return message.content;
+  }
+
+  if (
+    Array.isArray(message.content)
+  ) {
+    return message.content
+      .filter(
+        (item) =>
+          item?.type ===
+          "input_text"
+      )
+      .map(
+        (item) =>
+          item.text || ""
+      )
+      .join(" ")
+      .trim();
+  }
+
+  return "";
+}
+
+/* =====================================================
+   ASA PERSONALITY
 ===================================================== */
 
 const ASA_INSTRUCTIONS = `
@@ -207,156 +466,108 @@ Samimi, doğal, zeki ve yardımsever ol.
 
 Robot gibi konuşma.
 
-Alperen'in tarzına uyum sağla.
+Alperen'in konuşma tarzına uyum sağla.
 
-Kısa sorulara gereksiz uzun cevaplar verme.
+Kısa sorulara kısa ve doğal cevap ver.
 
-Fakat konu önemli veya karmaşıksa
-yeterli açıklama yap.
+Karmaşık konularda yeterli açıklama yap.
 
-Alperen sana günlük konuşma yapıyorsa
-doğal bir arkadaş gibi konuş.
+Alperen günlük konuşuyorsa arkadaşça
+ve doğal şekilde karşılık ver.
 
 ==============================
-KİŞİSEL HAFIZA
+KALICI HAFIZA
 ==============================
 
-Sana verilen kişisel hafızayı bağlam olarak kullan.
+Sana verilen kişisel hafızayı kullan.
 
-Bir bilgi hafızada varsa Alperen tekrar
-söylemeden kullanabilirsin.
+Hafızada bulunan bilgileri kullanıcı
+tekrar söylemeden kullanabilirsin.
 
-Örneğin Alperen'in sevdiği bir şey,
-daha önce verdiği bir bilgi veya
-önceki konuşmada belirttiği tercih
-hafızada bulunuyorsa buna göre cevap ver.
+Fakat hafızada olmayan bilgileri
+uydurma.
 
-Hafızadaki bilgileri kullanıcıya
-gereksiz yere listeleme.
+Hafızayı gereksiz yere listeleme.
 
-Doğal şekilde kullan.
-
-Hafızada olmayan bir şeyi kesin bilgi
-gibi uydurma.
+Bilgileri doğal şekilde kullan.
 
 ==============================
 GÜNCEL BİLGİ
 ==============================
 
-Bilgi güncelse web araştırması kullan.
+Güncel bilgi gerektiğinde web search kullan.
 
 Özellikle:
 
-- hava durumu
-- haberler
+- haber
 - son dakika
+- hava durumu
 - döviz
 - altın
 - kripto
 - borsa
 - spor
 - canlı skor
-- maçlar
+- maç
 - fikstür
-- ürün fiyatları
+- ürün fiyatı
 - teknoloji
 - şirket haberleri
 - siyasi gelişmeler
 - ulaşım
 - etkinlikler
-- tarih
-- saat
 - internet üzerindeki güncel bilgiler
 
-gibi konularda güncel araştırma yap.
+gibi konularda güncel bilgi araştır.
 
-Ancak basit günlük konuşmalarda
-gereksiz web araştırması yapma.
+Basit günlük konuşmalarda
+gereksiz web araması yapma.
 
 ==============================
-WEB SONUÇLARINI YORUMLAMA
+WEB
 ==============================
 
 Web sonuçlarını olduğu gibi kopyalama.
 
-Önce bilgiyi değerlendir.
+Bilgiyi değerlendir.
 
-Sonra Alperen'e anlaşılır şekilde aktar.
+Sonra Alperen'e doğal şekilde anlat.
 
-Mümkün olduğunda:
-
-1. Durum
-2. Önemli detay
-3. ASA'nın değerlendirmesi
-
-şeklinde doğal bir yapı kullan.
-
-Örneğin:
-
-"Durum şu..."
-
-"Önemli nokta..."
-
-"Benim yorumum..."
-
-şeklinde konuşabilirsin.
-
-Sadece haber başlıklarını arka arkaya
-dizme.
+Gereksiz kaynak listeleri oluşturma.
 
 ==============================
-HABERLER
+GÖRSELLER
 ==============================
 
-Alperen "bugünün haberleri",
-"son dakika", "dünyada ne oluyor"
-gibi bir şey sorarsa güncel araştırma yap.
+Kullanıcı bir görsel gönderirse
+görseli gerçekten incele.
 
-Önemli haberleri seç.
+Görselde gördüğün şeyleri
+uydurmadan anlat.
 
-Gereksiz ayrıntıları ele.
+Görsel net değilse bunu açıkça söyle.
 
-Haberin neden önemli olduğunu
-mümkün olduğunda açıkla.
-
-==============================
-SPOR
-==============================
-
-Skor, maç, fikstür veya canlı sonuç
-sorulursa güncel araştırma yap.
-
-Eski bilgiyi güncelmiş gibi gösterme.
-
-==============================
-HAVA DURUMU
-==============================
-
-Şehir belirtilmişse o şehir için
-güncel hava durumunu araştır.
-
-Sadece sıcaklığı değil,
-gerekiyorsa yağış, rüzgar ve
-günün genel durumunu da özetle.
+Bir fotoğraf üzerinde soru sorulursa
+doğrudan fotoğraf üzerinden cevap ver.
 
 ==============================
 KONUŞMA
 ==============================
 
-Kullanıcı:
+"selam"
 
 "nasılsın?"
+
 "ne yapıyorsun?"
-"selam"
+
 "iyi geceler"
 
-gibi günlük konuşma yapıyorsa
-web kullanma.
+gibi mesajlarda doğal konuş.
 
-Doğal cevap ver.
+Web kullanma.
 
 ==============================
-CEVAP STİLİ
+ÜSLUP
 ==============================
 
 Türkçe konuş.
@@ -365,288 +576,23 @@ Samimi ol.
 
 Gereksiz tekrar yapma.
 
-Kullanıcının sorusunu tekrar ederek
-cevaba başlama.
+Gereksiz uzun cevaplar verme.
 
-Alperen'in kişisel asistanı gibi davran.
+Emoji gerektiğinde kullan.
 
-Emoji gerektiğinde kullanabilirsin
-ama abartma.
-
-Kullanıcı "ASA", "kanka", "chat"
-gibi ifadeler kullanırsa doğal şekilde
-karşılık verebilirsin.
+Alperen "ASA", "kanka", "patron"
+gibi ifadeler kullanırsa doğal karşılık ver.
 `;
 
 /* =====================================================
-   HAFIZA GÜNCELLEME
+   RESPONSE
 ===================================================== */
 
-async function updateMemory(
-  currentMemory,
-  userMessage
+async function generateResponse(
+  messages,
+  memory
 ) {
-  if (!userMessage) {
-    return currentMemory;
-  }
-
-  const memoryResponse =
-    await openai.responses.create({
-      model: "gpt-5.6",
-
-      instructions: `
-Sen bir kişisel AI hafıza yöneticisisin.
-
-Kullanıcının adı Alperen.
-
-Aşağıdaki kullanıcı mesajından gelecekte
-işe yarayabilecek kalıcı kişisel bilgileri çıkar.
-
-Sadece gerçekten önemli olan bilgileri kaydet.
-
-Örnek:
-
-- isim
-- sevdiği şeyler
-- tercihleri
-- önemli kişisel bilgiler
-- projeleri
-- kullandığı sistemler
-- önemli alışkanlıklar
-- asistanıyla ilgili tercihleri
-
-Günlük ve geçici şeyleri kaydetme.
-
-Örneğin:
-"Bugün çay içtim" -> kaydetme.
-
-"En sevdiğim renk siyah" -> kaydet.
-
-Sonucu SADECE JSON olarak döndür.
-
-Format:
-
-{
-  "facts": [],
-  "preferences": [],
-  "important": []
-}
-`,
-
-      input: `
-MEVCUT HAFIZA:
-
-${JSON.stringify(
-  currentMemory,
-  null,
-  2
-)}
-
-YENİ KULLANICI MESAJI:
-
-${userMessage}
-`,
-    });
-
-  try {
-    const text =
-      memoryResponse.output_text || "{}";
-
-    const cleaned = text
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
-
-    const updates = JSON.parse(cleaned);
-
-    const memory = {
-      ...currentMemory,
-
-      facts: [
-        ...new Set([
-          ...(currentMemory.facts || []),
-          ...(Array.isArray(updates.facts)
-            ? updates.facts
-            : []),
-        ]),
-      ].slice(-100),
-
-      preferences: [
-        ...new Set([
-          ...(currentMemory.preferences || []),
-          ...(Array.isArray(
-            updates.preferences
-          )
-            ? updates.preferences
-            : []),
-        ]),
-      ].slice(-100),
-
-      important: [
-        ...new Set([
-          ...(currentMemory.important || []),
-          ...(Array.isArray(
-            updates.important
-          )
-            ? updates.important
-            : []),
-        ]),
-      ].slice(-100),
-    };
-
-    await saveMemory(memory);
-
-    return memory;
-  } catch {
-    return currentMemory;
-  }
-}
-
-/* =====================================================
-   API
-===================================================== */
-
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      success: false,
-      error:
-        "Sadece POST isteği kabul edilir.",
-    });
-  }
-
-  try {
-    const body = req.body || {};
-
-    const conversationId =
-      typeof body.conversationId ===
-        "string" &&
-      body.conversationId.trim()
-        ? body.conversationId.trim()
-        : DEFAULT_CONVERSATION;
-
-    /* ================================================
-       YENİ SOHBET
-    ================================================ */
-
-    if (body.newConversation === true) {
-      const newId =
-        `chat-${Date.now()}-${Math.random()
-          .toString(36)
-          .slice(2, 8)}`;
-
-      return res.status(200).json({
-        success: true,
-        conversationId: newId,
-        history: [],
-        answer: "",
-        newConversation: true,
-      });
-    }
-
-    /* ================================================
-       GEÇMİŞİ GETİR
-    ================================================ */
-
-    const oldMessages =
-      await getConversation(
-        conversationId
-      );
-
-    if (
-      body.getHistory === true &&
-      (!body.messages ||
-        !Array.isArray(body.messages) ||
-        body.messages.length === 0)
-    ) {
-      return res.status(200).json({
-        success: true,
-        conversationId,
-        history: oldMessages,
-        answer: "",
-      });
-    }
-
-    /* ================================================
-       GELEN MESAJLAR
-    ================================================ */
-
-    const incomingMessages =
-      normalizeMessages(
-        body.messages
-      );
-
-    if (
-      incomingMessages.length === 0
-    ) {
-      return res.status(200).json({
-        success: true,
-        conversationId,
-        history: oldMessages,
-        answer: "",
-      });
-    }
-
-    /* ================================================
-       KONUŞMA BİRLEŞTİR
-    ================================================ */
-
-    let combinedMessages = [
-      ...oldMessages,
-    ];
-
-    for (const message of incomingMessages) {
-      const alreadyExists =
-        combinedMessages.some(
-          (oldMessage) =>
-            oldMessage.role ===
-              message.role &&
-            oldMessage.content ===
-              message.content
-        );
-
-      if (!alreadyExists) {
-        combinedMessages.push(
-          message
-        );
-      }
-    }
-
-    combinedMessages =
-      combinedMessages.slice(-100);
-
-    /* ================================================
-       SON KULLANICI MESAJI
-    ================================================ */
-
-    const lastUserMessage =
-      [...incomingMessages]
-        .reverse()
-        .find(
-          (message) =>
-            message.role === "user"
-        );
-
-    /* ================================================
-       KALICI HAFIZA
-    ================================================ */
-
-    let memory =
-      await getMemory();
-
-    if (lastUserMessage) {
-      memory =
-        await updateMemory(
-          memory,
-          lastUserMessage.content
-        );
-    }
-
-    /* ================================================
-       ASA'YA VERİLECEK TALİMAT
-    ================================================ */
-
-    const finalInstructions = `
+  const instructions = `
 ${ASA_INSTRUCTIONS}
 
 ==============================
@@ -659,49 +605,252 @@ ${JSON.stringify(
   2
 )}
 
-Bu hafızayı doğal şekilde kullan.
+Hafızadaki bilgileri doğal şekilde kullan.
 
-Hafızadaki bilgileri uydurma veya değiştirme.
+Hafızada olmayan kişisel bilgileri
+uydurma.
 `;
 
-    /* ================================================
-       GPT-5.6
-    ================================================ */
+  const response =
+    await openai.responses.create({
+      model: MODEL,
+
+      reasoning: {
+        effort: "low",
+      },
+
+      instructions,
+
+      tools: [
+        {
+          type: "web_search",
+        },
+      ],
+
+      input: messages,
+
+      truncation: "auto",
+    });
+
+  return response;
+}
+
+/* =====================================================
+   NEW ID
+===================================================== */
+
+function createConversationId() {
+  return (
+    `chat-${Date.now()}-` +
+    Math.random()
+      .toString(36)
+      .slice(2, 9)
+  );
+}
+
+/* =====================================================
+   API
+===================================================== */
+
+export default async function handler(
+  req,
+  res
+) {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      success: false,
+      error:
+        "Sadece POST isteği kabul edilir.",
+    });
+  }
+
+  try {
+    const body =
+      req.body || {};
+
+    const action =
+      body.action || "chat";
+
+    /* =================================================
+       DELETE
+    ================================================= */
+
+    if (
+      action ===
+      "deleteConversation"
+    ) {
+      const id =
+        typeof body.conversationId ===
+          "string"
+          ? body.conversationId.trim()
+          : "";
+
+      if (!id) {
+        return res.status(400).json({
+          success: false,
+          error:
+            "conversationId gerekli.",
+        });
+      }
+
+      await deleteConversation(id);
+
+      return res.status(200).json({
+        success: true,
+        deleted: true,
+        conversationId: id,
+      });
+    }
+
+    /* =================================================
+       NEW CONVERSATION
+    ================================================= */
+
+    if (
+      action ===
+      "newConversation" ||
+      body.newConversation === true
+    ) {
+      const newId =
+        createConversationId();
+
+      return res.status(200).json({
+        success: true,
+
+        conversationId: newId,
+
+        history: [],
+
+        answer: "",
+
+        newConversation: true,
+      });
+    }
+
+    /* =================================================
+       CONVERSATION ID
+    ================================================= */
+
+    const conversationId =
+      typeof body.conversationId ===
+        "string" &&
+      body.conversationId.trim()
+        ? body.conversationId.trim()
+        : DEFAULT_CONVERSATION;
+
+    /* =================================================
+       HISTORY
+    ================================================= */
+
+    const oldMessages =
+      await getConversation(
+        conversationId
+      );
+
+    if (
+      action === "getHistory" ||
+      body.getHistory === true
+    ) {
+      return res.status(200).json({
+        success: true,
+
+        conversationId,
+
+        history: oldMessages,
+
+        answer: "",
+      });
+    }
+
+    /* =================================================
+       INCOMING
+    ================================================= */
+
+    const incomingMessages =
+      normalizeMessages(
+        body.messages
+      );
+
+    if (
+      incomingMessages.length === 0
+    ) {
+      return res.status(200).json({
+        success: true,
+
+        conversationId,
+
+        history: oldMessages,
+
+        answer: "",
+      });
+    }
+
+    /* =================================================
+       COMBINE
+    ================================================= */
+
+    const combinedMessages = [
+      ...oldMessages,
+      ...incomingMessages,
+    ].slice(-100);
+
+    /* =================================================
+       LAST USER MESSAGE
+    ================================================= */
+
+    const lastUserMessage =
+      [
+        ...incomingMessages,
+      ]
+        .reverse()
+        .find(
+          (message) =>
+            message.role === "user"
+        );
+
+    /* =================================================
+       MEMORY
+    ================================================= */
+
+    let memory =
+      await getMemory();
+
+    const memoryText =
+      extractTextFromMessage(
+        lastUserMessage
+      );
+
+    if (memoryText) {
+      memory =
+        await updateMemory(
+          memory,
+          memoryText
+        );
+    }
+
+    /* =================================================
+       GENERATE
+    ================================================= */
 
     const response =
-      await openai.responses.create({
-        model: "gpt-5.6",
-
-        instructions:
-          finalInstructions,
-
-        tools: [
-          {
-            type: "web_search",
-          },
-        ],
-
-        input: combinedMessages,
-
-        truncation: "auto",
-      });
+      await generateResponse(
+        combinedMessages,
+        memory
+      );
 
     const answer =
       response.output_text ||
       "Şu anda cevap oluşturamadım.";
 
-    /* ================================================
-       CEVABI KONUŞMAYA EKLE
-    ================================================ */
+    /* =================================================
+       SAVE
+    ================================================= */
 
     combinedMessages.push({
       role: "assistant",
+
       content: answer,
     });
-
-    /* ================================================
-       REDIS'E KAYDET
-    ================================================ */
 
     const savedMessages =
       await saveConversation(
@@ -709,9 +858,9 @@ Hafızadaki bilgileri uydurma veya değiştirme.
         combinedMessages
       );
 
-    /* ================================================
-       RESPONSE
-    ================================================ */
+    /* =================================================
+       RESULT
+    ================================================= */
 
     return res.status(200).json({
       success: true,
@@ -725,6 +874,8 @@ Hafızadaki bilgileri uydurma veya değiştirme.
       memory,
 
       responseId: response.id,
+
+      model: MODEL,
     });
   } catch (error) {
     console.error(
