@@ -13,13 +13,43 @@
     padding: 0;
 }
 
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
 body {
     background: #07090f;
     color: #ffffff;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    min-height: 100vh;
 }
 
+.app {
+    width: 100%;
+    max-width: 700px;
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background: #07090f;
+}
+
+/* HEADER */
+
+.header {
+    height: 70px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-bottom: 1px solid #202532;
+    background: rgba(7, 9, 15, 0.96);
+}
+
+.logo {
+    display: flex;
     align-items: center;
     gap: 12px;
 }
@@ -34,7 +64,7 @@ body {
     justify-content: center;
     font-weight: 900;
     font-size: 18px;
-    box-shadow: 0 0 20px rgba(155,92,255,.35);
+    box-shadow: 0 0 20px rgba(155, 92, 255, 0.35);
 }
 
 .logo-text {
@@ -48,12 +78,13 @@ body {
     color: #66ff99;
 }
 
-/* SOHBET */
+/* CHAT */
 
 .chat {
     flex: 1;
     padding: 25px 18px 120px;
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
 .welcome {
@@ -67,6 +98,7 @@ body {
     margin-bottom: 10px;
     background: linear-gradient(90deg, #9b5cff, #ff4fd8);
     -webkit-background-clip: text;
+    background-clip: text;
     color: transparent;
 }
 
@@ -94,6 +126,8 @@ body {
     border-radius: 18px;
     line-height: 1.5;
     font-size: 15px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .asa .bubble {
@@ -107,7 +141,7 @@ body {
     border-bottom-right-radius: 5px;
 }
 
-/* ALT KISIM */
+/* INPUT */
 
 .input-area {
     position: fixed;
@@ -117,7 +151,7 @@ body {
     width: 100%;
     max-width: 700px;
     padding: 15px;
-    background: rgba(7,9,15,.94);
+    background: rgba(7, 9, 15, 0.96);
     border-top: 1px solid #202532;
     backdrop-filter: blur(15px);
 }
@@ -133,6 +167,7 @@ body {
 
 #messageInput {
     flex: 1;
+    min-width: 0;
     background: transparent;
     border: none;
     outline: none;
@@ -148,6 +183,7 @@ body {
 #sendButton {
     width: 48px;
     height: 48px;
+    flex-shrink: 0;
     border: none;
     border-radius: 13px;
     background: linear-gradient(135deg, #8b4dff, #d94fd5);
@@ -157,7 +193,12 @@ body {
 }
 
 #sendButton:active {
-    transform: scale(.94);
+    transform: scale(0.94);
+}
+
+#sendButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .info {
@@ -167,12 +208,12 @@ body {
     margin-top: 8px;
 }
 
-/* MASAÜSTÜ */
+/* DESKTOP */
 
 @media (min-width: 701px) {
     body {
         background:
-        radial-gradient(circle at top, #171027 0%, #07090f 45%);
+            radial-gradient(circle at top, #171027 0%, #07090f 45%);
     }
 
     .app {
@@ -200,7 +241,6 @@ body {
 
     </header>
 
-
     <main class="chat" id="chat">
 
         <div class="welcome" id="welcome">
@@ -209,7 +249,6 @@ body {
         </div>
 
     </main>
-
 
     <div class="input-area">
 
@@ -222,7 +261,7 @@ body {
                 autocomplete="off"
             >
 
-            <button id="sendButton">➤</button>
+            <button id="sendButton" type="button">➤</button>
 
         </div>
 
@@ -234,14 +273,12 @@ body {
 
 </div>
 
-
 <script>
 
 const input = document.getElementById("messageInput");
 const button = document.getElementById("sendButton");
 const chat = document.getElementById("chat");
 const welcome = document.getElementById("welcome");
-
 
 function addMessage(text, type) {
 
@@ -250,35 +287,38 @@ function addMessage(text, type) {
     }
 
     const message = document.createElement("div");
-
     message.className = "message " + type;
 
     const bubble = document.createElement("div");
-
     bubble.className = "bubble";
 
-    bubble.textContent = text;
+    bubble.textContent = String(text ?? "");
 
     message.appendChild(bubble);
-
     chat.appendChild(message);
 
     chat.scrollTop = chat.scrollHeight;
+
+    return message;
 }
 
-
 async function sendMessage() {
+
     const text = input.value.trim();
 
-    if (!text) return;
+    if (!text || button.disabled) {
+        return;
+    }
 
     addMessage(text, "user");
-    input.value = "";
 
-    // Geçici "düşünüyor" mesajı
-    addMessage("ASA düşünüyor...", "asa");
+    input.value = "";
+    button.disabled = true;
+
+    const thinkingMessage = addMessage("ASA düşünüyor...", "asa");
 
     try {
+
         const response = await fetch("/api/chat", {
             method: "POST",
             headers: {
@@ -289,41 +329,71 @@ async function sendMessage() {
             })
         });
 
-        const data = await response.json();
+        const rawText = await response.text();
 
-        // Son "ASA düşünüyor..." mesajını kaldır
-        const messages = chat.querySelectorAll(".message");
-        if (messages.length > 0) {
-            messages[messages.length - 1].remove();
+        let data = {};
+
+        try {
+            data = rawText ? JSON.parse(rawText) : {};
+        } catch (jsonError) {
+            throw new Error(
+                "Sunucudan geçerli JSON cevabı alınamadı: " + rawText
+            );
+        }
+
+        if (thinkingMessage) {
+            thinkingMessage.remove();
         }
 
         if (!response.ok) {
-            throw new Error(data.error || "API bağlantısı başarısız.");
+            throw new Error(
+                data.error ||
+                data.message ||
+                ("Sunucu hatası: " + response.status)
+            );
         }
 
-addMessage(data.answer, "asa");
+        const answer =
+            data.answer ??
+            data.reply ??
+            data.output_text ??
+            data.text ??
+            "";
+
+        if (!answer) {
+            throw new Error(
+                "ASA sunucudan boş cevap döndürdü."
+            );
+        }
+
+        addMessage(answer, "asa");
 
     } catch (error) {
-        const messages = chat.querySelectorAll(".message");
-        if (messages.length > 0) {
-            messages[messages.length - 1].remove();
+
+        if (thinkingMessage) {
+            thinkingMessage.remove();
         }
 
         addMessage(
-            "Üzgünüm Alperen, şu anda yapay zekâ bağlantısında bir sorun oluştu. " +
-            error.message,
+            "ASA bağlantısında bir sorun oluştu:\n" +
+            (error.message || "Bilinmeyen hata"),
             "asa"
         );
+
+    } finally {
+
+        button.disabled = false;
+        input.focus();
+
     }
 }
 
-
 button.addEventListener("click", sendMessage);
-
 
 input.addEventListener("keydown", function(event) {
 
     if (event.key === "Enter") {
+        event.preventDefault();
         sendMessage();
     }
 
