@@ -7,6 +7,7 @@
 <title>ASA</title>
 
 <style>
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -40,11 +41,15 @@ body {
 .header {
     height: 70px;
     flex-shrink: 0;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     padding: 0 18px;
+
     border-bottom: 1px solid #202532;
+
     background: rgba(7, 9, 15, 0.96);
 }
 
@@ -57,14 +62,24 @@ body {
 .logo-circle {
     width: 42px;
     height: 42px;
+
     border-radius: 50%;
-    background: linear-gradient(135deg, #9b5cff, #ff4fd8);
+
+    background: linear-gradient(
+        135deg,
+        #9b5cff,
+        #ff4fd8
+    );
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-weight: 900;
     font-size: 18px;
-    box-shadow: 0 0 20px rgba(155, 92, 255, 0.35);
+
+    box-shadow:
+        0 0 20px rgba(155, 92, 255, 0.35);
 }
 
 .logo-text {
@@ -82,13 +97,17 @@ body {
 
 .chat {
     flex: 1;
-    padding: 25px 18px 120px;
+
+    padding: 25px 18px 130px;
+
     overflow-y: auto;
+
     scroll-behavior: smooth;
 }
 
 .welcome {
     text-align: center;
+
     margin-top: 80px;
     margin-bottom: 40px;
 }
@@ -96,9 +115,16 @@ body {
 .welcome h1 {
     font-size: 42px;
     margin-bottom: 10px;
-    background: linear-gradient(90deg, #9b5cff, #ff4fd8);
+
+    background: linear-gradient(
+        90deg,
+        #9b5cff,
+        #ff4fd8
+    );
+
     -webkit-background-clip: text;
     background-clip: text;
+
     color: transparent;
 }
 
@@ -106,6 +132,8 @@ body {
     color: #858b9b;
     font-size: 15px;
 }
+
+/* MESAJ */
 
 .message {
     display: flex;
@@ -122,57 +150,95 @@ body {
 
 .bubble {
     max-width: 82%;
+
     padding: 14px 17px;
+
     border-radius: 18px;
+
     line-height: 1.5;
+
     font-size: 15px;
+
     white-space: pre-wrap;
+
     overflow-wrap: anywhere;
 }
 
 .asa .bubble {
     background: #111622;
+
     border: 1px solid #252c3b;
+
     border-bottom-left-radius: 5px;
 }
 
 .user .bubble {
-    background: linear-gradient(135deg, #7146d9, #a448bd);
+    background: linear-gradient(
+        135deg,
+        #7146d9,
+        #a448bd
+    );
+
     border-bottom-right-radius: 5px;
+}
+
+/* DÜŞÜNÜYOR */
+
+.thinking {
+    opacity: 0.65;
 }
 
 /* INPUT */
 
 .input-area {
     position: fixed;
+
     bottom: 0;
     left: 50%;
+
     transform: translateX(-50%);
+
     width: 100%;
     max-width: 700px;
+
     padding: 15px;
+
     background: rgba(7, 9, 15, 0.96);
+
     border-top: 1px solid #202532;
+
     backdrop-filter: blur(15px);
 }
 
 .input-box {
     display: flex;
+
     gap: 10px;
+
     background: #111622;
+
     border: 1px solid #2b3242;
+
     border-radius: 17px;
+
     padding: 7px;
 }
 
 #messageInput {
     flex: 1;
+
     min-width: 0;
+
     background: transparent;
+
     border: none;
+
     outline: none;
+
     color: white;
+
     font-size: 15px;
+
     padding: 12px;
 }
 
@@ -183,13 +249,27 @@ body {
 #sendButton {
     width: 48px;
     height: 48px;
+
     flex-shrink: 0;
+
     border: none;
+
     border-radius: 13px;
-    background: linear-gradient(135deg, #8b4dff, #d94fd5);
+
+    background: linear-gradient(
+        135deg,
+        #8b4dff,
+        #d94fd5
+    );
+
     color: white;
+
     font-size: 20px;
+
     cursor: pointer;
+
+    transition: transform 0.15s ease,
+                opacity 0.15s ease;
 }
 
 #sendButton:active {
@@ -197,23 +277,31 @@ body {
 }
 
 #sendButton:disabled {
-    opacity: 0.6;
+    opacity: 0.55;
     cursor: not-allowed;
 }
 
 .info {
     text-align: center;
+
     color: #555c6b;
+
     font-size: 10px;
+
     margin-top: 8px;
 }
 
-/* DESKTOP */
+/* MASAÜSTÜ */
 
 @media (min-width: 701px) {
+
     body {
         background:
-            radial-gradient(circle at top, #171027 0%, #07090f 45%);
+            radial-gradient(
+                circle at top,
+                #171027 0%,
+                #07090f 45%
+            );
     }
 
     .app {
@@ -221,6 +309,7 @@ body {
         border-right: 1px solid #202532;
     }
 }
+
 </style>
 </head>
 
@@ -228,11 +317,20 @@ body {
 
 <div class="app">
 
+    <!-- HEADER -->
+
     <header class="header">
 
         <div class="logo">
-            <div class="logo-circle">A</div>
-            <div class="logo-text">ASA</div>
+
+            <div class="logo-circle">
+                A
+            </div>
+
+            <div class="logo-text">
+                ASA
+            </div>
+
         </div>
 
         <div class="status">
@@ -241,14 +339,33 @@ body {
 
     </header>
 
-    <main class="chat" id="chat">
 
-        <div class="welcome" id="welcome">
-            <h1>ASA</h1>
-            <p>Alperen'in kişisel yapay zekâ asistanı</p>
+    <!-- CHAT -->
+
+    <main
+        class="chat"
+        id="chat"
+    >
+
+        <div
+            class="welcome"
+            id="welcome"
+        >
+
+            <h1>
+                ASA
+            </h1>
+
+            <p>
+                Alperen'in kişisel yapay zekâ asistanı
+            </p>
+
         </div>
 
     </main>
+
+
+    <!-- INPUT -->
 
     <div class="input-area">
 
@@ -261,277 +378,303 @@ body {
                 autocomplete="off"
             >
 
-            <button id="sendButton" type="button">➤</button>
+            <button
+                id="sendButton"
+                type="button"
+            >
+                ➤
+            </button>
 
         </div>
 
         <div class="info">
-            ASA v0.1 • Kişisel Asistan
+            ASA v0.2 • Kişisel Asistan
         </div>
 
     </div>
 
 </div>
 
-<script>
-
-const input = document.getElementById("messageInput");
-const button = document.getElementById("sendButton");
-const chat = document.getElementById("chat");
-const welcome = document.getElementById("welcome");
-
-function addMessage(text, type) {
-
-    if (welcome) {
-        welcome.style.display = "none";
-    }
-
-    const message = document.createElement("div");
-    message.className = "message " + type;
-
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-
-    bubble.textContent = String(text ?? "");
-
-    message.appendChild(bubble);
-    chat.appendChild(message);
-
-    chat.scrollTop = chat.scrollHeight;
-
-    return message;
-}
-
-async function sendMessage() {
-
-    const text = input.value.trim();
-
-    if (!text || button.disabled) {
-        return;
-    }
-
-    addMessage(text, "user");
-
-    input.value = "";
-    button.disabled = true;
-
-    const thinkingMessage = addMessage("ASA düşünüyor...", "asa");
-
-    try {
-
-        const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: text
-            })
-        });
-
-        const rawText = await response.text();
-
-        let data = {};
-
-        try {
-            data = rawText ? JSON.parse(rawText) : {};
-        } catch (jsonError) {
-            throw new Error(
-                "Sunucudan geçerli JSON cevabı alınamadı: " + rawText
-            );
-        }
-
-        if (thinkingMessage) {
-            thinkingMessage.remove();
-        }
-
-        if (!response.ok) {
-            throw new Error(
-                data.error ||
-                data.message ||
-                ("Sunucu hatası: " + response.status)
-            );
-        }
-
-        const answer =
-            data.answer ??
-            data.reply ??
-            data.output_text ??
-            data.text ??
-            "";
-
-        if (!answer) {
-            throw new Error(
-                "ASA sunucudan boş cevap döndürdü."
-            );
-        }
-
-        addMessage(answer, "asa");
-
-    } catch (error) {
-
-        if (thinkingMessage) {
-            thinkingMessage.remove();
-        }
-
-        addMessage(
-            "ASA bağlantısında bir sorun oluştu:\n" +
-            (error.message || "Bilinmeyen hata"),
-            "asa"
-        );
-
-    } finally {
-
-        button.disabled = false;
-        input.focus();
-
-    }
-}
-
-button.addEventListener("click", sendMessage);
-
-input.addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
-        event.preventDefault();
-        sendMessage();
-    }
-
-});
 
 <script>
 
-const input = document.getElementById("messageInput");
-const button = document.getElementById("sendButton");
-const chat = document.getElementById("chat");
-const welcome = document.getElementById("welcome");
+/* ELEMENTLER */
+
+const input =
+    document.getElementById("messageInput");
+
+const button =
+    document.getElementById("sendButton");
+
+const chat =
+    document.getElementById("chat");
+
+const welcome =
+    document.getElementById("welcome");
+
+
+/* KONUŞMA HAFIZASI */
 
 let conversation = [];
 
+
+/* MESAJ EKLEME */
+
 function addMessage(text, type) {
 
     if (welcome) {
         welcome.style.display = "none";
     }
 
-    const message = document.createElement("div");
-    message.className = "message " + type;
+    const message =
+        document.createElement("div");
 
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
+    message.className =
+        "message " + type;
 
-    bubble.textContent = String(text ?? "");
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "bubble";
+
+    bubble.textContent =
+        String(text ?? "");
 
     message.appendChild(bubble);
+
     chat.appendChild(message);
 
-    chat.scrollTop = chat.scrollHeight;
+    chat.scrollTop =
+        chat.scrollHeight;
 
     return message;
 }
 
+
+/* MESAJ GÖNDER */
+
 async function sendMessage() {
 
-    const text = input.value.trim();
+    const text =
+        input.value.trim();
 
-    if (!text || button.disabled) {
+    if (
+        !text ||
+        button.disabled
+    ) {
         return;
     }
 
-    addMessage(text, "user");
+
+    /* KULLANICI MESAJINI EKRANA YAZ */
+
+    addMessage(
+        text,
+        "user"
+    );
+
+
+    /* INPUT TEMİZLE */
 
     input.value = "";
+
+
+    /* BUTONU KİLİTLE */
+
     button.disabled = true;
 
+
+    /* KONUŞMA HAFIZASINA EKLE */
+
     conversation.push({
+
         role: "user",
+
         content: text
+
     });
 
-    const thinkingMessage = addMessage(
-        "ASA düşünüyor...",
-        "asa"
-    );
+
+    /* DÜŞÜNÜYOR MESAJI */
+
+    const thinkingMessage =
+        addMessage(
+            "ASA düşünüyor...",
+            "asa"
+        );
+
+    thinkingMessage
+        .querySelector(".bubble")
+        .classList.add("thinking");
+
 
     try {
 
-        const response = await fetch("/api/chat", {
-            method: "POST",
+        /* API'YE İSTEK */
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+        const response =
+            await fetch(
+                "/api/chat",
+                {
 
-            body: JSON.stringify({
-                messages: conversation
-            })
-        });
+                    method: "POST",
 
-        const rawText = await response.text();
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        messages:
+                            conversation
+
+                    })
+
+                }
+            );
+
+
+        /* HAM CEVAP */
+
+        const rawText =
+            await response.text();
+
+
+        /* JSON */
 
         let data = {};
 
         try {
-            data = rawText ? JSON.parse(rawText) : {};
+
+            data =
+                rawText
+                    ? JSON.parse(rawText)
+                    : {};
+
         } catch {
+
             throw new Error(
-                "Sunucudan geçerli JSON cevabı alınamadı."
+                "Sunucudan geçerli cevap alınamadı."
             );
+
         }
+
+
+        /* DÜŞÜNÜYOR MESAJINI SİL */
 
         if (thinkingMessage) {
             thinkingMessage.remove();
         }
 
+
+        /* API HATASI */
+
         if (!response.ok) {
+
             throw new Error(
+
                 data.error ||
-                "Sunucu hatası: " + response.status
+
+                data.message ||
+
+                (
+                    "Sunucu hatası: " +
+                    response.status
+                )
+
             );
+
         }
+
+
+        /* CEVABI AL */
 
         const answer =
             data.answer ||
             data.reply ||
+            data.output_text ||
             "";
 
+
+        /* BOŞ CEVAP KONTROLÜ */
+
         if (!answer) {
+
             throw new Error(
                 "ASA boş cevap döndürdü."
             );
+
         }
 
+
+        /* ASA CEVABINI HAFIZAYA EKLE */
+
         conversation.push({
+
             role: "assistant",
+
             content: answer
+
         });
 
-        addMessage(answer, "asa");
+
+        /* ASA CEVABINI GÖSTER */
+
+        addMessage(
+            answer,
+            "asa"
+        );
+
 
     } catch (error) {
+
+        /* DÜŞÜNÜYOR MESAJINI SİL */
 
         if (thinkingMessage) {
             thinkingMessage.remove();
         }
 
+
+        /* HATA MESAJI */
+
         addMessage(
+
             "ASA bağlantısında bir sorun oluştu:\n" +
-            (error.message || "Bilinmeyen hata"),
+            (
+                error.message ||
+                "Bilinmeyen hata"
+            ),
+
             "asa"
+
         );
 
     } finally {
 
+        /* BUTONU AÇ */
+
         button.disabled = false;
+
+        /* INPUT'A GERİ DÖN */
+
         input.focus();
 
     }
+
 }
+
+
+/* BUTONA BASILINCA */
 
 button.addEventListener(
     "click",
     sendMessage
 );
+
+
+/* ENTER İLE GÖNDER */
 
 input.addEventListener(
     "keydown",
@@ -542,6 +685,7 @@ input.addEventListener(
             event.preventDefault();
 
             sendMessage();
+
         }
 
     }
