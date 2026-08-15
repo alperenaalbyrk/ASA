@@ -4,88 +4,159 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const redisUrl =
-  process.env.KV_REST_API_URL ||
-  process.env.KV_URL;
+// Redis / Upstash ayarları
+const REDIS_URL = process.env.KV_REST_API_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN;
 
-const redisToken =
-  process.env.KV_REST_API_TOKEN;
+const MEMORY_KEY = "asa:memory";
 
-const MEMORY_KEY = "asa:memory:alperen";
-const CHAT_KEY = "asa:chat:alperen";
-
-async function redisCommand(command) {
-  if (!redisUrl || !redisToken) {
-    throw new Error("Redis bağlantı bilgileri bulunamadı.");
-  }
-
-  const response = await fetch(redisUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${redisToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(command),
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Redis hatası: ${text}`);
-  }
-
-  return response.json();
-}
-
-async function getValue(key) {
-  const data = await redisCommand(["GET", key]);
-
-  if (!data.result) {
-    return null;
+/**
+ * Redis'ten ASA'nın kalıcı hafızasını getirir.
+ */
+async function getMemory() {
+  if (!REDIS_URL || !REDIS_TOKEN) {
+    console.error("Redis environment variables eksik.");
+    return {};
   }
 
   try {
+    const response = await fetch(
+      `${REDIS_URL}/get/${encodeURIComponent(MEMORY_KEY)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${REDIS_TOKEN}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Redis GET hatası: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.result) {
+      return {};
+    }
+
+    if (typeof data.result === "object") {
+      return data.result;
+    }
+
     return JSON.parse(data.result);
-  } catch {
-    return data.result;
+  } catch (error) {
+    console.error("Hafıza okuma hatası:", error);
+    return {};
   }
 }
 
-async function setValue(key, value) {
-  await redisCommand([
-    "SET",
-    key,
-    JSON.stringify(value),
-  ]);
-}
-
-async function getMemory() {
-  const memory = await getValue(MEMORY_KEY);
-
-  return Array.isArray(memory)
-    ? memory
-    : [];
-}
-
+/**
+ * ASA'nın hafızasını Redis'e kaydeder.
+ */
 async function saveMemory(memory) {
-  await setValue(
-    MEMORY_KEY,
-    [...new Set(memory)].slice(-100)
-  );
+  if (!REDIS_URL || !REDIS_TOKEN) {
+    console.error("Redis environment variables eksik.");
+    return;
+  }
+
+  try {
+    const value = JSON.stringify(memory);
+
+    const response = await fetch(
+      `${REDIS_URL}/set/${encodeURIComponent(MEMORY_KEY)}/${encodeURIComponent(
+        value
+      )}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${REDIS_TOKEN}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Redis SET hatası: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Hafıza kayıt hatası:", error);
+  }
 }
 
-async function getChatHistory() {
-  const history = await getValue(CHAT_KEY);
+/**
+ * Kullanıcının mesajından kalıcı olarak hatırlanması
+ * gereken kişisel bilgileri çıkarır.
+ */
+async function extractMemory(userMessage) {
+  try {
+    const response = await openai.responses.create({
+      model: "gpt-5.6",
 
-  return Array.isArray(history)
-    ? history
-    : [];
+      instructions: `
+Sen ASA'nın hafıza yöneticisisin.
+
+Kullanıcının adı Alperen.
+
+Görevin, kullanıcının mesajından gelecekte de
+işe yarayacak kalıcı kişisel bilgileri tespit etmektir.
+
+SADECE gerçekten kalıcı ve kişisel bilgileri kaydet.
+
+Örnekler:
+- En sevdiğim renk mor.
+- En sevdiğim oyun God of War.
+- Ben reklam işi yapıyorum.
+- Çay dükkanım var.
+- Sıla benim kız arkadaşım.
+- En sevdiğim takım Galatasaray.
+- Bilgisayarımın ekran kartı RTX 4070.
+
+Bunlar kaydedilebilir.
+
+Şunları kaydetme:
+- Bugün hava çok sıcak.
+- Şu an acıktım.
+- Birazdan işe gideceğim.
+- Bugün moralim bozuk.
+- Merhaba.
+- Nasılsın?
+- Geçici günlük konuşmalar.
+
+ÖNEMLİ:
+Kullanıcı açıkça "hatırla" demese bile,
+mesaj kalıcı bir kişisel bilgi içeriyorsa kaydet.
+
+Çıktıyı SADECE geçerli JSON olarak ver.
+
+Eğer kaydedilecek bilgi yoksa:
+{}
+
+Eğer bilgi varsa örnek:
+{
+  "favorite_color": "mor"
 }
 
-async function saveChatHistory(history) {
-  await setValue(
-    CHAT_KEY,
-    history.slice(-50)
-  );
+Başka açıklama yazma.
+`,
+
+      input: userMessage,
+    });
+
+    const text = response.output_text?.trim();
+
+    if (!text) {
+      return {};
+    }
+
+    try {
+      return JSON.parse(text);
+    } catch {
+      console.error("Hafıza JSON olarak okunamadı:", text);
+      return {};
+    }
+  } catch (error) {
+    console.error("Hafıza analiz hatası:", error);
+    return {};
+  }
 }
 
 export default async function handler(req, res) {
@@ -96,213 +167,90 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = req.body || {};
+    const { messages } = req.body || {};
 
-    /*
-     * FRONTEND'DEN GELEN MESAJI AL
-     *
-     * Eski index.html:
-     * { message: "..." }
-     *
-     * Yeni sistem:
-     * { messages: [...] }
-     */
-
-    let currentMessage = "";
-
-    if (
-      typeof body.message === "string" &&
-      body.message.trim()
-    ) {
-      currentMessage = body.message.trim();
-    }
-
-    if (
-      !currentMessage &&
-      Array.isArray(body.messages) &&
-      body.messages.length > 0
-    ) {
-      const lastUserMessage =
-        [...body.messages]
-          .reverse()
-          .find(
-            (item) =>
-              item &&
-              item.role === "user" &&
-              typeof item.content === "string"
-          );
-
-      if (lastUserMessage) {
-        currentMessage =
-          lastUserMessage.content.trim();
-      }
-    }
-
-    if (!currentMessage) {
+    if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({
-        error: "Mesaj gönderilmedi.",
+        error: "Mesaj geçmişi gönderilmedi.",
       });
     }
 
-    /*
-     * HAFIZA KOMUTU
-     */
+    // Son kullanıcı mesajını bul
+    const lastUserMessage = [...messages]
+      .reverse()
+      .find((message) => message?.role === "user");
 
-    const lowerMessage =
-      currentMessage.toLocaleLowerCase("tr-TR");
+    const userText =
+      typeof lastUserMessage?.content === "string"
+        ? lastUserMessage.content
+        : "";
 
-    if (
-      lowerMessage.includes("beni unut") ||
-      lowerMessage.includes("hafızanı temizle") ||
-      lowerMessage.includes("hafızanı sıfırla")
-    ) {
-      await saveMemory([]);
-      await saveChatHistory([]);
-
-      return res.status(200).json({
-        answer:
-          "Tamam Alperen. Kalıcı hafızamdaki bilgileri temizledim. 🧠🗑️",
-      });
-    }
-
-    /*
-     * REDIS'TEN VERİLERİ AL
-     */
-
+    // Mevcut kalıcı hafızayı getir
     const memory = await getMemory();
-    const chatHistory = await getChatHistory();
 
-    /*
-     * SOHBET BAĞLAMI
-     */
+    // ASA'nın cevabını oluştur
+    const response = await openai.responses.create({
+      model: "gpt-5.6",
 
-    const context = [
-      ...chatHistory,
-      {
-        role: "user",
-        content: currentMessage,
-      },
-    ].slice(-30);
-
-    /*
-     * HAFIZA BİLGİLERİ
-     */
-
-    const memoryText =
-      memory.length > 0
-        ? memory
-            .map(
-              (item) => `- ${item}`
-            )
-            .join("\n")
-        : "Henüz kayıtlı özel bilgi yok.";
-
-    /*
-     * OPENAI
-     */
-
-    const response =
-      await openai.responses.create({
-        model: "gpt-5.6",
-
-        instructions: `
+      instructions: `
 Sen ASA'sın.
 
 Kullanıcının adı Alperen.
-
 Türkçe konuş.
-
-Samimi, doğal, sıcak ve yardımcı ol.
+Samimi, doğal ve yardımcı ol.
+Kendini ASA olarak tanıt.
+Kısa ve anlaşılır cevaplar ver.
 
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 
-Aşağıdaki bilgiler senin kalıcı hafızandır:
+Sana gönderilen messages dizisi önceki konuşma geçmişidir.
+Önceki mesajları dikkate al ve konuşmanın bağlamını koru.
 
-${memoryText}
+Aşağıdaki bilgiler ASA'nın kalıcı hafızasıdır.
+Cevap verirken gerektiğinde bunları kullan:
 
-Bu bilgileri gerektiğinde kullan.
+${JSON.stringify(memory, null, 2)}
 
-Kullanıcı sana:
+Hafızadaki bilgileri kullanıcı sormadan gereksiz yere
+listeleme.
 
-"bunu hatırla"
-"bunu kaydet"
-"aklında tut"
-"unutma"
-
-gibi bir ifade kullanırsa, verdiği bilgiyi
-kalıcı hafızaya alınması gereken önemli
-bir bilgi olarak değerlendir.
-
-Her konuşmayı hafızaya alma.
-
-Sadece gelecekte işe yarayacak kişisel
-bilgileri hafızaya al.
-
-Cevaplarını gereksiz yere uzatma.
-
-Teknik konularda adım adım ve net yardım et.
-
-Bilmediğin şeyi uydurma.
+Bir bilgi hafızada varsa onu biliyormuş gibi doğal şekilde kullan.
 `,
 
-        input: context,
-      });
+      input: messages,
+    });
 
     const answer =
-      response.output_text?.trim() ||
-      "Şu anda cevap oluşturamadım.";
+      response.output_text || "Şu anda cevap oluşturamadım.";
 
-    /*
-     * SOHBET GEÇMİŞİNİ KAYDET
-     */
+    // Yeni kişisel bilgi var mı kontrol et
+    if (userText) {
+      const newMemory = await extractMemory(userText);
 
-    await saveChatHistory([
-      ...chatHistory,
-      {
-        role: "user",
-        content: currentMessage,
-      },
-      {
-        role: "assistant",
-        content: answer,
-      },
-    ]);
+      if (
+        newMemory &&
+        typeof newMemory === "object" &&
+        Object.keys(newMemory).length > 0
+      ) {
+        const updatedMemory = {
+          ...memory,
+          ...newMemory,
+        };
 
-    /*
-     * AÇIK HAFIZA KOMUTU VARSA KAYDET
-     */
+        await saveMemory(updatedMemory);
 
-    const wantsMemory =
-      lowerMessage.includes("bunu hatırla") ||
-      lowerMessage.includes("bunu kaydet") ||
-      lowerMessage.includes("aklında tut") ||
-      lowerMessage.includes("unutma");
-
-    if (wantsMemory) {
-      await saveMemory([
-        ...memory,
-        currentMessage,
-      ]);
+        console.log("ASA HAFIZASI GÜNCELLENDİ:", updatedMemory);
+      }
     }
-
-    /*
-     * CEVAP
-     */
 
     return res.status(200).json({
       answer,
     });
-
   } catch (error) {
-    console.error(
-      "ASA API HATASI:",
-      error
-    );
+    console.error("ASA API HATASI:", error);
 
     return res.status(500).json({
-      error:
-        error?.message ||
-        "ASA tarafında bilinmeyen bir hata oluştu.",
+      error: error.message || "Bilinmeyen hata",
     });
   }
 }
