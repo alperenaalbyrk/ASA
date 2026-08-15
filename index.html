@@ -20,29 +20,25 @@ body {
     min-height: 100vh;
 }
 
-.app {
-    width: 100%;
-    max-width: 700px;
-    margin: auto;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+const response = await openai.responses.create({
+    model: "gpt-5",
+    instructions: `
+Sen ASA'sın.
 
-/* ÜST BAR */
+Kullanıcının adı Alperen.
+Türkçe konuş.
+Samimi, doğal ve yardımcı ol.
+Kendini "ASA" olarak tanıt.
+Kısa ve anlaşılır cevaplar ver.
 
-.header {
-    height: 75px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 22px;
-    border-bottom: 1px solid #202532;
-    background: #0a0d14;
-}
+Sen Alperen'in kişisel yapay zekâ asistanısın.
+`,
+    input: message,
+});
 
-.logo {
-    display: flex;
+return res.status(200).json({
+    reply: response.output_text,
+});
     align-items: center;
     gap: 12px;
 }
