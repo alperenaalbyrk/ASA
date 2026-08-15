@@ -12,27 +12,29 @@
 
 <style>
 
-/* =========================================================
-   RESET
-========================================================= */
-
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+:root {
+  --bg: #05040a;
+  --panel: #0d0c16;
+  --panel2: #12111d;
+  --border: rgba(255,255,255,.10);
+  --text: #f5f5fa;
+  --muted: #858394;
+  --purple: #9b35ff;
+  --purple2: #c13cff;
+}
+
 html,
 body {
   width: 100%;
   height: 100%;
-}
-
-body {
-  overflow: hidden;
-
-  background: #05040a;
-  color: #f5f4fa;
+  background: var(--bg);
+  color: var(--text);
 
   font-family:
     -apple-system,
@@ -40,6 +42,8 @@ body {
     "SF Pro Display",
     "Segoe UI",
     sans-serif;
+
+  overflow: hidden;
 }
 
 button,
@@ -53,38 +57,11 @@ button {
 }
 
 
-/* =========================================================
-   COLORS
-========================================================= */
-
-:root {
-
-  --bg: #05040a;
-
-  --panel: #0d0c16;
-
-  --panel2: #12111d;
-
-  --border:
-    rgba(255,255,255,.09);
-
-  --text: #f5f4fa;
-
-  --muted: #858394;
-
-  --purple: #9b35ff;
-
-  --purple2: #c53cff;
-
-}
-
-
-/* =========================================================
+/* =====================================================
    APP
-========================================================= */
+===================================================== */
 
 .app {
-
   width: 100%;
   height: 100dvh;
 
@@ -93,61 +70,47 @@ button {
   overflow: hidden;
 
   background:
-
     radial-gradient(
-      circle at 50% 18%,
-      rgba(130,30,190,.17),
+      circle at 50% 15%,
+      rgba(117,22,180,.20),
       transparent 35%
     ),
-
     radial-gradient(
       circle at 80% 70%,
-      rgba(80,0,150,.12),
-      transparent 38%
+      rgba(80,0,150,.13),
+      transparent 35%
     ),
-
     #05040a;
 }
 
 
-/* =========================================================
+/* =====================================================
    HEADER
-========================================================= */
+===================================================== */
 
 .header {
-
-  position: absolute;
-
-  top: 0;
-  left: 0;
-  right: 0;
-
   height: 100px;
 
-  padding:
-    14px
-    18px;
+  padding: 15px 14px;
 
   display: flex;
-
   align-items: center;
 
-  gap: 12px;
+  gap: 11px;
 
-  z-index: 20;
+  border-bottom:
+    1px solid rgba(255,255,255,.08);
 
   background:
     linear-gradient(
       180deg,
-      rgba(5,4,10,.99),
-      rgba(5,4,10,.91)
+      rgba(5,4,10,.98),
+      rgba(5,4,10,.88)
     );
 
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.07);
+  position: relative;
+  z-index: 20;
 }
-
 
 .menuButton,
 .iconButton {
@@ -159,35 +122,27 @@ button {
 
   border-radius: 18px;
 
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
   background:
-    rgba(18,17,29,.9);
+    rgba(18,17,29,.90);
 
   border:
-    1px solid
-    rgba(255,255,255,.10);
+    1px solid rgba(255,255,255,.10);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   font-size: 25px;
 
   cursor: pointer;
 
-  transition:
-    transform .15s,
-    background .15s;
+  transition: .2s;
 }
-
 
 .menuButton:active,
 .iconButton:active {
-
   transform: scale(.94);
-
 }
-
 
 .logo {
 
@@ -199,7 +154,6 @@ button {
   border-radius: 18px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
@@ -211,44 +165,34 @@ button {
     );
 
   box-shadow:
-    0 0 30px
-    rgba(163,45,255,.32);
+    0 0 30px rgba(163,45,255,.35);
 
   font-size: 31px;
-
   font-weight: 800;
 }
 
-
 .brand {
 
-  font-size: 29px;
+  font-size: 28px;
 
   font-weight: 800;
 
   letter-spacing: 6px;
-
-  white-space: nowrap;
 }
 
-
 .headerSpacer {
-
   flex: 1;
 }
 
-
 .headerActions {
-
   display: flex;
-
   gap: 7px;
 }
 
 
-/* =========================================================
-   CHAT AREA
-========================================================= */
+/* =====================================================
+   CHAT
+===================================================== */
 
 .chat {
 
@@ -263,20 +207,16 @@ button {
   overflow-x: hidden;
 
   padding:
-    45px
+    55px
     18px
     150px;
 
   scroll-behavior: smooth;
 }
 
-
 .chat::-webkit-scrollbar {
-
   width: 4px;
-
 }
-
 
 .chat::-webkit-scrollbar-thumb {
 
@@ -284,59 +224,52 @@ button {
     rgba(180,60,255,.35);
 
   border-radius: 10px;
-
 }
 
 
-/* =========================================================
+/* =====================================================
    MESSAGE
-========================================================= */
+===================================================== */
 
 .message {
 
   width: 100%;
 
+  margin-bottom: 25px;
+
   display: flex;
-
-  margin-bottom: 22px;
-
-  align-items: flex-start;
 }
-
 
 .message.user {
-
   justify-content: flex-end;
-
 }
-
 
 .message.assistant {
-
   justify-content: flex-start;
-
 }
 
 
-/* =========================================================
-   USER MESSAGE
-========================================================= */
+/* USER */
 
 .user .bubble {
 
-  display: block;
-
-  width: fit-content;
-
-  max-width: 88%;
+  max-width: 90%;
 
   padding:
-    15px
-    19px;
+    18px
+    20px;
 
-  border-radius: 24px;
+  border-radius: 23px;
 
   border-bottom-right-radius: 7px;
+
+  font-size: 18px;
+
+  line-height: 1.55;
+
+  word-break: break-word;
+
+  white-space: pre-wrap;
 
   background:
     linear-gradient(
@@ -346,163 +279,62 @@ button {
     );
 
   box-shadow:
-    0 10px 35px
-    rgba(131,48,255,.14);
-
-  font-size: 18px;
-
-  line-height: 1.5;
-
-  white-space: pre-wrap;
-
-  word-break: break-word;
+    0 12px 35px
+    rgba(131,48,255,.15);
 }
 
 
-/* =========================================================
-   ASA MESSAGE
-========================================================= */
-
-/*
-   ÖNEMLİ:
-   ASA cevabında artık büyük kart yok.
-*/
+/* ASSISTANT */
 
 .assistant .bubble {
 
-  display: block;
-
-  width: auto;
-
-  max-width: 90%;
+  max-width: 92%;
 
   padding:
     4px
-    0;
+    5px;
 
   background: transparent;
 
   border: 0;
 
-  box-shadow: none;
-
-  border-radius: 0;
-
   font-size: 18px;
 
-  line-height: 1.65;
-
-  white-space: normal;
+  line-height: 1.7;
 
   word-break: break-word;
-}
 
+  white-space: normal;
+}
 
 .assistantLabel {
 
   display: block;
 
-  margin-bottom: 8px;
-
   color:
-    #b43cff;
+    #b13cff;
 
-  font-size: 13px;
+  font-size: 14px;
 
   font-weight: 800;
 
   letter-spacing: 6px;
-}
 
+  margin-bottom: 13px;
+}
 
 .assistantText {
-
-  color:
-    #f1eff7;
+  color: #f3f2f8;
 }
 
 
-/* =========================================================
-   TYPING
-========================================================= */
-
-.typing {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 6px;
-
-  height: 20px;
-
-  padding-top: 3px;
-}
-
-
-.typing span {
-
-  width: 7px;
-  height: 7px;
-
-  border-radius: 50%;
-
-  background:
-    #b43cff;
-
-  animation:
-    typing 1.1s infinite;
-}
-
-
-.typing span:nth-child(2) {
-
-  animation-delay:
-    .15s;
-
-}
-
-
-.typing span:nth-child(3) {
-
-  animation-delay:
-    .30s;
-
-}
-
-
-@keyframes typing {
-
-  0%,
-  60%,
-  100% {
-
-    opacity: .25;
-
-    transform:
-      translateY(0);
-
-  }
-
-  30% {
-
-    opacity: 1;
-
-    transform:
-      translateY(-4px);
-
-  }
-
-}
-
-
-/* =========================================================
-   EMPTY SCREEN
-========================================================= */
+/* =====================================================
+   EMPTY
+===================================================== */
 
 .empty {
 
-  min-height: 100%;
+  height: 100%;
 
   display: flex;
 
@@ -517,18 +349,12 @@ button {
   padding: 30px;
 }
 
-
 .emptyLogo {
 
-  width: 86px;
-  height: 86px;
+  width: 90px;
+  height: 90px;
 
-  border-radius: 27px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
+  border-radius: 28px;
 
   background:
     linear-gradient(
@@ -537,40 +363,40 @@ button {
       #c33cff
     );
 
-  font-size: 48px;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 50px;
 
   font-weight: 800;
 
   box-shadow:
-    0 0 60px
-    rgba(159,44,255,.28);
+    0 0 70px
+    rgba(159,44,255,.30);
 
-  margin-bottom: 22px;
+  margin-bottom: 25px;
 }
-
 
 .empty h1 {
 
-  font-size: 27px;
+  font-size: 28px;
 
-  margin-bottom: 8px;
-
+  margin-bottom: 10px;
 }
-
 
 .empty p {
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
   font-size: 17px;
-
 }
 
 
-/* =========================================================
+/* =====================================================
    INPUT
-========================================================= */
+===================================================== */
 
 .inputArea {
 
@@ -581,9 +407,8 @@ button {
 
   bottom: 12px;
 
-  z-index: 25;
+  z-index: 15;
 }
-
 
 .inputBox {
 
@@ -591,27 +416,26 @@ button {
 
   border-radius: 25px;
 
+  background:
+    rgba(15,14,25,.96);
+
+  border:
+    1px solid
+    rgba(255,255,255,.11);
+
   display: flex;
 
   align-items: center;
 
   padding: 7px;
 
-  background:
-    rgba(15,14,25,.97);
-
-  border:
-    1px solid
-    rgba(255,255,255,.11);
-
   box-shadow:
     0 15px 50px
-    rgba(0,0,0,.4),
+    rgba(0,0,0,.35),
 
     0 0 35px
     rgba(135,35,255,.08);
 }
-
 
 .voiceButton {
 
@@ -634,14 +458,11 @@ button {
   cursor: pointer;
 }
 
-
 .input {
 
   flex: 1;
 
   min-width: 0;
-
-  height: 58px;
 
   background: transparent;
 
@@ -652,19 +473,14 @@ button {
   color: white;
 
   padding:
-    0 11px;
+    0 10px;
 
   font-size: 17px;
 }
 
-
 .input::placeholder {
-
-  color:
-    #727181;
-
+  color: #727181;
 }
-
 
 .sendButton {
 
@@ -682,27 +498,23 @@ button {
       #c03cff
     );
 
-  font-size: 32px;
+  font-size: 31px;
 
   cursor: pointer;
 
   box-shadow:
     0 0 30px
-    rgba(165,45,255,.22);
-
+    rgba(165,45,255,.25);
 }
-
 
 .sendButton:disabled {
-
   opacity: .45;
-
 }
 
 
-/* =========================================================
+/* =====================================================
    OVERLAY
-========================================================= */
+===================================================== */
 
 .overlay {
 
@@ -710,35 +522,32 @@ button {
 
   inset: 0;
 
-  z-index: 50;
-
   background:
-    rgba(0,0,0,.60);
+    rgba(0,0,0,.58);
 
   backdrop-filter:
-    blur(8px);
+    blur(7px);
+
+  z-index: 50;
 
   opacity: 0;
 
   pointer-events: none;
 
-  transition:
-    opacity .25s;
+  transition: .25s;
 }
-
 
 .overlay.open {
 
   opacity: 1;
 
   pointer-events: auto;
-
 }
 
 
-/* =========================================================
+/* =====================================================
    SIDEBAR
-========================================================= */
+===================================================== */
 
 .sidebar {
 
@@ -749,24 +558,7 @@ button {
   bottom: 0;
 
   width:
-    min(430px, 88vw);
-
-  z-index: 60;
-
-  transform:
-    translateX(-105%);
-
-  transition:
-    transform .30s
-    cubic-bezier(.22,.8,.25,1);
-
-  padding: 22px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  overflow: hidden;
+    min(560px,88vw);
 
   background:
     linear-gradient(
@@ -778,20 +570,28 @@ button {
   border-right:
     1px solid
     rgba(255,255,255,.09);
-}
 
-
-.sidebar.open {
+  z-index: 60;
 
   transform:
-    translateX(0);
+    translateX(-105%);
 
+  transition:
+    transform
+    .3s
+    cubic-bezier(.22,.8,.25,1);
+
+  padding: 22px;
+
+  display: flex;
+
+  flex-direction: column;
 }
 
-
-/* =========================================================
-   SIDEBAR HEADER
-========================================================= */
+.sidebar.open {
+  transform:
+    translateX(0);
+}
 
 .sidebarHeader {
 
@@ -799,11 +599,10 @@ button {
 
   align-items: center;
 
-  gap: 13px;
+  gap: 15px;
 
   margin-bottom: 35px;
 }
-
 
 .sidebarLogo {
 
@@ -812,11 +611,6 @@ button {
 
   border-radius: 18px;
 
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
   background:
     linear-gradient(
       135deg,
@@ -824,23 +618,26 @@ button {
       #c33cff
     );
 
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
   font-size: 31px;
 
   font-weight: 800;
 }
 
-
 .sidebarBrand {
-
-  flex: 1;
 
   font-size: 25px;
 
   font-weight: 800;
 
   letter-spacing: 7px;
-}
 
+  flex: 1;
+}
 
 .closeButton {
 
@@ -852,90 +649,68 @@ button {
   background:
     rgba(255,255,255,.05);
 
-  font-size: 31px;
+  font-size: 32px;
 
   cursor: pointer;
 }
 
-
-/* =========================================================
-   SIDEBAR MENU
-========================================================= */
-
 .menuSectionTitle {
 
-  color:
-    #858394;
-
-  font-size: 12px;
+  font-size: 13px;
 
   letter-spacing: 5px;
 
   font-weight: 800;
 
-  margin-bottom: 12px;
-}
+  color: #858394;
 
+  margin-bottom: 14px;
+}
 
 .menuItem {
 
   width: 100%;
 
-  min-height: 62px;
+  min-height: 65px;
 
   display: flex;
 
   align-items: center;
 
-  gap: 17px;
+  gap: 20px;
 
-  padding:
-    8px
-    13px;
+  padding: 10px 15px;
 
-  border-radius: 18px;
+  border-radius: 20px;
 
   background: transparent;
 
+  cursor: pointer;
+
   text-align: left;
 
-  font-size: 18px;
+  font-size: 20px;
 
   font-weight: 600;
 
-  cursor: pointer;
-
-  transition:
-    background .18s,
-    transform .15s;
+  transition: .2s;
 }
 
-
+.menuItem:hover,
 .menuItem:active {
 
-  transform:
-    scale(.98);
-
-}
-
-
-.menuItem.active {
-
   background:
-    rgba(155,53,255,.14);
-
+    rgba(255,255,255,.06);
 }
-
 
 .menuIcon {
 
-  width: 42px;
+  width: 45px;
 
   text-align: center;
 
-  font-size: 27px;
+  font-size: 29px;
 }
-
 
 .menuDivider {
 
@@ -944,57 +719,13 @@ button {
   background:
     rgba(255,255,255,.07);
 
-  margin:
-    20px 0;
+  margin: 20px 0;
 }
 
 
-/* =========================================================
-   HISTORY AREA
-========================================================= */
-
-.historyHeader {
-
-  display: none;
-
-  align-items: center;
-
-  gap: 10px;
-
-  margin-bottom: 12px;
-}
-
-
-.historyHeader.show {
-
-  display: flex;
-
-}
-
-
-.backHistory {
-
-  width: 42px;
-  height: 42px;
-
-  border-radius: 14px;
-
-  background:
-    rgba(255,255,255,.05);
-
-  font-size: 23px;
-
-  cursor: pointer;
-}
-
-
-.historyHeaderTitle {
-
-  font-size: 20px;
-
-  font-weight: 700;
-}
-
+/* =====================================================
+   CHAT LIST
+===================================================== */
 
 .chatList {
 
@@ -1002,46 +733,28 @@ button {
 
   overflow-y: auto;
 
-  padding-right: 3px;
+  padding-right: 5px;
 
-  display: none;
+  margin-top: 2px;
 }
-
-
-.chatList.show {
-
-  display: block;
-
-}
-
 
 .chatList::-webkit-scrollbar {
-
   width: 3px;
-
 }
-
 
 .chatList::-webkit-scrollbar-thumb {
 
   background:
     rgba(180,60,255,.35);
-
-  border-radius: 10px;
-
 }
 
-
 .historyGroup {
-
   margin-bottom: 20px;
 }
 
-
 .historyDate {
 
-  color:
-    #747286;
+  color: #747286;
 
   font-size: 12px;
 
@@ -1050,9 +763,8 @@ button {
   font-weight: 800;
 
   margin:
-    15px 7px 9px;
+    15px 8px 9px;
 }
-
 
 .historyItem {
 
@@ -1062,11 +774,11 @@ button {
 
   padding:
     15px
-    52px
+    48px
     15px
-    16px;
+    18px;
 
-  border-radius: 17px;
+  border-radius: 18px;
 
   background:
     rgba(255,255,255,.025);
@@ -1079,33 +791,31 @@ button {
 
   cursor: pointer;
 
-  transition:
-    transform .15s,
-    background .15s;
+  transition: .2s;
 }
 
-
-.historyItem:active {
-
-  transform:
-    scale(.985);
-
-}
-
-
-.historyItem.current {
+.historyItem:hover {
 
   background:
-    rgba(155,53,255,.12);
-
-  border-color:
-    rgba(155,53,255,.25);
+    rgba(255,255,255,.055);
 }
 
+.historyItem.active {
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(155,53,255,.20),
+      rgba(193,60,255,.10)
+    );
+
+  border-color:
+    rgba(180,60,255,.30);
+}
 
 .historyTitle {
 
-  font-size: 16px;
+  font-size: 17px;
 
   font-weight: 650;
 
@@ -1116,79 +826,55 @@ button {
   text-overflow: ellipsis;
 }
 
-
 .historyTime {
 
-  color:
-    #727181;
+  color: #727181;
 
-  font-size: 11px;
+  font-size: 12px;
 
   margin-top: 5px;
 }
-
 
 .historyMore {
 
   position: absolute;
 
-  right: 9px;
+  right: 8px;
   top: 50%;
 
   transform:
     translateY(-50%);
 
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   background:
     rgba(255,255,255,.045);
 
-  color:
-    #aaa8b6;
+  color: #aaa8b6;
 
-  font-size: 17px;
+  font-size: 18px;
 
   cursor: pointer;
 }
 
-
 .noHistory {
 
-  color:
-    #666578;
+  color: #666578;
 
   text-align: center;
 
-  padding:
-    35px 10px;
+  padding: 30px 10px;
 
   font-size: 15px;
 }
 
 
-/* =========================================================
-   SIDEBAR FOOTER
-========================================================= */
-
-.sidebarFooter {
-
-  text-align: center;
-
-  color:
-    #666578;
-
-  font-size: 13px;
-
-  padding-top: 15px;
-}
-
-
-/* =========================================================
+/* =====================================================
    CONTEXT MENU
-========================================================= */
+===================================================== */
 
 .contextMenu {
 
@@ -1198,12 +884,6 @@ button {
 
   width: 210px;
 
-  display: none;
-
-  padding: 7px;
-
-  border-radius: 17px;
-
   background:
     #151421;
 
@@ -1211,56 +891,52 @@ button {
     1px solid
     rgba(255,255,255,.10);
 
+  border-radius: 18px;
+
+  padding: 8px;
+
   box-shadow:
     0 20px 60px
     rgba(0,0,0,.5);
-}
 
+  display: none;
+}
 
 .contextMenu.open {
-
   display: block;
-
 }
-
 
 .contextItem {
 
   width: 100%;
 
-  padding:
-    13px 14px;
+  padding: 13px 15px;
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   background: transparent;
 
   text-align: left;
 
-  font-size: 14px;
-
   cursor: pointer;
-}
 
+  font-size: 15px;
+}
 
 .contextItem:active {
 
   background:
     rgba(255,255,255,.06);
-
 }
-
 
 .contextItem.delete {
-
-  color:
-    #ff687c;
+  color: #ff687c;
 }
 
 
-/* =========================================================
-   MODALS
-========================================================= */
+/* =====================================================
+   MODAL
+===================================================== */
 
 .modalOverlay {
 
@@ -1270,36 +946,29 @@ button {
 
   z-index: 200;
 
-  display: none;
-
-  align-items: center;
-  justify-content: center;
-
-  padding: 22px;
-
   background:
     rgba(0,0,0,.72);
 
   backdrop-filter:
     blur(10px);
-}
 
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 25px;
+}
 
 .modalOverlay.open {
-
   display: flex;
-
 }
-
 
 .modal {
 
   width:
-    min(480px, 100%);
-
-  padding: 25px;
-
-  border-radius: 25px;
+    min(500px,100%);
 
   background:
     #12111d;
@@ -1308,38 +977,29 @@ button {
     1px solid
     rgba(255,255,255,.11);
 
+  border-radius: 28px;
+
+  padding: 28px;
+
   box-shadow:
     0 30px 100px
     rgba(0,0,0,.6);
 }
 
-
 .modal h2 {
 
-  font-size: 22px;
+  font-size: 24px;
 
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
-
-
-.modalText {
-
-  color:
-    #898796;
-
-  line-height: 1.5;
-
-  margin-bottom: 5px;
-}
-
 
 .modalInput {
 
   width: 100%;
 
-  padding: 16px;
+  padding: 17px;
 
-  border-radius: 16px;
+  border-radius: 17px;
 
   background:
     #090811;
@@ -1352,9 +1012,8 @@ button {
 
   color: white;
 
-  font-size: 16px;
+  font-size: 17px;
 }
-
 
 .modalButtons {
 
@@ -1362,24 +1021,22 @@ button {
 
   gap: 10px;
 
-  margin-top: 18px;
+  margin-top: 20px;
 }
-
 
 .modalButton {
 
   flex: 1;
 
-  padding: 14px;
+  padding: 15px;
 
-  border-radius: 15px;
+  border-radius: 16px;
 
   background:
     rgba(255,255,255,.06);
 
   cursor: pointer;
 }
-
 
 .modalButton.primary {
 
@@ -1391,104 +1048,158 @@ button {
     );
 }
 
-
 .modalButton.danger {
-
-  background:
-    #a92843;
+  background: #a92843;
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* =====================================================
+   TYPING
+===================================================== */
 
-@media (max-width: 600px) {
+.typing {
+
+  display: flex;
+
+  gap: 6px;
+
+  padding: 8px 2px;
+}
+
+.typing span {
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background:
+    #b43cff;
+
+  animation:
+    typing 1.1s infinite;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: .15s;
+}
+
+.typing span:nth-child(3) {
+  animation-delay: .30s;
+}
+
+@keyframes typing {
+
+  0%,60%,100% {
+    opacity: .25;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+
+/* =====================================================
+   DESKTOP
+===================================================== */
+
+@media (min-width:601px) {
 
   .header {
 
-    height: 100px;
+    height: 130px;
 
     padding:
-      15px
-      14px;
+      30px 22px 18px;
 
-    gap: 10px;
-
+    gap: 18px;
   }
-
 
   .menuButton,
   .iconButton,
   .logo {
 
-    width: 58px;
-    height: 58px;
+    width: 70px;
+    height: 70px;
 
+    border-radius: 22px;
   }
 
+  .logo {
+    font-size: 38px;
+  }
+
+  .menuButton,
+  .iconButton {
+    font-size: 31px;
+  }
 
   .brand {
 
-    font-size: 28px;
+    font-size: 37px;
 
-    letter-spacing: 6px;
-
+    letter-spacing: 7px;
   }
-
 
   .chat {
 
-    top: 100px;
+    top: 130px;
 
-    bottom: 110px;
+    bottom: 125px;
 
     padding:
-      42px
-      18px
-      145px;
-
+      70px
+      25px
+      160px;
   }
-
 
   .user .bubble {
 
-    max-width: 88%;
-
-    font-size: 18px;
+    font-size: 21px;
 
     padding:
-      14px
-      18px;
-
+      23px
+      27px;
   }
-
 
   .assistant .bubble {
 
-    max-width: 91%;
-
-    font-size: 18px;
-
+    font-size: 21px;
   }
-
-
-  .sidebar {
-
-    width: 88vw;
-
-    padding:
-      20px;
-
-  }
-
 
   .inputArea {
 
-    bottom: 12px;
+    left: 20px;
+    right: 20px;
 
+    bottom: 25px;
   }
 
+  .inputBox {
+
+    min-height: 92px;
+
+    border-radius: 30px;
+
+    padding: 10px;
+  }
+
+  .voiceButton,
+  .sendButton {
+
+    width: 70px;
+    height: 70px;
+
+    border-radius: 22px;
+  }
+
+  .input {
+
+    font-size: 20px;
+  }
 }
 
 </style>
@@ -1497,119 +1208,103 @@ button {
 
 <body>
 
-
 <div class="app">
 
 
-  <!-- =====================================================
-       HEADER
-  ====================================================== -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
-  <header class="header">
+<header class="header">
+
+  <button
+    class="menuButton"
+    id="menuButton"
+  >
+    ☰
+  </button>
+
+  <div class="logo">
+    A
+  </div>
+
+  <div class="brand">
+    ASA
+  </div>
+
+  <div class="headerSpacer"></div>
+
+  <div class="headerActions">
 
     <button
-      class="menuButton"
-      id="menuButton"
-      type="button"
-      aria-label="Menü"
+      class="iconButton"
+      id="memoryButton"
     >
-      ☰
+      🧠
     </button>
 
+    <button
+      class="iconButton"
+      id="settingsButton"
+    >
+      ⚙️
+    </button>
 
-    <div class="logo">
-      A
-    </div>
+  </div>
 
-
-    <div class="brand">
-      ASA
-    </div>
-
-
-    <div class="headerSpacer"></div>
+</header>
 
 
-    <div class="headerActions">
+<!-- =====================================================
+     CHAT
+===================================================== -->
 
-      <button
-        class="iconButton"
-        id="memoryButton"
-        type="button"
-        title="Hafızam"
-      >
-        🧠
-      </button>
+<main
+  class="chat"
+  id="chat"
+></main>
 
 
-      <button
-        class="iconButton"
-        id="settingsButton"
-        type="button"
-        title="Ayarlar"
-      >
-        ⚙️
-      </button>
+<!-- =====================================================
+     INPUT
+===================================================== -->
 
-    </div>
+<div class="inputArea">
 
-  </header>
+  <div class="inputBox">
 
+    <button
+      class="voiceButton"
+      id="voiceButton"
+    >
+      🎙️
+    </button>
 
-  <!-- =====================================================
-       CHAT
-  ====================================================== -->
+    <input
+      class="input"
+      id="messageInput"
+      type="text"
+      autocomplete="off"
+      placeholder="ASA'ya bir şey sor..."
+    >
 
-  <main
-    class="chat"
-    id="chat"
-  ></main>
-
-
-  <!-- =====================================================
-       INPUT
-  ====================================================== -->
-
-  <div class="inputArea">
-
-    <div class="inputBox">
-
-      <button
-        class="voiceButton"
-        id="voiceButton"
-        type="button"
-      >
-        🎙️
-      </button>
-
-
-      <input
-        class="input"
-        id="messageInput"
-        type="text"
-        autocomplete="off"
-        placeholder="ASA'ya bir şey sor..."
-      >
-
-
-      <button
-        class="sendButton"
-        id="sendButton"
-        type="button"
-      >
-        ➤
-      </button>
-
-    </div>
+    <button
+      class="sendButton"
+      id="sendButton"
+    >
+      ➤
+    </button>
 
   </div>
 
 </div>
 
+</div>
 
-<!-- =========================================================
+
+<!-- =====================================================
      OVERLAY
-========================================================= -->
+===================================================== -->
 
 <div
   class="overlay"
@@ -1617,15 +1312,14 @@ button {
 ></div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      SIDEBAR
-========================================================= -->
+===================================================== -->
 
 <aside
   class="sidebar"
   id="sidebar"
 >
-
 
   <div class="sidebarHeader">
 
@@ -1633,16 +1327,13 @@ button {
       A
     </div>
 
-
     <div class="sidebarBrand">
       ASA
     </div>
 
-
     <button
       class="closeButton"
       id="closeMenu"
-      type="button"
     >
       ×
     </button>
@@ -1650,115 +1341,84 @@ button {
   </div>
 
 
-  <!-- ANA MENÜ -->
-
-  <div id="mainMenu">
-
-
-    <div class="menuSectionTitle">
-      SOHBET
-    </div>
-
-
-    <button
-      class="menuItem"
-      id="newChatButton"
-      type="button"
-    >
-
-      <span class="menuIcon">
-        ＋
-      </span>
-
-      <span>
-        Yeni Sohbet
-      </span>
-
-    </button>
-
-
-    <button
-      class="menuItem"
-      id="showChatsButton"
-      type="button"
-    >
-
-      <span class="menuIcon">
-        💬
-      </span>
-
-      <span>
-        Sohbetler
-      </span>
-
-    </button>
-
-
-    <div class="menuDivider"></div>
-
-
-    <div class="menuSectionTitle">
-      ASA
-    </div>
-
-
-    <button
-      class="menuItem"
-      id="memoryMenuButton"
-      type="button"
-    >
-
-      <span class="menuIcon">
-        🧠
-      </span>
-
-      <span>
-        Hafızam
-      </span>
-
-    </button>
-
-
-    <button
-      class="menuItem"
-      id="settingsMenuButton"
-      type="button"
-    >
-
-      <span class="menuIcon">
-        ⚙️
-      </span>
-
-      <span>
-        Ayarlar
-      </span>
-
-    </button>
-
+  <div class="menuSectionTitle">
+    SOHBET
   </div>
 
 
-  <!-- GEÇMİŞ SOHBETLER -->
-
-  <div
-    class="historyHeader"
-    id="historyHeader"
+  <button
+    class="menuItem"
+    id="newChatButton"
   >
 
-    <button
-      class="backHistory"
-      id="backHistory"
-      type="button"
-    >
-      ‹
-    </button>
+    <span class="menuIcon">
+      ＋
+    </span>
+
+    <span>
+      Yeni Sohbet
+    </span>
+
+  </button>
 
 
-    <div class="historyHeaderTitle">
+  <button
+    class="menuItem"
+    id="showChatsButton"
+  >
+
+    <span class="menuIcon">
+      💬
+    </span>
+
+    <span>
       Sohbetler
-    </div>
+    </span>
 
+  </button>
+
+
+  <div class="menuDivider"></div>
+
+
+  <div class="menuSectionTitle">
+    ASA
   </div>
+
+
+  <button
+    class="menuItem"
+    id="memoryMenuButton"
+  >
+
+    <span class="menuIcon">
+      🧠
+    </span>
+
+    <span>
+      Hafızam
+    </span>
+
+  </button>
+
+
+  <button
+    class="menuItem"
+    id="settingsMenuButton"
+  >
+
+    <span class="menuIcon">
+      ⚙️
+    </span>
+
+    <span>
+      Ayarlar
+    </span>
+
+  </button>
+
+
+  <div class="menuDivider"></div>
 
 
   <div
@@ -1766,17 +1426,12 @@ button {
     id="chatList"
   ></div>
 
-
-  <div class="sidebarFooter">
-    ASA v1.2 · Alperen'in kişisel asistanı
-  </div>
-
 </aside>
 
 
-<!-- =========================================================
+<!-- =====================================================
      CONTEXT MENU
-========================================================= -->
+===================================================== -->
 
 <div
   class="contextMenu"
@@ -1786,16 +1441,13 @@ button {
   <button
     class="contextItem"
     id="renameButton"
-    type="button"
   >
     ✏️ Başlığı değiştir
   </button>
 
-
   <button
     class="contextItem delete"
     id="deleteButton"
-    type="button"
   >
     🗑️ Sohbeti sil
   </button>
@@ -1803,9 +1455,9 @@ button {
 </div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      RENAME MODAL
-========================================================= -->
+===================================================== -->
 
 <div
   class="modalOverlay"
@@ -1818,7 +1470,6 @@ button {
       Sohbet başlığını değiştir
     </h2>
 
-
     <input
       class="modalInput"
       id="renameInput"
@@ -1827,22 +1478,18 @@ button {
       placeholder="Sohbet adı"
     >
 
-
     <div class="modalButtons">
 
       <button
         class="modalButton"
         id="renameCancel"
-        type="button"
       >
         İptal
       </button>
 
-
       <button
         class="modalButton primary"
         id="renameSave"
-        type="button"
       >
         Kaydet
       </button>
@@ -1854,9 +1501,9 @@ button {
 </div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      DELETE MODAL
-========================================================= -->
+===================================================== -->
 
 <div
   class="modalOverlay"
@@ -1869,30 +1516,28 @@ button {
       Sohbet silinsin mi?
     </h2>
 
-
     <p
-      class="modalText"
       id="deleteText"
+      style="
+        color:#898796;
+        line-height:1.5;
+      "
     >
       Bu sohbet silinecek.
     </p>
-
 
     <div class="modalButtons">
 
       <button
         class="modalButton"
         id="deleteCancel"
-        type="button"
       >
         İptal
       </button>
 
-
       <button
         class="modalButton danger"
         id="deleteConfirm"
-        type="button"
       >
         Sil
       </button>
@@ -1906,9 +1551,9 @@ button {
 
 <script>
 
-/* =========================================================
+/* =====================================================
    CONFIG
-========================================================= */
+===================================================== */
 
 const API_URL = "/api/chat";
 
@@ -1919,69 +1564,9 @@ const ACTIVE_KEY =
   "asa_active_conversation_v2";
 
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const chat =
-  document.getElementById("chat");
-
-const input =
-  document.getElementById("messageInput");
-
-const sendButton =
-  document.getElementById("sendButton");
-
-const menuButton =
-  document.getElementById("menuButton");
-
-const sidebar =
-  document.getElementById("sidebar");
-
-const overlay =
-  document.getElementById("overlay");
-
-const closeMenu =
-  document.getElementById("closeMenu");
-
-const mainMenu =
-  document.getElementById("mainMenu");
-
-const chatList =
-  document.getElementById("chatList");
-
-const historyHeader =
-  document.getElementById("historyHeader");
-
-const contextMenu =
-  document.getElementById("contextMenu");
-
-const renameModal =
-  document.getElementById("renameModal");
-
-const renameInput =
-  document.getElementById("renameInput");
-
-const deleteModal =
-  document.getElementById("deleteModal");
-
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let conversationId = null;
-
-let messages = [];
-
-let contextConversationId = null;
-
-let isSending = false;
-
-
-/* =========================================================
+/* =====================================================
    STORAGE
-========================================================= */
+===================================================== */
 
 function loadConversations() {
 
@@ -2017,21 +1602,7 @@ function saveConversations(data) {
 }
 
 
-function createConversationId() {
-
-  return (
-    "asa-" +
-    Date.now() +
-    "-" +
-    Math.random()
-      .toString(36)
-      .slice(2, 9)
-  );
-
-}
-
-
-function getActiveConversationId() {
+function getActiveId() {
 
   return localStorage.getItem(
     ACTIVE_KEY
@@ -2040,7 +1611,7 @@ function getActiveConversationId() {
 }
 
 
-function setActiveConversationId(id) {
+function setActiveId(id) {
 
   localStorage.setItem(
     ACTIVE_KEY,
@@ -2050,135 +1621,170 @@ function setActiveConversationId(id) {
 }
 
 
-/* =========================================================
-   NEW CONVERSATION
-========================================================= */
-
-function createNewConversation() {
-
-  conversationId =
-    createConversationId();
-
-  messages = [];
-
-  setActiveConversationId(
-    conversationId
-  );
-
-  showEmpty();
-
-  input.focus();
-
-}
-
-
-/* =========================================================
-   TITLE
-========================================================= */
-
-function generateTitle(text) {
-
-  let title =
-    String(text || "")
-      .replace(/\s+/g, " ")
-      .trim();
-
-
-  if (!title) {
-
-    return "Yeni Sohbet";
-
-  }
-
-
-  title =
-    title
-      .replace(/[?!.]+$/g, "")
-      .trim();
-
-
-  if (title.length > 45) {
-
-    title =
-      title
-        .slice(0, 45)
-        .trim() +
-      "…";
-
-  }
-
+function createId() {
 
   return (
-    title.charAt(0).toUpperCase() +
-    title.slice(1)
+    "asa-" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2,10)
   );
 
 }
 
 
-/* =========================================================
-   SAVE CONVERSATION METADATA
-========================================================= */
+/* =====================================================
+   STATE
+===================================================== */
 
-function ensureConversation(firstMessage = "") {
+let conversationId =
+  getActiveId();
 
-  let conversations =
+let messages = [];
+
+let selectedConversationId =
+  null;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const chat =
+  document.getElementById("chat");
+
+const input =
+  document.getElementById(
+    "messageInput"
+  );
+
+const sendButton =
+  document.getElementById(
+    "sendButton"
+  );
+
+const sidebar =
+  document.getElementById(
+    "sidebar"
+  );
+
+const overlay =
+  document.getElementById(
+    "overlay"
+  );
+
+const contextMenu =
+  document.getElementById(
+    "contextMenu"
+  );
+
+const renameModal =
+  document.getElementById(
+    "renameModal"
+  );
+
+const renameInput =
+  document.getElementById(
+    "renameInput"
+  );
+
+const deleteModal =
+  document.getElementById(
+    "deleteModal"
+  );
+
+
+/* =====================================================
+   CONVERSATION OBJECT
+===================================================== */
+
+function createConversation(
+  firstMessage = ""
+) {
+
+  const id =
+    createId();
+
+  const conversation = {
+
+    id,
+
+    title:
+      firstMessage
+        ? generateTitle(firstMessage)
+        : "Yeni Sohbet",
+
+    createdAt:
+      Date.now(),
+
+    updatedAt:
+      Date.now(),
+
+    messages: []
+
+  };
+
+  const conversations =
     loadConversations();
 
+  conversations.unshift(
+    conversation
+  );
 
-  let item =
+  saveConversations(
+    conversations
+  );
+
+  return conversation;
+
+}
+
+
+/* =====================================================
+   GET CURRENT CONVERSATION
+===================================================== */
+
+function getConversation(id) {
+
+  return loadConversations()
+    .find(
+      item =>
+        item.id === id
+    );
+
+}
+
+
+/* =====================================================
+   SAVE CURRENT MESSAGES
+===================================================== */
+
+function saveCurrentMessages() {
+
+  if (!conversationId) {
+    return;
+  }
+
+  const conversations =
+    loadConversations();
+
+  const item =
     conversations.find(
       x =>
-        x.id ===
-        conversationId
+        x.id === conversationId
     );
-
 
   if (!item) {
-
-    item = {
-
-      id:
-        conversationId,
-
-      title:
-        firstMessage
-          ? generateTitle(firstMessage)
-          : "Yeni Sohbet",
-
-      createdAt:
-        Date.now(),
-
-      updatedAt:
-        Date.now()
-
-    };
-
-
-    conversations.unshift(
-      item
-    );
-
+    return;
   }
 
-
-  if (
-    firstMessage &&
-    item.title ===
-      "Yeni Sohbet"
-  ) {
-
-    item.title =
-      generateTitle(
-        firstMessage
-      );
-
-  }
-
+  item.messages =
+    messages;
 
   item.updatedAt =
     Date.now();
-
 
   saveConversations(
     conversations
@@ -2187,143 +1793,110 @@ function ensureConversation(firstMessage = "") {
 }
 
 
-/* =========================================================
-   MENU
-========================================================= */
+/* =====================================================
+   TITLE
+===================================================== */
+
+function generateTitle(text) {
+
+  let title =
+    String(text)
+      .replace(/\s+/g," ")
+      .trim();
+
+  if (!title) {
+    return "Yeni Sohbet";
+  }
+
+  title =
+    title
+      .replace(/[?!.]+$/g,"")
+      .trim();
+
+  if (title.length > 42) {
+
+    title =
+      title
+        .slice(0,42)
+        .trim() +
+      "…";
+
+  }
+
+  return (
+    title.charAt(0)
+      .toUpperCase() +
+    title.slice(1)
+  );
+
+}
+
+
+/* =====================================================
+   OPEN / CLOSE MENU
+===================================================== */
 
 function openMenu() {
 
-  sidebar.classList.add(
-    "open"
-  );
+  sidebar.classList.add("open");
 
-  overlay.classList.add(
-    "open"
-  );
-
-}
-
-
-function closeSidebar() {
-
-  sidebar.classList.remove(
-    "open"
-  );
-
-  overlay.classList.remove(
-    "open"
-  );
-
-  closeContextMenu();
-
-}
-
-
-menuButton.addEventListener(
-  "click",
-  openMenu
-);
-
-
-closeMenu.addEventListener(
-  "click",
-  closeSidebar
-);
-
-
-overlay.addEventListener(
-  "click",
-  closeSidebar
-);
-
-
-/* =========================================================
-   SHOW MAIN MENU
-========================================================= */
-
-function showMainMenu() {
-
-  mainMenu.style.display =
-    "block";
-
-  historyHeader.classList.remove(
-    "show"
-  );
-
-  chatList.classList.remove(
-    "show"
-  );
-
-}
-
-
-/* =========================================================
-   SHOW CHAT HISTORY
-========================================================= */
-
-function showChatHistory() {
-
-  mainMenu.style.display =
-    "none";
-
-  historyHeader.classList.add(
-    "show"
-  );
-
-  chatList.classList.add(
-    "show"
-  );
+  overlay.classList.add("open");
 
   renderChatList();
 
 }
 
 
-/* =========================================================
-   CHAT HISTORY BUTTON
-========================================================= */
+function closeMenu() {
+
+  sidebar.classList.remove("open");
+
+  overlay.classList.remove("open");
+
+  closeContextMenu();
+
+}
+
 
 document
-  .getElementById(
-    "showChatsButton"
-  )
+  .getElementById("menuButton")
   .addEventListener(
     "click",
-    showChatHistory
+    openMenu
   );
 
 
 document
-  .getElementById(
-    "backHistory"
-  )
+  .getElementById("closeMenu")
   .addEventListener(
     "click",
-    showMainMenu
+    closeMenu
   );
 
 
-/* =========================================================
+overlay.addEventListener(
+  "click",
+  closeMenu
+);
+
+
+/* =====================================================
    RENDER CHAT LIST
-========================================================= */
+===================================================== */
 
 function renderChatList() {
 
   const conversations =
     loadConversations()
       .sort(
-        (a, b) =>
+        (a,b) =>
           (b.updatedAt || 0) -
           (a.updatedAt || 0)
       );
 
-
   chatList.innerHTML = "";
 
-
-  if (
-    conversations.length === 0
-  ) {
+  if (!conversations.length) {
 
     chatList.innerHTML = `
       <div class="noHistory">
@@ -2348,21 +1921,14 @@ function renderChatList() {
           item.createdAt
         );
 
-
       const key =
         date.toDateString();
 
-
       if (!groups[key]) {
-
         groups[key] = [];
-
       }
 
-
-      groups[key].push(
-        item
-      );
+      groups[key].push(item);
 
     }
   );
@@ -2370,7 +1936,7 @@ function renderChatList() {
 
   Object.entries(groups)
     .forEach(
-      ([key, items]) => {
+      ([key,items]) => {
 
         const group =
           document.createElement(
@@ -2391,7 +1957,6 @@ function renderChatList() {
 
         dateTitle.textContent =
           getDateLabel(key);
-
 
         group.appendChild(
           dateTitle
@@ -2416,32 +1981,68 @@ function renderChatList() {
             ) {
 
               element.classList.add(
-                "current"
+                "active"
               );
 
             }
 
 
-            element.innerHTML = `
+            const title =
+              document.createElement(
+                "div"
+              );
 
-              <div class="historyTitle">
-                ${escapeHtml(item.title)}
-              </div>
+            title.className =
+              "historyTitle";
 
-              <div class="historyTime">
-                ${formatTime(item.updatedAt)}
-              </div>
+            title.textContent =
+              item.title ||
+              "Yeni Sohbet";
 
-              <button
-                class="historyMore"
-                type="button"
-                aria-label="Sohbet seçenekleri"
-              >
-                •••
-              </button>
 
-            `;
+            const time =
+              document.createElement(
+                "div"
+              );
 
+            time.className =
+              "historyTime";
+
+            time.textContent =
+              formatTime(
+                item.updatedAt
+              );
+
+
+            const more =
+              document.createElement(
+                "button"
+              );
+
+            more.className =
+              "historyMore";
+
+            more.type =
+              "button";
+
+            more.textContent =
+              "•••";
+
+
+            element.appendChild(
+              title
+            );
+
+            element.appendChild(
+              time
+            );
+
+            element.appendChild(
+              more
+            );
+
+
+            /* SOHBETE TIKLA */
 
             element.addEventListener(
               "click",
@@ -2455,15 +2056,13 @@ function renderChatList() {
             );
 
 
-            const more =
-              element.querySelector(
-                ".historyMore"
-              );
-
+            /* ÜÇ NOKTA */
 
             more.addEventListener(
               "click",
               event => {
+
+                event.preventDefault();
 
                 event.stopPropagation();
 
@@ -2494,22 +2093,17 @@ function renderChatList() {
 }
 
 
-/* =========================================================
-   DATE LABEL
-========================================================= */
+/* =====================================================
+   DATE
+===================================================== */
 
-function getDateLabel(
-  dateString
-) {
+function getDateLabel(dateString) {
 
-  const date =
-    new Date(
-      dateString
-    );
-
-  const now =
+  const today =
     new Date();
 
+  const date =
+    new Date(dateString);
 
   const yesterday =
     new Date();
@@ -2521,7 +2115,7 @@ function getDateLabel(
 
   if (
     date.toDateString() ===
-    now.toDateString()
+    today.toDateString()
   ) {
 
     return "BUGÜN";
@@ -2544,8 +2138,7 @@ function getDateLabel(
       "tr-TR",
       {
         day: "numeric",
-        month: "long",
-        year: "numeric"
+        month: "long"
       }
     )
     .toUpperCase();
@@ -2553,96 +2146,69 @@ function getDateLabel(
 }
 
 
-/* =========================================================
-   TIME
-========================================================= */
-
-function formatTime(
-  timestamp
-) {
+function formatTime(timestamp) {
 
   if (!timestamp) {
-
     return "";
-
   }
 
-
-  return new Date(
-    timestamp
-  ).toLocaleTimeString(
-    "tr-TR",
-    {
-      hour: "2-digit",
-      minute: "2-digit"
-    }
-  );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(
-  text
-) {
-
-  return String(text)
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-    .replaceAll(
-      "'",
-      "&#039;"
+  return new Date(timestamp)
+    .toLocaleTimeString(
+      "tr-TR",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
     );
 
 }
 
 
-/* =========================================================
+/* =====================================================
    CONTEXT MENU
-========================================================= */
+===================================================== */
 
 function showContextMenu(
   id,
   element
 ) {
 
-  contextConversationId =
+  selectedConversationId =
     id;
-
 
   const rect =
     element.getBoundingClientRect();
 
 
-  contextMenu.style.left =
+  let left =
+    rect.left - 175;
+
+  let top =
+    rect.bottom + 5;
+
+
+  left =
     Math.max(
       10,
-      rect.left - 175
-    ) + "px";
+      Math.min(
+        left,
+        window.innerWidth - 220
+      )
+    );
 
+
+  top =
+    Math.min(
+      top,
+      window.innerHeight - 120
+    );
+
+
+  contextMenu.style.left =
+    left + "px";
 
   contextMenu.style.top =
-    Math.min(
-      window.innerHeight - 120,
-      rect.bottom + 5
-    ) + "px";
+    top + "px";
 
 
   contextMenu.classList.add(
@@ -2658,8 +2224,16 @@ function closeContextMenu() {
     "open"
   );
 
-  contextConversationId =
-    null;
+  /*
+    ÖNEMLİ:
+
+    Burada selectedConversationId
+    ARTIK NULL YAPILMIYOR.
+
+    Böylece Kaydet/Sil işlemi
+    hangi sohbet üzerinde yapıldığını
+    kaybetmiyor.
+  */
 
 }
 
@@ -2672,8 +2246,8 @@ document.addEventListener(
       !contextMenu.contains(
         event.target
       ) &&
-      !event.target.classList.contains(
-        "historyMore"
+      !event.target.closest(
+        ".historyMore"
       )
     ) {
 
@@ -2685,9 +2259,9 @@ document.addEventListener(
 );
 
 
-/* =========================================================
+/* =====================================================
    RENAME
-========================================================= */
+===================================================== */
 
 document
   .getElementById(
@@ -2697,35 +2271,33 @@ document
     "click",
     () => {
 
-      const conversations =
-        loadConversations();
+      const id =
+        selectedConversationId;
+
+      if (!id) {
+        return;
+      }
 
 
       const item =
-        conversations.find(
-          x =>
-            x.id ===
-            contextConversationId
-        );
-
+        getConversation(id);
 
       if (!item) {
-
         return;
-
       }
 
 
       renameInput.value =
-        item.title;
+        item.title ||
+        "Yeni Sohbet";
+
+
+      closeContextMenu();
 
 
       renameModal.classList.add(
         "open"
       );
-
-
-      closeContextMenu();
 
 
       setTimeout(
@@ -2767,14 +2339,15 @@ document
     "click",
     () => {
 
+      const id =
+        selectedConversationId;
+
       const title =
         renameInput.value.trim();
 
 
-      if (!title) {
-
+      if (!id || !title) {
         return;
-
       }
 
 
@@ -2785,24 +2358,25 @@ document
       const item =
         conversations.find(
           x =>
-            x.id ===
-            contextConversationId
+            x.id === id
         );
 
 
-      if (item) {
-
-        item.title =
-          title;
-
-        item.updatedAt =
-          Date.now();
-
-        saveConversations(
-          conversations
-        );
-
+      if (!item) {
+        return;
       }
+
+
+      item.title =
+        title;
+
+      item.updatedAt =
+        Date.now();
+
+
+      saveConversations(
+        conversations
+      );
 
 
       renameModal.classList.remove(
@@ -2816,9 +2390,31 @@ document
   );
 
 
-/* =========================================================
+renameInput.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Enter"
+    ) {
+
+      event.preventDefault();
+
+      document
+        .getElementById(
+          "renameSave"
+        )
+        .click();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
    DELETE
-========================================================= */
+===================================================== */
 
 document
   .getElementById(
@@ -2828,22 +2424,19 @@ document
     "click",
     () => {
 
-      const conversations =
-        loadConversations();
+      const id =
+        selectedConversationId;
+
+      if (!id) {
+        return;
+      }
 
 
       const item =
-        conversations.find(
-          x =>
-            x.id ===
-            contextConversationId
-        );
-
+        getConversation(id);
 
       if (!item) {
-
         return;
-
       }
 
 
@@ -2855,12 +2448,12 @@ document
         `"${item.title}" sohbeti silinecek.`;
 
 
+      closeContextMenu();
+
+
       deleteModal.classList.add(
         "open"
       );
-
-
-      closeContextMenu();
 
     }
   );
@@ -2891,7 +2484,11 @@ document
     () => {
 
       const id =
-        contextConversationId;
+        selectedConversationId;
+
+      if (!id) {
+        return;
+      }
 
 
       let conversations =
@@ -2900,8 +2497,8 @@ document
 
       conversations =
         conversations.filter(
-          x =>
-            x.id !== id
+          item =>
+            item.id !== id
         );
 
 
@@ -2915,14 +2512,33 @@ document
       );
 
 
+      /*
+        Eğer aktif sohbet silindiyse
+        yeni boş sohbet aç.
+      */
+
       if (
-        id ===
-        conversationId
+        id === conversationId
       ) {
 
-        createNewConversation();
+        conversationId =
+          null;
+
+        messages = [];
+
+        localStorage.removeItem(
+          ACTIVE_KEY
+        );
+
+        createNewConversation(
+          false
+        );
 
       }
+
+
+      selectedConversationId =
+        null;
 
 
       renderChatList();
@@ -2931,9 +2547,9 @@ document
   );
 
 
-/* =========================================================
+/* =====================================================
    NEW CHAT
-========================================================= */
+===================================================== */
 
 document
   .getElementById(
@@ -2945,39 +2561,98 @@ document
 
       createNewConversation();
 
-      showMainMenu();
-
-      closeSidebar();
+      closeMenu();
 
     }
   );
 
 
-/* =========================================================
-   OPEN CONVERSATION
-========================================================= */
-
-async function openConversation(
-  id
+function createNewConversation(
+  saveImmediately = true
 ) {
+
+  const conversation =
+    createConversation();
+
+
+  conversationId =
+    conversation.id;
+
+  messages = [];
+
+
+  setActiveId(
+    conversationId
+  );
+
+
+  if (!saveImmediately) {
+
+    saveConversations(
+      loadConversations()
+    );
+
+  }
+
+
+  showEmpty();
+
+  renderChatList();
+
+  input.focus();
+
+}
+
+
+/* =====================================================
+   OPEN CONVERSATION
+===================================================== */
+
+async function openConversation(id) {
+
+  const item =
+    getConversation(id);
+
+
+  if (!item) {
+    return;
+  }
+
 
   conversationId =
     id;
 
-
-  setActiveConversationId(
-    id
-  );
+  setActiveId(id);
 
 
-  closeSidebar();
+  selectedConversationId =
+    null;
 
 
-  chat.innerHTML = "";
+  closeContextMenu();
 
 
-  addTyping();
+  /*
+    Önce LOCAL mesajları göster.
+    Böylece sohbet anında değişir.
+  */
 
+  messages =
+    Array.isArray(item.messages)
+      ? item.messages
+      : [];
+
+
+  renderMessages();
+
+  renderChatList();
+
+  closeMenu();
+
+
+  /*
+    Sonra API'den geçmişi güncelle.
+  */
 
   try {
 
@@ -2986,8 +2661,7 @@ async function openConversation(
         API_URL,
         {
 
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
             "Content-Type":
@@ -2997,27 +2671,26 @@ async function openConversation(
           body:
             JSON.stringify({
 
-              conversationId:
-                id,
+              conversationId: id,
 
-              getHistory:
-                true
+              getHistory: true
 
             })
 
-        }
+          }
       );
+
+
+    if (!response.ok) {
+      return;
+    }
 
 
     const data =
       await response.json();
 
 
-    removeTyping();
-
-
     if (
-      data.history &&
       Array.isArray(
         data.history
       )
@@ -3026,144 +2699,144 @@ async function openConversation(
       messages =
         data.history;
 
-      renderMessages();
 
-    } else {
+      const conversations =
+        loadConversations();
 
-      showEmpty();
+
+      const current =
+        conversations.find(
+          x =>
+            x.id === id
+        );
+
+
+      if (current) {
+
+        current.messages =
+          messages;
+
+        saveConversations(
+          conversations
+        );
+
+      }
+
+
+      /*
+        Kullanıcı başka sohbete
+        geçtiyse eski cevabı ekrana
+        yazma.
+      */
+
+      if (
+        conversationId === id
+      ) {
+
+        renderMessages();
+
+      }
 
     }
 
   } catch {
 
-    removeTyping();
-
-    showEmpty();
+    /*
+      API geçmişi gelmezse
+      LOCAL mesajlar zaten ekranda.
+    */
 
   }
 
 }
 
 
-/* =========================================================
-   LOAD ACTIVE
-========================================================= */
-
-async function loadActiveConversation() {
-
-  const saved =
-    getActiveConversationId();
-
-
-  if (!saved) {
-
-    conversationId =
-      createConversationId();
-
-    setActiveConversationId(
-      conversationId
-    );
-
-    showEmpty();
-
-    return;
-
-  }
-
-
-  const conversations =
-    loadConversations();
-
-
-  const exists =
-    conversations.some(
-      x =>
-        x.id === saved
-    );
-
-
-  if (!exists) {
-
-    conversationId =
-      saved;
-
-    showEmpty();
-
-    return;
-
-  }
-
-
-  await openConversation(
-    saved
-  );
-
-}
-
-
-/* =========================================================
-   SEND MESSAGE
-========================================================= */
+/* =====================================================
+   SEND
+===================================================== */
 
 async function sendMessage() {
-
-  if (isSending) {
-
-    return;
-
-  }
-
 
   const text =
     input.value.trim();
 
 
   if (!text) {
-
     return;
+  }
+
+
+  /*
+    Eğer aktif sohbet yoksa
+    otomatik oluştur.
+  */
+
+  if (!conversationId) {
+
+    createNewConversation();
 
   }
 
 
-  isSending = true;
+  let item =
+    getConversation(
+      conversationId
+    );
+
+
+  if (!item) {
+
+    const newConversation =
+      createConversation(text);
+
+    conversationId =
+      newConversation.id;
+
+    setActiveId(
+      conversationId
+    );
+
+    item =
+      newConversation;
+
+  }
+
+
+  /*
+    İlk mesajda otomatik başlık.
+  */
+
+  if (
+    item.title ===
+    "Yeni Sohbet"
+  ) {
+
+    item.title =
+      generateTitle(text);
+
+  }
+
+
+  input.value = "";
 
   sendButton.disabled =
     true;
 
 
-  input.value = "";
-
-
-  if (!conversationId) {
-
-    conversationId =
-      createConversationId();
-
-    setActiveConversationId(
-      conversationId
-    );
-
-  }
-
-
-  ensureConversation(
-    text
-  );
-
-
   messages.push({
 
-    role:
-      "user",
+    role: "user",
 
-    content:
-      text
+    content: text
 
   });
 
 
+  saveCurrentMessages();
+
   renderMessages();
 
+  renderChatList();
 
   addTyping();
 
@@ -3175,8 +2848,7 @@ async function sendMessage() {
         API_URL,
         {
 
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
             "Content-Type":
@@ -3186,16 +2858,12 @@ async function sendMessage() {
           body:
             JSON.stringify({
 
-              conversationId:
-                conversationId,
+              conversationId,
 
               messages: [
                 {
-                  role:
-                    "user",
-
-                  content:
-                    text
+                  role: "user",
+                  content: text
                 }
               ]
 
@@ -3230,8 +2898,16 @@ async function sendMessage() {
       "Şu anda cevap oluşturamadım.";
 
 
+    messages.push({
+
+      role: "assistant",
+
+      content: answer
+
+    });
+
+
     if (
-      data.history &&
       Array.isArray(
         data.history
       )
@@ -3240,36 +2916,24 @@ async function sendMessage() {
       messages =
         data.history;
 
-    } else {
-
-      messages.push({
-
-        role:
-          "assistant",
-
-        content:
-          answer
-
-      });
-
     }
 
 
-    ensureConversation();
-
+    saveCurrentMessages();
 
     renderMessages();
 
+    renderChatList();
 
-  } catch (error) {
+
+  } catch(error) {
 
     removeTyping();
 
 
     messages.push({
 
-      role:
-        "assistant",
+      role: "assistant",
 
       content:
         "Bir bağlantı sorunu oluştu. Birazdan tekrar deneyelim."
@@ -3277,18 +2941,14 @@ async function sendMessage() {
     });
 
 
+    saveCurrentMessages();
+
     renderMessages();
 
-
-    console.error(
-      "ASA ERROR:",
-      error
-    );
+    console.error(error);
 
   }
 
-
-  isSending = false;
 
   sendButton.disabled =
     false;
@@ -3298,9 +2958,9 @@ async function sendMessage() {
 }
 
 
-/* =========================================================
+/* =====================================================
    SEND EVENTS
-========================================================= */
+===================================================== */
 
 sendButton.addEventListener(
   "click",
@@ -3326,18 +2986,16 @@ input.addEventListener(
 );
 
 
-/* =========================================================
+/* =====================================================
    RENDER MESSAGES
-========================================================= */
+===================================================== */
 
 function renderMessages() {
 
   chat.innerHTML = "";
 
 
-  if (
-    !messages.length
-  ) {
+  if (!messages.length) {
 
     showEmpty();
 
@@ -3358,8 +3016,7 @@ function renderMessages() {
       row.className =
         "message " +
         (
-          message.role ===
-          "user"
+          message.role === "user"
             ? "user"
             : "assistant"
         );
@@ -3380,23 +3037,39 @@ function renderMessages() {
         "assistant"
       ) {
 
-        bubble.innerHTML = `
+        const label =
+          document.createElement(
+            "span"
+          );
 
-          <span
-            class="assistantLabel"
-          >
-            ASA
-          </span>
+        label.className =
+          "assistantLabel";
 
-          <div
-            class="assistantText"
-          >
-            ${formatAnswer(
-              message.content
-            )}
-          </div>
+        label.textContent =
+          "ASA";
 
-        `;
+
+        const text =
+          document.createElement(
+            "div"
+          );
+
+        text.className =
+          "assistantText";
+
+        text.innerHTML =
+          formatAnswer(
+            message.content
+          );
+
+
+        bubble.appendChild(
+          label
+        );
+
+        bubble.appendChild(
+          text
+        );
 
       } else {
 
@@ -3409,7 +3082,6 @@ function renderMessages() {
       row.appendChild(
         bubble
       );
-
 
       chat.appendChild(
         row
@@ -3424,17 +3096,15 @@ function renderMessages() {
 }
 
 
-/* =========================================================
+/* =====================================================
    FORMAT ANSWER
-========================================================= */
+===================================================== */
 
-function formatAnswer(
-  text
-) {
+function formatAnswer(text) {
 
   let result =
     escapeHtml(
-      text || ""
+      String(text || "")
     );
 
 
@@ -3457,9 +3127,45 @@ function formatAnswer(
 }
 
 
-/* =========================================================
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHtml(text) {
+
+  return String(text)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+/* =====================================================
    EMPTY
-========================================================= */
+===================================================== */
 
 function showEmpty() {
 
@@ -3486,9 +3192,9 @@ function showEmpty() {
 }
 
 
-/* =========================================================
+/* =====================================================
    TYPING
-========================================================= */
+===================================================== */
 
 function addTyping() {
 
@@ -3513,9 +3219,7 @@ function addTyping() {
 
     <div class="bubble">
 
-      <span
-        class="assistantLabel"
-      >
+      <span class="assistantLabel">
         ASA
       </span>
 
@@ -3544,24 +3248,22 @@ function addTyping() {
 
 function removeTyping() {
 
-  const element =
+  const typing =
     document.getElementById(
       "typingMessage"
     );
 
 
-  if (element) {
-
-    element.remove();
-
+  if (typing) {
+    typing.remove();
   }
 
 }
 
 
-/* =========================================================
+/* =====================================================
    SCROLL
-========================================================= */
+===================================================== */
 
 function scrollToBottom() {
 
@@ -3577,9 +3279,9 @@ function scrollToBottom() {
 }
 
 
-/* =========================================================
-   MEMORY / SETTINGS
-========================================================= */
+/* =====================================================
+   MEMORY
+===================================================== */
 
 document
   .getElementById(
@@ -3590,12 +3292,34 @@ document
     () => {
 
       alert(
-        "🧠 Hafıza panelini bir sonraki aşamada bağlayacağız."
+        "🧠 Hafıza sistemi aktif."
       );
 
     }
   );
 
+
+document
+  .getElementById(
+    "memoryMenuButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      closeMenu();
+
+      alert(
+        "🧠 ASA hafızası aktif ve API üzerinden çalışıyor."
+      );
+
+    }
+  );
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
 
 document
   .getElementById(
@@ -3615,31 +3339,13 @@ document
 
 document
   .getElementById(
-    "memoryMenuButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      closeSidebar();
-
-      alert(
-        "🧠 Hafıza panelini bir sonraki aşamada gerçek hafıza sistemine bağlayacağız."
-      );
-
-    }
-  );
-
-
-document
-  .getElementById(
     "settingsMenuButton"
   )
   .addEventListener(
     "click",
     () => {
 
-      closeSidebar();
+      closeMenu();
 
       alert(
         "⚙️ Ayarlar panelini bir sonraki aşamada geliştireceğiz."
@@ -3649,9 +3355,41 @@ document
   );
 
 
-/* =========================================================
+/* =====================================================
+   SOHBETLER
+===================================================== */
+
+document
+  .getElementById(
+    "showChatsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      renderChatList();
+
+      /*
+        Menü zaten açık olduğu için
+        burada scrollIntoView kullanmıyoruz.
+        Sohbet listesi zaten kendi içinde
+        scroll edilebilir.
+      */
+
+      const list =
+        document.getElementById(
+          "chatList"
+        );
+
+      list.scrollTop = 0;
+
+    }
+  );
+
+
+/* =====================================================
    VOICE
-========================================================= */
+===================================================== */
 
 document
   .getElementById(
@@ -3705,11 +3443,10 @@ document
 
 
       recognition.onerror =
-        error => {
+        () => {
 
           console.log(
-            "Voice error:",
-            error
+            "Sesli giriş hatası."
           );
 
         };
@@ -3721,29 +3458,74 @@ document
   );
 
 
-/* =========================================================
+/* =====================================================
    START
-========================================================= */
+===================================================== */
 
-conversationId =
-  getActiveConversationId();
+function startApp() {
+
+  /*
+    Eski v1 verisini silmiyoruz.
+    Yeni sistem kendi v2 alanını kullanıyor.
+  */
+
+  if (!conversationId) {
+
+    const conversations =
+      loadConversations();
 
 
-if (!conversationId) {
+    if (
+      conversations.length
+    ) {
 
-  conversationId =
-    createConversationId();
+      conversationId =
+        conversations[0].id;
 
-  setActiveConversationId(
-    conversationId
-  );
+      setActiveId(
+        conversationId
+      );
+
+    } else {
+
+      createNewConversation();
+
+      return;
+
+    }
+
+  }
+
+
+  const item =
+    getConversation(
+      conversationId
+    );
+
+
+  if (!item) {
+
+    createNewConversation();
+
+    return;
+
+  }
+
+
+  messages =
+    Array.isArray(item.messages)
+      ? item.messages
+      : [];
+
+
+  renderMessages();
+
+  renderChatList();
 
 }
 
 
-showMainMenu();
-
-loadActiveConversation();
+startApp();
 
 </script>
 
