@@ -44,9 +44,7 @@ return res.status(200).json({
     reply: response.output_text,
 });
 
-    return res.status(200).json({
-      reply: response.output_text,
-    });
+    
   } catch (error) {
     console.error(error);
 
