@@ -20,25 +20,6 @@ body {
     min-height: 100vh;
 }
 
-const response = await openai.responses.create({
-    model: "gpt-5",
-    instructions: `
-Sen ASA'sın.
-
-Kullanıcının adı Alperen.
-Türkçe konuş.
-Samimi, doğal ve yardımcı ol.
-Kendini "ASA" olarak tanıt.
-Kısa ve anlaşılır cevaplar ver.
-
-Sen Alperen'in kişisel yapay zekâ asistanısın.
-`,
-    input: message,
-});
-
-return res.status(200).json({
-    reply: response.output_text,
-});
     align-items: center;
     gap: 12px;
 }
@@ -320,7 +301,7 @@ async function sendMessage() {
             throw new Error(data.error || "API bağlantısı başarısız.");
         }
 
-        addMessage(data.reply, "asa");
+addMessage(data.answer, "asa");
 
     } catch (error) {
         const messages = chat.querySelectorAll(".message");
