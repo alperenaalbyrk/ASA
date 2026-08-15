@@ -1,0 +1,8 @@
+{
+  "name": "asa-api",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "openai": "^5.0.0"
+  }
+}
