@@ -324,7 +324,7 @@ async function sendMessage() {
             throw new Error(data.error || "API bağlantısı başarısız.");
         }
 
-        addMessage(data.answer, "asa");
+        addMessage(data.reply, "asa");
 
     } catch (error) {
         const messages = chat.querySelectorAll(".message");
