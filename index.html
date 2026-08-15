@@ -5,7 +5,7 @@
 
 <meta
   name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
 >
 
 <title>ASA</title>
@@ -13,7 +13,7 @@
 <style>
 
 /* =====================================================
-   RESET
+   BASE
 ===================================================== */
 
 * {
@@ -28,362 +28,303 @@
   --panel2: #12111d;
   --text: #f5f5fa;
   --muted: #858394;
-
-  --purple: #9b35ff;
-  --purple2: #c13cff;
-
-  --border:
-    rgba(255,255,255,.10);
+  --purple: #a33cff;
+  --purple2: #c447ff;
+  --border: rgba(255,255,255,.09);
 }
 
 html,
 body {
-
   width: 100%;
   height: 100%;
-
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
     "SF Pro Display",
     "Segoe UI",
     sans-serif;
-
-  overflow: hidden;
 }
 
 button,
 input {
-
   font: inherit;
 }
 
 button {
-
   border: 0;
   color: inherit;
 }
-
 
 /* =====================================================
    APP
 ===================================================== */
 
 .app {
-
-  position: relative;
-
   width: 100%;
   height: 100dvh;
-
+  position: relative;
   overflow: hidden;
 
   background:
-
     radial-gradient(
-      circle at 50% 10%,
-      rgba(130,30,200,.20),
+      circle at 50% 5%,
+      rgba(130,30,200,.18),
       transparent 35%
     ),
-
     radial-gradient(
-      circle at 85% 70%,
-      rgba(90,0,160,.14),
+      circle at 90% 70%,
+      rgba(80,0,150,.12),
       transparent 35%
     ),
-
     #05040a;
 }
-
 
 /* =====================================================
    HEADER
 ===================================================== */
 
 .header {
-
   position: absolute;
-
   top: 0;
   left: 0;
   right: 0;
 
-  height: 100px;
+  height: 96px;
 
   padding:
-    15px
+    14px
     14px;
 
   display: flex;
-
   align-items: center;
-
-  gap: 11px;
+  gap: 10px;
 
   background:
     linear-gradient(
       180deg,
       rgba(5,4,10,.99),
-      rgba(5,4,10,.91)
+      rgba(5,4,10,.90)
     );
 
   border-bottom:
     1px solid
-    rgba(255,255,255,.07);
+    rgba(255,255,255,.06);
 
   z-index: 30;
 }
 
-.menuButton,
-.headerButton {
-
-  width: 58px;
-  height: 58px;
-
+.headerButton,
+.logo {
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
-
   border-radius: 18px;
+}
 
+.headerButton {
   background:
-    rgba(18,17,29,.88);
+    rgba(255,255,255,.035);
 
   border:
     1px solid
-    rgba(255,255,255,.10);
+    rgba(255,255,255,.08);
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
+  font-size: 24px;
+
   cursor: pointer;
-
-  transition: .2s;
 }
 
-.menuButton {
-
-  font-size: 25px;
-}
-
-.headerButton {
-
-  font-size: 27px;
-}
-
-.menuButton:active,
 .headerButton:active {
-
-  transform:
-    scale(.94);
+  transform: scale(.93);
 }
 
 .logo {
-
-  width: 58px;
-  height: 58px;
-
-  flex-shrink: 0;
-
-  border-radius: 18px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
 
   background:
     linear-gradient(
       135deg,
-      #8d2fff,
-      #c53cff
+      #8f30ff,
+      #c43cff
     );
 
   box-shadow:
     0 0 30px
-    rgba(163,45,255,.32);
+    rgba(160,50,255,.30);
 
-  font-size: 31px;
-
+  font-size: 30px;
   font-weight: 800;
 }
 
 .brand {
-
-  font-size: 28px;
-
+  font-size: 27px;
   font-weight: 800;
-
   letter-spacing: 6px;
 }
 
 .headerSpacer {
-
   flex: 1;
 }
 
 .headerActions {
-
   display: flex;
-
-  gap: 7px;
+  gap: 6px;
 }
 
-
 /* =====================================================
-   CHAT AREA
+   CHAT
 ===================================================== */
 
 .chat {
-
   position: absolute;
 
-  top: 100px;
+  top: 96px;
   left: 0;
   right: 0;
-  bottom: 94px;
+  bottom: 92px;
 
   overflow-y: auto;
   overflow-x: hidden;
 
   padding:
-    38px
+    32px
     18px
-    35px;
-
-  scroll-behavior: smooth;
+    30px;
 
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .chat::-webkit-scrollbar {
-
   width: 3px;
 }
 
 .chat::-webkit-scrollbar-thumb {
-
   background:
-    rgba(180,60,255,.35);
-
+    rgba(180,60,255,.30);
   border-radius: 10px;
 }
 
-
 /* =====================================================
-   MESSAGES
+   MESSAGE
 ===================================================== */
 
 .message {
-
-  width: 100%;
-
-  margin-bottom: 24px;
-
   display: flex;
+  width: 100%;
+  margin-bottom: 22px;
 }
 
 .message.user {
-
   justify-content: flex-end;
 }
 
 .message.assistant {
-
   justify-content: flex-start;
 }
 
-
 /* USER */
 
-.user .bubble {
-
+.userBubble {
   max-width: 88%;
 
   padding:
-    14px
-    18px;
+    13px
+    17px;
 
-  border-radius: 22px;
-
+  border-radius: 21px;
   border-bottom-right-radius: 7px;
 
   background:
     linear-gradient(
       135deg,
-      #8b36ed,
-      #c33bd8
+      #8736e9,
+      #bd3bd6
     );
 
   box-shadow:
     0 10px 30px
-    rgba(130,45,255,.14);
+    rgba(130,45,255,.13);
 
-  font-size: 18px;
-
+  font-size: 17px;
   line-height: 1.5;
 
   white-space: pre-wrap;
-
   word-break: break-word;
 }
 
-
 /* ASSISTANT */
 
-.assistant .bubble {
-
+.assistantBubble {
   max-width: 94%;
 
   background: transparent;
 
   font-size: 18px;
-
-  line-height: 1.65;
+  line-height: 1.62;
 
   word-break: break-word;
 }
 
 .assistantLabel {
-
   display: block;
 
-  color:
-    #b13cff;
+  margin-bottom: 7px;
 
-  font-size: 13px;
+  color: #b53cff;
 
+  font-size: 12px;
   font-weight: 800;
 
-  letter-spacing: 6px;
-
-  margin-bottom: 9px;
+  letter-spacing: 5px;
 }
 
 .assistantText {
-
-  color:
-    #f2f1f7;
+  color: #f1eff6;
 }
 
+/* =====================================================
+   IMAGE MESSAGE
+===================================================== */
+
+.messageImage {
+  display: block;
+
+  max-width: 260px;
+  max-height: 330px;
+
+  border-radius: 18px;
+
+  object-fit: cover;
+
+  margin-bottom: 8px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.12);
+}
 
 /* =====================================================
    EMPTY
 ===================================================== */
 
 .empty {
-
+  width: 100%;
   height: 100%;
 
   display: flex;
-
   flex-direction: column;
 
   align-items: center;
-
   justify-content: center;
 
   text-align: center;
@@ -392,57 +333,47 @@ button {
 }
 
 .emptyLogo {
-
   width: 86px;
   height: 86px;
 
   border-radius: 27px;
 
-  background:
-    linear-gradient(
-      135deg,
-      #8e30ff,
-      #c33cff
-    );
-
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  font-size: 48px;
-
-  font-weight: 800;
+  background:
+    linear-gradient(
+      135deg,
+      #8f30ff,
+      #c33cff
+    );
 
   box-shadow:
     0 0 65px
-    rgba(159,44,255,.28);
+    rgba(160,45,255,.27);
+
+  font-size: 48px;
+  font-weight: 800;
 
   margin-bottom: 22px;
 }
 
 .empty h1 {
-
   font-size: 27px;
-
-  margin-bottom: 9px;
+  margin-bottom: 8px;
 }
 
 .empty p {
-
-  color:
-    var(--muted);
-
-  font-size: 17px;
+  color: var(--muted);
+  font-size: 16px;
 }
 
-
 /* =====================================================
-   INPUT AREA
+   INPUT
 ===================================================== */
 
 .inputArea {
-
   position: absolute;
 
   left: 12px;
@@ -450,216 +381,158 @@ button {
 
   bottom:
     calc(
-      12px + env(safe-area-inset-bottom)
+      11px +
+      env(safe-area-inset-bottom)
     );
 
-  z-index: 25;
+  z-index: 35;
 
   transition:
-    bottom .15s ease;
+    bottom .12s ease;
 }
 
-
-/* =====================================================
-   INPUT BOX
-===================================================== */
-
 .inputBox {
+  min-height: 64px;
 
-  min-height: 66px;
+  display: flex;
+  align-items: center;
 
-  width: 100%;
+  padding: 6px;
 
-  border-radius: 24px;
+  border-radius: 23px;
 
   background:
-    rgba(15,14,25,.96);
+    rgba(15,14,25,.97);
 
   border:
     1px solid
-    rgba(255,255,255,.11);
-
-  display: flex;
-
-  align-items: center;
-
-  padding:
-    6px 7px;
+    rgba(255,255,255,.10);
 
   box-shadow:
-    0 12px 45px
-    rgba(0,0,0,.40),
-
-    0 0 30px
-    rgba(135,35,255,.07);
+    0 14px 45px
+    rgba(0,0,0,.42);
 }
 
-
-/* =====================================================
-   PLUS
-===================================================== */
+/* PLUS */
 
 .plusButton {
-
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
 
   flex-shrink: 0;
 
-  border-radius: 17px;
-
-  background:
-    rgba(255,255,255,.045);
-
-  border:
-    1px solid
-    rgba(255,255,255,.07);
-
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  font-size: 28px;
-
-  font-weight: 300;
-
-  cursor: pointer;
-
-  transition: .2s;
-}
-
-.plusButton:active {
-
-  transform:
-    scale(.92);
-}
-
-
-/* =====================================================
-   INPUT
-===================================================== */
-
-.input {
-
-  flex: 1;
-
-  min-width: 0;
-
-  height: 50px;
+  border-radius: 16px;
 
   background: transparent;
 
-  border: 0;
+  color: #d5d2dc;
 
+  font-size: 29px;
+  font-weight: 300;
+
+  cursor: pointer;
+}
+
+.plusButton:active {
+  transform: scale(.90);
+}
+
+/* INPUT */
+
+.input {
+  flex: 1;
+  min-width: 0;
+
+  height: 48px;
+
+  background: transparent;
+  border: 0;
   outline: 0;
 
   color: white;
 
   padding:
-    0 12px;
+    0 9px;
 
   font-size: 17px;
 }
 
 .input::placeholder {
-
-  color:
-    #777583;
+  color: #74717f;
 }
 
-
-/* =====================================================
-   RIGHT ACTIONS
-===================================================== */
+/* RIGHT */
 
 .inputActions {
-
   display: flex;
-
   align-items: center;
-
-  gap: 5px;
+  gap: 1px;
 }
 
 .voiceButton,
 .sendButton {
-
-  width: 50px;
-  height: 50px;
+  width: 43px;
+  height: 43px;
 
   flex-shrink: 0;
 
-  border-radius: 17px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  cursor: pointer;
+  border-radius: 14px;
 
-  transition: .2s;
+  background: transparent;
+
+  cursor: pointer;
 }
 
 .voiceButton {
-
-  background:
-    rgba(255,255,255,.045);
-
-  border:
-    1px solid
-    rgba(255,255,255,.07);
-
-  font-size: 21px;
+  color: #d6d3dc;
 }
 
 .sendButton {
-
-  background:
-    linear-gradient(
-      135deg,
-      #9633ff,
-      #c03cff
-    );
-
-  font-size: 25px;
-
-  box-shadow:
-    0 0 25px
-    rgba(165,45,255,.20);
+  color: #b53cff;
 }
 
 .voiceButton:active,
 .sendButton:active {
-
-  transform:
-    scale(.92);
+  transform: scale(.87);
 }
 
 .sendButton:disabled {
-
-  opacity: .4;
+  opacity: .25;
 }
 
+.voiceButton svg {
+  width: 21px;
+  height: 21px;
+}
+
+.sendButton svg {
+  width: 22px;
+  height: 22px;
+}
 
 /* =====================================================
-   ATTACHMENT MENU
+   ATTACH MENU
 ===================================================== */
 
 .attachMenu {
-
   position: absolute;
 
   left: 4px;
+  bottom: 73px;
 
-  bottom: 76px;
-
-  width: 175px;
+  width: 180px;
 
   padding: 7px;
 
-  border-radius: 20px;
+  border-radius: 19px;
 
   background:
     rgba(20,18,31,.98);
@@ -680,14 +553,12 @@ button {
 
   pointer-events: none;
 
-  transition:
-    .18s ease;
+  transition: .18s;
 
-  z-index: 40;
+  z-index: 50;
 }
 
 .attachMenu.open {
-
   opacity: 1;
 
   transform:
@@ -698,19 +569,17 @@ button {
 }
 
 .attachItem {
-
   width: 100%;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
 
   padding:
     12px;
 
-  border-radius: 14px;
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  border-radius: 13px;
 
   background: transparent;
 
@@ -722,40 +591,139 @@ button {
 }
 
 .attachItem:active {
-
   background:
     rgba(255,255,255,.06);
 }
 
 .attachIcon {
-
-  width: 32px;
-
+  width: 30px;
   text-align: center;
-
-  font-size: 21px;
+  font-size: 20px;
 }
 
-
-/* =====================================================
-   HIDDEN FILE INPUT
-===================================================== */
-
 .hiddenFile {
-
   display: none;
 }
 
+/* =====================================================
+   IMAGE PREVIEW
+===================================================== */
+
+.attachmentPreview {
+  position: absolute;
+
+  left: 4px;
+  bottom: 73px;
+
+  width: 78px;
+  height: 78px;
+
+  border-radius: 17px;
+
+  overflow: hidden;
+
+  display: none;
+
+  background: #11101b;
+
+  border:
+    1px solid
+    rgba(255,255,255,.12);
+
+  box-shadow:
+    0 18px 45px
+    rgba(0,0,0,.50);
+
+  z-index: 45;
+}
+
+.attachmentPreview.show {
+  display: block;
+}
+
+.attachmentPreview img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.attachmentRemove {
+  position: absolute;
+
+  top: 5px;
+  right: 5px;
+
+  width: 24px;
+  height: 24px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(0,0,0,.70);
+
+  color: white;
+
+  cursor: pointer;
+}
+
+/* =====================================================
+   TYPING
+===================================================== */
+
+.typing {
+  display: flex;
+  gap: 5px;
+
+  padding-top: 5px;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #b43cff;
+
+  animation:
+    typing 1.05s infinite;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: .14s;
+}
+
+.typing span:nth-child(3) {
+  animation-delay: .28s;
+}
+
+@keyframes typing {
+
+  0%,60%,100% {
+    opacity: .25;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
 
 /* =====================================================
    OVERLAY
 ===================================================== */
 
 .overlay {
-
   position: fixed;
-
   inset: 0;
+
+  z-index: 50;
 
   background:
     rgba(0,0,0,.60);
@@ -763,29 +731,22 @@ button {
   backdrop-filter:
     blur(8px);
 
-  z-index: 50;
-
   opacity: 0;
-
   pointer-events: none;
 
   transition: .22s;
 }
 
 .overlay.open {
-
   opacity: 1;
-
   pointer-events: auto;
 }
-
 
 /* =====================================================
    SIDEBAR
 ===================================================== */
 
 .sidebar {
-
   position: fixed;
 
   top: 0;
@@ -793,7 +754,14 @@ button {
   bottom: 0;
 
   width:
-    min(560px,88vw);
+    min(540px,90vw);
+
+  z-index: 60;
+
+  padding: 22px;
+
+  display: flex;
+  flex-direction: column;
 
   background:
     linear-gradient(
@@ -806,55 +774,42 @@ button {
     1px solid
     rgba(255,255,255,.09);
 
-  z-index: 60;
-
   transform:
     translateX(-105%);
 
   transition:
     transform .30s
     cubic-bezier(.22,.8,.25,1);
-
-  padding:
-    22px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  overflow: hidden;
 }
 
 .sidebar.open {
-
   transform:
     translateX(0);
 }
-
 
 /* =====================================================
    SIDEBAR HEADER
 ===================================================== */
 
 .sidebarHeader {
-
   display: flex;
-
   align-items: center;
-
-  gap: 15px;
+  gap: 14px;
 
   flex-shrink: 0;
 
-  margin-bottom: 32px;
+  margin-bottom: 30px;
 }
 
 .sidebarLogo {
-
-  width: 58px;
-  height: 58px;
+  width: 57px;
+  height: 57px;
 
   border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background:
     linear-gradient(
@@ -863,118 +818,91 @@ button {
       #c33cff
     );
 
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 31px;
-
+  font-size: 30px;
   font-weight: 800;
 }
 
 .sidebarBrand {
-
   flex: 1;
 
-  font-size: 25px;
-
+  font-size: 24px;
   font-weight: 800;
 
   letter-spacing: 7px;
 }
 
 .closeButton {
+  width: 52px;
+  height: 52px;
 
-  width: 55px;
-  height: 55px;
-
-  border-radius: 18px;
+  border-radius: 17px;
 
   background:
     rgba(255,255,255,.05);
 
-  font-size: 32px;
+  font-size: 30px;
 
   cursor: pointer;
 }
 
-
 /* =====================================================
-   SIDEBAR MENU
+   SIDEBAR ITEMS
 ===================================================== */
 
 .menuSectionTitle {
-
   flex-shrink: 0;
 
-  font-size: 12px;
+  margin-bottom: 8px;
 
-  letter-spacing: 5px;
+  color: #817e8f;
 
+  font-size: 11px;
   font-weight: 800;
 
-  color:
-    #858394;
-
-  margin-bottom: 10px;
+  letter-spacing: 4px;
 }
 
 .menuItem {
-
   width: 100%;
-
-  min-height: 64px;
+  min-height: 62px;
 
   flex-shrink: 0;
 
   display: flex;
-
   align-items: center;
 
-  gap: 18px;
+  gap: 17px;
 
   padding:
-    9px 14px;
+    8px 13px;
 
-  border-radius: 20px;
+  border-radius: 18px;
 
   background: transparent;
 
-  cursor: pointer;
-
   text-align: left;
 
-  font-size: 19px;
+  cursor: pointer;
 
+  font-size: 18px;
   font-weight: 600;
-
-  transition: .2s;
 }
 
+.menuItem:active,
 .menuItem.active {
-
   background:
     rgba(255,255,255,.065);
 }
 
-.menuItem:active {
-
-  background:
-    rgba(255,255,255,.08);
-}
-
 .menuIcon {
-
-  width: 43px;
+  width: 40px;
 
   text-align: center;
 
-  font-size: 27px;
+  font-size: 25px;
 }
 
 .menuDivider {
-
   height: 1px;
 
   flex-shrink: 0;
@@ -983,31 +911,32 @@ button {
     rgba(255,255,255,.07);
 
   margin:
-    18px 0;
+    17px 0;
 }
 
-
 /* =====================================================
-   CHAT HISTORY PANEL
+   HISTORY PANEL
 ===================================================== */
 
 .historyPanel {
-
   position: absolute;
 
-  top: 108px;
+  top: 106px;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
 
-  left: 16px;
-  right: 16px;
+  z-index: 80;
 
-  bottom: 16px;
+  padding: 17px;
 
-  padding: 18px;
+  display: flex;
+  flex-direction: column;
 
-  border-radius: 25px;
+  border-radius: 24px;
 
   background:
-    rgba(14,13,24,.98);
+    rgba(14,13,24,.99);
 
   border:
     1px solid
@@ -1015,13 +944,7 @@ button {
 
   box-shadow:
     0 25px 80px
-    rgba(0,0,0,.50);
-
-  z-index: 80;
-
-  display: flex;
-
-  flex-direction: column;
+    rgba(0,0,0,.55);
 
   opacity: 0;
 
@@ -1031,12 +954,10 @@ button {
 
   pointer-events: none;
 
-  transition:
-    .20s ease;
+  transition: .20s;
 }
 
 .historyPanel.open {
-
   opacity: 1;
 
   transform:
@@ -1046,101 +967,88 @@ button {
   pointer-events: auto;
 }
 
-.historyPanelHeader {
-
+.historyHeader {
   display: flex;
-
   align-items: center;
 
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
-.historyPanelTitle {
-
+.historyTitle {
   flex: 1;
 
   font-size: 20px;
-
   font-weight: 750;
 }
 
 .historyClose {
-
-  width: 40px;
-  height: 40px;
+  width: 39px;
+  height: 39px;
 
   border-radius: 13px;
 
   background:
     rgba(255,255,255,.05);
 
-  font-size: 22px;
+  font-size: 21px;
 
   cursor: pointer;
 }
 
 .chatList {
-
   flex: 1;
-
   min-height: 0;
 
   overflow-y: auto;
 
-  padding-right: 3px;
+  padding-right: 2px;
 }
 
 .chatList::-webkit-scrollbar {
-
   width: 3px;
 }
 
 .chatList::-webkit-scrollbar-thumb {
-
   background:
-    rgba(180,60,255,.35);
-
-  border-radius: 10px;
+    rgba(180,60,255,.30);
 }
 
-
 /* =====================================================
-   HISTORY ITEM
+   HISTORY ITEMS
 ===================================================== */
 
 .historyGroup {
-
-  margin-bottom: 18px;
+  margin-bottom: 17px;
 }
 
 .historyDate {
+  margin:
+    11px
+    6px
+    7px;
 
-  color:
-    #747286;
+  color: #747184;
 
-  font-size: 11px;
-
-  letter-spacing: 3px;
-
+  font-size: 10px;
   font-weight: 800;
 
-  margin:
-    12px 7px 8px;
+  letter-spacing: 3px;
 }
 
 .historyItem {
-
   position: relative;
 
   width: 100%;
 
-  min-height: 68px;
+  min-height: 65px;
+
+  margin-bottom: 7px;
 
   padding:
-    13px
-    50px
-    13px
-    15px;
+    12px
+    49px
+    12px
+    14px;
 
   border-radius: 17px;
 
@@ -1151,100 +1059,80 @@ button {
     1px solid
     rgba(255,255,255,.06);
 
-  margin-bottom: 8px;
-
   cursor: pointer;
-
-  transition: .18s;
 }
 
 .historyItem.active {
-
   background:
-    linear-gradient(
-      135deg,
-      rgba(155,53,255,.20),
-      rgba(193,60,255,.08)
-    );
+    rgba(165,55,255,.13);
 
   border-color:
-    rgba(180,60,255,.32);
+    rgba(170,55,255,.30);
 }
 
-.historyTitle {
-
-  font-size: 16px;
-
+.historyTitleText {
+  font-size: 15px;
   font-weight: 650;
 
   white-space: nowrap;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
 }
 
 .historyTime {
+  margin-top: 4px;
 
-  color:
-    #727181;
+  color: #716e7d;
 
   font-size: 11px;
-
-  margin-top: 4px;
 }
 
 .historyMore {
-
   position: absolute;
 
-  right: 8px;
+  right: 7px;
   top: 50%;
 
   transform:
     translateY(-50%);
 
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
 
-  border-radius: 13px;
+  border-radius: 12px;
 
   background:
     rgba(255,255,255,.045);
 
-  color:
-    #aaa8b6;
-
-  font-size: 17px;
+  color: #aaa7b5;
 
   cursor: pointer;
 }
 
 .noHistory {
+  padding: 35px 10px;
 
-  color:
-    #666578;
+  color: #686577;
 
   text-align: center;
-
-  padding:
-    35px 10px;
 
   font-size: 14px;
 }
 
-
 /* =====================================================
-   CONTEXT MENU
+   CONTEXT
 ===================================================== */
 
 .contextMenu {
-
   position: fixed;
 
   z-index: 150;
 
-  width: 210px;
+  width: 205px;
+
+  padding: 7px;
+
+  border-radius: 17px;
 
   background:
     #151421;
@@ -1252,10 +1140,6 @@ button {
   border:
     1px solid
     rgba(255,255,255,.10);
-
-  border-radius: 18px;
-
-  padding: 8px;
 
   box-shadow:
     0 20px 60px
@@ -1265,18 +1149,16 @@ button {
 }
 
 .contextMenu.open {
-
   display: block;
 }
 
 .contextItem {
-
   width: 100%;
 
   padding:
-    13px 15px;
+    12px 14px;
 
-  border-radius: 13px;
+  border-radius: 12px;
 
   background: transparent;
 
@@ -1284,58 +1166,52 @@ button {
 
   cursor: pointer;
 
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .contextItem:active {
-
   background:
     rgba(255,255,255,.06);
 }
 
 .contextItem.delete {
-
-  color:
-    #ff687c;
+  color: #ff687c;
 }
 
-
 /* =====================================================
-   MODALS
+   MODAL
 ===================================================== */
 
 .modalOverlay {
-
   position: fixed;
-
   inset: 0;
 
   z-index: 200;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 22px;
 
   background:
     rgba(0,0,0,.72);
 
   backdrop-filter:
     blur(10px);
-
-  display: none;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 25px;
 }
 
 .modalOverlay.open {
-
   display: flex;
 }
 
 .modal {
+  width: min(480px,100%);
 
-  width:
-    min(500px,100%);
+  padding: 26px;
+
+  border-radius: 26px;
 
   background:
     #12111d;
@@ -1344,29 +1220,23 @@ button {
     1px solid
     rgba(255,255,255,.11);
 
-  border-radius: 28px;
-
-  padding: 28px;
-
   box-shadow:
     0 30px 100px
     rgba(0,0,0,.60);
 }
 
 .modal h2 {
+  margin-bottom: 18px;
 
-  font-size: 24px;
-
-  margin-bottom: 20px;
+  font-size: 23px;
 }
 
 .modalInput {
-
   width: 100%;
 
-  padding: 17px;
+  padding: 16px;
 
-  border-radius: 17px;
+  border-radius: 16px;
 
   background:
     #090811;
@@ -1375,29 +1245,26 @@ button {
     1px solid
     rgba(255,255,255,.10);
 
-  outline: none;
-
   color: white;
 
-  font-size: 17px;
+  outline: 0;
+
+  font-size: 16px;
 }
 
 .modalButtons {
-
   display: flex;
+  gap: 9px;
 
-  gap: 10px;
-
-  margin-top: 20px;
+  margin-top: 19px;
 }
 
 .modalButton {
-
   flex: 1;
 
-  padding: 15px;
+  padding: 14px;
 
-  border-radius: 16px;
+  border-radius: 15px;
 
   background:
     rgba(255,255,255,.06);
@@ -1406,7 +1273,6 @@ button {
 }
 
 .modalButton.primary {
-
   background:
     linear-gradient(
       135deg,
@@ -1416,70 +1282,9 @@ button {
 }
 
 .modalButton.danger {
-
   background:
     #a92843;
 }
-
-
-/* =====================================================
-   TYPING
-===================================================== */
-
-.typing {
-
-  display: flex;
-
-  gap: 6px;
-
-  padding: 8px 2px;
-}
-
-.typing span {
-
-  width: 7px;
-  height: 7px;
-
-  border-radius: 50%;
-
-  background:
-    #b43cff;
-
-  animation:
-    typing 1.1s infinite;
-}
-
-.typing span:nth-child(2) {
-
-  animation-delay:
-    .15s;
-}
-
-.typing span:nth-child(3) {
-
-  animation-delay:
-    .30s;
-}
-
-@keyframes typing {
-
-  0%,60%,100% {
-
-    opacity: .25;
-
-    transform:
-      translateY(0);
-  }
-
-  30% {
-
-    opacity: 1;
-
-    transform:
-      translateY(-4px);
-  }
-}
-
 
 /* =====================================================
    DESKTOP
@@ -1488,106 +1293,59 @@ button {
 @media (min-width:601px) {
 
   .header {
-
-    height: 130px;
+    height: 118px;
 
     padding:
-      30px 22px 18px;
+      20px 22px;
 
-    gap: 18px;
+    gap: 15px;
   }
 
-  .menuButton,
   .headerButton,
   .logo {
-
-    width: 70px;
-    height: 70px;
-
-    border-radius: 22px;
-  }
-
-  .menuButton,
-  .headerButton {
-
-    font-size: 30px;
-  }
-
-  .logo {
-
-    font-size: 38px;
+    width: 64px;
+    height: 64px;
   }
 
   .brand {
-
-    font-size: 37px;
-
-    letter-spacing: 7px;
+    font-size: 31px;
   }
 
   .chat {
-
-    top: 130px;
-
-    bottom: 105px;
+    top: 118px;
+    bottom: 100px;
 
     padding:
-      55px 25px 35px;
+      45px
+      25px
+      35px;
   }
 
-  .user .bubble {
-
-    font-size: 21px;
-
-    padding:
-      18px 24px;
+  .userBubble {
+    font-size: 19px;
   }
 
-  .assistant .bubble {
-
-    font-size: 21px;
+  .assistantBubble {
+    font-size: 20px;
   }
 
   .inputArea {
-
     left: 20px;
     right: 20px;
-
-    bottom: 20px;
+    bottom: 18px;
   }
 
   .inputBox {
-
-    min-height: 78px;
-
-    border-radius: 27px;
-  }
-
-  .plusButton,
-  .voiceButton,
-  .sendButton {
-
-    width: 60px;
-    height: 60px;
-
-    border-radius: 19px;
-  }
-
-  .input {
-
-    font-size: 19px;
+    min-height: 70px;
   }
 }
 
 </style>
 </head>
 
-
 <body>
 
-
 <div class="app">
-
 
 <!-- =====================================================
      HEADER
@@ -1596,26 +1354,21 @@ button {
 <header class="header">
 
   <button
-    class="menuButton"
+    class="headerButton"
     id="menuButton"
-    aria-label="Menü"
   >
     ☰
   </button>
-
 
   <div class="logo">
     A
   </div>
 
-
   <div class="brand">
     ASA
   </div>
 
-
   <div class="headerSpacer"></div>
-
 
   <div class="headerActions">
 
@@ -1625,7 +1378,6 @@ button {
     >
       🧠
     </button>
-
 
     <button
       class="headerButton"
@@ -1658,6 +1410,28 @@ button {
   id="inputArea"
 >
 
+  <!-- IMAGE PREVIEW -->
+
+  <div
+    class="attachmentPreview"
+    id="attachmentPreview"
+  >
+
+    <img
+      id="attachmentPreviewImage"
+      alt="Seçilen görsel"
+    >
+
+    <button
+      class="attachmentRemove"
+      id="attachmentRemove"
+      type="button"
+    >
+      ×
+    </button>
+
+  </div>
+
 
   <!-- ATTACH MENU -->
 
@@ -1669,6 +1443,7 @@ button {
     <button
       class="attachItem"
       id="fileButton"
+      type="button"
     >
 
       <span class="attachIcon">
@@ -1676,15 +1451,15 @@ button {
       </span>
 
       <span>
-        Dosya yükle
+        Fotoğraf / Dosya
       </span>
 
     </button>
 
-
     <button
       class="attachItem"
       id="cameraButton"
+      type="button"
     >
 
       <span class="attachIcon">
@@ -1702,19 +1477,14 @@ button {
 
   <div class="inputBox">
 
-
-    <!-- PLUS -->
-
     <button
       class="plusButton"
       id="plusButton"
-      aria-label="Ekle"
+      type="button"
     >
       +
     </button>
 
-
-    <!-- INPUT -->
 
     <input
       class="input"
@@ -1725,26 +1495,73 @@ button {
     >
 
 
-    <!-- RIGHT -->
-
     <div class="inputActions">
-
 
       <button
         class="voiceButton"
         id="voiceButton"
-        aria-label="Sesli giriş"
+        type="button"
       >
-        🎙
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <rect
+            x="9"
+            y="3"
+            width="6"
+            height="12"
+            rx="3"
+          ></rect>
+
+          <path
+            d="M5 11a7 7 0 0 0 14 0"
+          ></path>
+
+          <path
+            d="M12 18v3"
+          ></path>
+
+          <path
+            d="M8 21h8"
+          ></path>
+
+        </svg>
+
       </button>
 
 
       <button
         class="sendButton"
         id="sendButton"
-        aria-label="Gönder"
+        type="button"
       >
-        ➤
+
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+
+          <path
+            d="M4 12h15"
+          ></path>
+
+          <path
+            d="m13 5 7 7-7 7"
+          ></path>
+
+        </svg>
+
       </button>
 
     </div>
@@ -1754,15 +1571,11 @@ button {
 </div>
 
 
-<!-- =====================================================
-     FILE INPUTS
-===================================================== -->
-
 <input
   type="file"
   id="fileInput"
   class="hiddenFile"
-  multiple
+  accept="image/*,.pdf,.txt,.csv,.doc,.docx,.xls,.xlsx"
 >
 
 <input
@@ -1772,7 +1585,6 @@ button {
   accept="image/*"
   capture="environment"
 >
-
 
 </div>
 
@@ -1795,7 +1607,6 @@ button {
   class="sidebar"
   id="sidebar"
 >
-
 
   <div class="sidebarHeader">
 
@@ -1825,6 +1636,7 @@ button {
   <button
     class="menuItem"
     id="newChatButton"
+    type="button"
   >
 
     <span class="menuIcon">
@@ -1841,6 +1653,7 @@ button {
   <button
     class="menuItem"
     id="showChatsButton"
+    type="button"
   >
 
     <span class="menuIcon">
@@ -1865,6 +1678,7 @@ button {
   <button
     class="menuItem"
     id="memoryMenuButton"
+    type="button"
   >
 
     <span class="menuIcon">
@@ -1881,6 +1695,7 @@ button {
   <button
     class="menuItem"
     id="settingsMenuButton"
+    type="button"
   >
 
     <span class="menuIcon">
@@ -1894,24 +1709,23 @@ button {
   </button>
 
 
-  <!-- =================================================
-       HISTORY PANEL
-  ================================================== -->
+  <!-- HISTORY -->
 
   <section
     class="historyPanel"
     id="historyPanel"
   >
 
-    <div class="historyPanelHeader">
+    <div class="historyHeader">
 
-      <div class="historyPanelTitle">
+      <div class="historyTitle">
         Sohbetler
       </div>
 
       <button
         class="historyClose"
         id="historyClose"
+        type="button"
       >
         ×
       </button>
@@ -1925,7 +1739,6 @@ button {
     ></div>
 
   </section>
-
 
 </aside>
 
@@ -1942,14 +1755,15 @@ button {
   <button
     class="contextItem"
     id="renameButton"
+    type="button"
   >
     ✏️ Başlığı değiştir
   </button>
 
-
   <button
     class="contextItem delete"
     id="deleteButton"
+    type="button"
   >
     🗑️ Sohbeti sil
   </button>
@@ -1958,7 +1772,7 @@ button {
 
 
 <!-- =====================================================
-     RENAME MODAL
+     RENAME
 ===================================================== -->
 
 <div
@@ -1972,15 +1786,12 @@ button {
       Sohbet başlığını değiştir
     </h2>
 
-
     <input
       class="modalInput"
       id="renameInput"
-      type="text"
       maxlength="80"
       placeholder="Sohbet adı"
     >
-
 
     <div class="modalButtons">
 
@@ -1990,7 +1801,6 @@ button {
       >
         İptal
       </button>
-
 
       <button
         class="modalButton primary"
@@ -2007,7 +1817,7 @@ button {
 
 
 <!-- =====================================================
-     DELETE MODAL
+     DELETE
 ===================================================== -->
 
 <div
@@ -2021,7 +1831,6 @@ button {
       Sohbet silinsin mi?
     </h2>
 
-
     <p
       id="deleteText"
       style="
@@ -2032,7 +1841,6 @@ button {
       Bu sohbet silinecek.
     </p>
 
-
     <div class="modalButtons">
 
       <button
@@ -2041,7 +1849,6 @@ button {
       >
         İptal
       </button>
-
 
       <button
         class="modalButton danger"
@@ -2063,20 +1870,99 @@ button {
    CONFIG
 ===================================================== */
 
-const API_URL =
-  "/api/chat";
-
+const API_URL = "/api/chat";
 
 const STORAGE_KEY =
-  "asa_conversations_v3";
-
+  "asa_conversations_luna_v1";
 
 const ACTIVE_KEY =
-  "asa_active_conversation_v3";
+  "asa_active_luna_v1";
 
 
 /* =====================================================
-   STORAGE
+   STATE
+===================================================== */
+
+let conversationId =
+  localStorage.getItem(
+    ACTIVE_KEY
+  );
+
+let messages = [];
+
+let selectedConversationId =
+  null;
+
+let selectedImage = null;
+
+let selectedImageData = null;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const chat =
+  document.getElementById("chat");
+
+const input =
+  document.getElementById(
+    "messageInput"
+  );
+
+const sendButton =
+  document.getElementById(
+    "sendButton"
+  );
+
+const sidebar =
+  document.getElementById(
+    "sidebar"
+  );
+
+const overlay =
+  document.getElementById(
+    "overlay"
+  );
+
+const historyPanel =
+  document.getElementById(
+    "historyPanel"
+  );
+
+const chatList =
+  document.getElementById(
+    "chatList"
+  );
+
+const contextMenu =
+  document.getElementById(
+    "contextMenu"
+  );
+
+const attachMenu =
+  document.getElementById(
+    "attachMenu"
+  );
+
+const inputArea =
+  document.getElementById(
+    "inputArea"
+  );
+
+const attachmentPreview =
+  document.getElementById(
+    "attachmentPreview"
+  );
+
+const attachmentPreviewImage =
+  document.getElementById(
+    "attachmentPreviewImage"
+  );
+
+
+/* =====================================================
+   LOCAL STORAGE
 ===================================================== */
 
 function loadConversations() {
@@ -2117,16 +2003,21 @@ function saveConversations(
 }
 
 
-function getActiveId() {
+function getConversation(id) {
 
-  return localStorage.getItem(
-    ACTIVE_KEY
-  );
+  return loadConversations()
+    .find(
+      item =>
+        item.id === id
+    );
 
 }
 
 
-function setActiveId(id) {
+function setActive(id) {
+
+  conversationId =
+    id;
 
   localStorage.setItem(
     ACTIVE_KEY,
@@ -2136,97 +2027,26 @@ function setActiveId(id) {
 }
 
 
+/* =====================================================
+   CREATE CONVERSATION
+===================================================== */
+
 function createId() {
 
   return (
-    "asa-" +
+    "chat-" +
     Date.now() +
     "-" +
     Math.random()
       .toString(36)
-      .slice(2,10)
+      .slice(2,9)
   );
 
 }
 
 
-/* =====================================================
-   STATE
-===================================================== */
-
-let conversationId =
-  getActiveId();
-
-let messages = [];
-
-let selectedConversationId =
-  null;
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const chat =
-  document.getElementById(
-    "chat"
-  );
-
-
-const input =
-  document.getElementById(
-    "messageInput"
-  );
-
-
-const sendButton =
-  document.getElementById(
-    "sendButton"
-  );
-
-
-const sidebar =
-  document.getElementById(
-    "sidebar"
-  );
-
-
-const overlay =
-  document.getElementById(
-    "overlay"
-  );
-
-
-const contextMenu =
-  document.getElementById(
-    "contextMenu"
-  );
-
-
-const historyPanel =
-  document.getElementById(
-    "historyPanel"
-  );
-
-
-const attachMenu =
-  document.getElementById(
-    "attachMenu"
-  );
-
-
-const inputArea =
-  document.getElementById(
-    "inputArea"
-  );
-
-
-/* =====================================================
-   CONVERSATIONS
-===================================================== */
-
 function createConversation(
-  firstMessage = ""
+  title = "Yeni Sohbet"
 ) {
 
   const conversation = {
@@ -2234,12 +2054,7 @@ function createConversation(
     id:
       createId(),
 
-    title:
-      firstMessage
-        ? generateTitle(
-            firstMessage
-          )
-        : "Yeni Sohbet",
+    title,
 
     createdAt:
       Date.now(),
@@ -2271,51 +2086,31 @@ function createConversation(
 }
 
 
-function getConversation(id) {
+function createNewConversation() {
 
-  return loadConversations()
-    .find(
-      item =>
-        item.id === id
-    );
-
-}
+  const conversation =
+    createConversation();
 
 
-function saveCurrentMessages() {
-
-  if (!conversationId) {
-    return;
-  }
-
-
-  const conversations =
-    loadConversations();
-
-
-  const item =
-    conversations.find(
-      x =>
-        x.id === conversationId
-    );
-
-
-  if (!item) {
-    return;
-  }
-
-
-  item.messages =
-    messages;
-
-
-  item.updatedAt =
-    Date.now();
-
-
-  saveConversations(
-    conversations
+  setActive(
+    conversation.id
   );
+
+
+  messages = [];
+
+
+  clearAttachment();
+
+  showEmpty();
+
+  renderChatList();
+
+  closeHistory();
+
+  closeSidebar();
+
+  input.focus();
 
 }
 
@@ -2324,7 +2119,9 @@ function saveCurrentMessages() {
    TITLE
 ===================================================== */
 
-function generateTitle(text) {
+function generateTitle(
+  text
+) {
 
   let title =
     String(text)
@@ -2354,9 +2151,49 @@ function generateTitle(text) {
 
 
   return (
-    title.charAt(0)
-      .toUpperCase() +
+    title.charAt(0).toUpperCase() +
     title.slice(1)
+  );
+
+}
+
+
+/* =====================================================
+   SAVE CURRENT
+===================================================== */
+
+function saveCurrentConversation() {
+
+  if (!conversationId) {
+    return;
+  }
+
+
+  const conversations =
+    loadConversations();
+
+
+  const item =
+    conversations.find(
+      x =>
+        x.id === conversationId
+    );
+
+
+  if (!item) {
+    return;
+  }
+
+
+  item.messages =
+    messages;
+
+  item.updatedAt =
+    Date.now();
+
+
+  saveConversations(
+    conversations
   );
 
 }
@@ -2366,7 +2203,7 @@ function generateTitle(text) {
    MENU
 ===================================================== */
 
-function openMenu() {
+function openSidebar() {
 
   sidebar.classList.add(
     "open"
@@ -2379,7 +2216,7 @@ function openMenu() {
 }
 
 
-function closeMenu() {
+function closeSidebar() {
 
   sidebar.classList.remove(
     "open"
@@ -2402,7 +2239,7 @@ document
   )
   .addEventListener(
     "click",
-    openMenu
+    openSidebar
   );
 
 
@@ -2412,18 +2249,18 @@ document
   )
   .addEventListener(
     "click",
-    closeMenu
+    closeSidebar
   );
 
 
 overlay.addEventListener(
   "click",
-  closeMenu
+  closeSidebar
 );
 
 
 /* =====================================================
-   CHAT PANEL
+   HISTORY
 ===================================================== */
 
 function openHistory() {
@@ -2433,7 +2270,6 @@ function openHistory() {
   historyPanel.classList.add(
     "open"
   );
-
 
   document
     .getElementById(
@@ -2451,7 +2287,6 @@ function closeHistory() {
   historyPanel.classList.remove(
     "open"
   );
-
 
   document
     .getElementById(
@@ -2485,16 +2320,10 @@ document
 
 
 /* =====================================================
-   CHAT LIST
+   HISTORY LIST
 ===================================================== */
 
 function renderChatList() {
-
-  const list =
-    document.getElementById(
-      "chatList"
-    );
-
 
   const conversations =
     loadConversations()
@@ -2505,17 +2334,15 @@ function renderChatList() {
       );
 
 
-  list.innerHTML = "";
+  chatList.innerHTML = "";
 
 
   if (!conversations.length) {
 
-    list.innerHTML = `
-
+    chatList.innerHTML = `
       <div class="noHistory">
         Henüz kayıtlı sohbet yok.
       </div>
-
     `;
 
     return;
@@ -2541,9 +2368,7 @@ function renderChatList() {
 
 
       if (!groups[key]) {
-
         groups[key] = [];
-
       }
 
 
@@ -2564,40 +2389,37 @@ function renderChatList() {
             "div"
           );
 
-
         group.className =
           "historyGroup";
 
 
-        const dateTitle =
+        const date =
           document.createElement(
             "div"
           );
 
-
-        dateTitle.className =
+        date.className =
           "historyDate";
 
-
-        dateTitle.textContent =
-          getDateLabel(key);
+        date.textContent =
+          dateLabel(key);
 
 
         group.appendChild(
-          dateTitle
+          date
         );
 
 
         items.forEach(
           item => {
 
-            const element =
+            const row =
               document.createElement(
                 "div"
               );
 
 
-            element.className =
+            row.className =
               "historyItem";
 
 
@@ -2606,7 +2428,7 @@ function renderChatList() {
               conversationId
             ) {
 
-              element.classList.add(
+              row.classList.add(
                 "active"
               );
 
@@ -2620,7 +2442,7 @@ function renderChatList() {
 
 
             title.className =
-              "historyTitle";
+              "historyTitleText";
 
 
             title.textContent =
@@ -2653,31 +2475,27 @@ function renderChatList() {
             more.className =
               "historyMore";
 
-
             more.type =
               "button";
-
 
             more.textContent =
               "•••";
 
 
-            element.appendChild(
+            row.appendChild(
               title
             );
 
-
-            element.appendChild(
+            row.appendChild(
               time
             );
 
-
-            element.appendChild(
+            row.appendChild(
               more
             );
 
 
-            element.addEventListener(
+            row.addEventListener(
               "click",
               () => {
 
@@ -2693,8 +2511,6 @@ function renderChatList() {
               "click",
               event => {
 
-                event.preventDefault();
-
                 event.stopPropagation();
 
                 showContextMenu(
@@ -2707,14 +2523,14 @@ function renderChatList() {
 
 
             group.appendChild(
-              element
+              row
             );
 
           }
         );
 
 
-        list.appendChild(
+        chatList.appendChild(
           group
         );
 
@@ -2724,23 +2540,15 @@ function renderChatList() {
 }
 
 
-/* =====================================================
-   DATE
-===================================================== */
-
-function getDateLabel(
+function dateLabel(
   dateString
 ) {
 
+  const date =
+    new Date(dateString);
+
   const today =
     new Date();
-
-
-  const date =
-    new Date(
-      dateString
-    );
-
 
   const yesterday =
     new Date();
@@ -2808,6 +2616,1159 @@ function formatTime(
 
 
 /* =====================================================
+   OPEN CONVERSATION
+===================================================== */
+
+async function openConversation(
+  id
+) {
+
+  const local =
+    getConversation(id);
+
+
+  if (!local) {
+    return;
+  }
+
+
+  setActive(id);
+
+
+  messages =
+    Array.isArray(
+      local.messages
+    )
+      ? local.messages
+      : [];
+
+
+  closeHistory();
+
+  closeSidebar();
+
+  closeContextMenu();
+
+
+  renderMessages();
+
+
+  /*
+    Redis'teki gerçek geçmişi çek.
+  */
+
+  try {
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              action:
+                "getHistory",
+
+              conversationId:
+                id
+
+            })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      response.ok &&
+      Array.isArray(
+        data.history
+      )
+    ) {
+
+      messages =
+        data.history;
+
+
+      saveCurrentConversation();
+
+      renderMessages();
+
+    }
+
+  } catch(error) {
+
+    console.error(
+      "Geçmiş alınamadı:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   SEND
+===================================================== */
+
+async function sendMessage() {
+
+  const text =
+    input.value.trim();
+
+
+  if (
+    !text &&
+    !selectedImageData
+  ) {
+    return;
+  }
+
+
+  /*
+    Sohbet yoksa oluştur.
+  */
+
+  if (!conversationId) {
+
+    const conversation =
+      createConversation();
+
+    setActive(
+      conversation.id
+    );
+
+  }
+
+
+  let conversation =
+    getConversation(
+      conversationId
+    );
+
+
+  if (!conversation) {
+
+    conversation =
+      createConversation();
+
+
+    setActive(
+      conversation.id
+    );
+
+  }
+
+
+  /*
+    İlk mesaj başlığı
+  */
+
+  if (
+    conversation.title ===
+    "Yeni Sohbet"
+  ) {
+
+    conversation.title =
+      generateTitle(
+        text ||
+        "Görsel sohbet"
+      );
+
+  }
+
+
+  /*
+    UI mesajı
+  */
+
+  const userMessage = {
+    role: "user",
+    content: text || ""
+  };
+
+
+  /*
+    Görsel varsa
+    API'ye multimodal içerik gönder.
+  */
+
+  if (selectedImageData) {
+
+    userMessage.content = [
+
+      {
+        type:
+          "input_text",
+
+        text:
+          text ||
+          "Bu görseli incele."
+      },
+
+      {
+        type:
+          "input_image",
+
+        image_url:
+          selectedImageData
+      }
+
+    ];
+
+  }
+
+
+  messages.push(
+    userMessage
+  );
+
+
+  saveCurrentConversation();
+
+  renderMessages();
+
+  renderChatList();
+
+
+  /*
+    UI temizle
+  */
+
+  input.value = "";
+
+  sendButton.disabled =
+    true;
+
+
+  const imageToSend =
+    selectedImageData;
+
+
+  clearAttachment();
+
+
+  addTyping();
+
+
+  try {
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              action:
+                "chat",
+
+              conversationId,
+
+              messages: [
+                userMessage
+              ]
+
+            })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    removeTyping();
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.error ||
+        "ASA cevap veremedi."
+      );
+
+    }
+
+
+    /*
+      API'nin kaydettiği
+      gerçek geçmişi kullan.
+    */
+
+    if (
+      Array.isArray(
+        data.history
+      )
+    ) {
+
+      messages =
+        data.history;
+
+    } else {
+
+      messages.push({
+
+        role:
+          "assistant",
+
+        content:
+          data.answer || ""
+
+      });
+
+    }
+
+
+    saveCurrentConversation();
+
+    renderMessages();
+
+    renderChatList();
+
+
+  } catch(error) {
+
+    removeTyping();
+
+
+    console.error(
+      "ASA:",
+      error
+    );
+
+
+    messages.push({
+
+      role:
+        "assistant",
+
+      content:
+        "Bağlantıda bir sorun oluştu. Birazdan tekrar deneyelim."
+
+    });
+
+
+    saveCurrentConversation();
+
+    renderMessages();
+
+  }
+
+
+  sendButton.disabled =
+    false;
+
+
+  input.focus();
+
+}
+
+
+/* =====================================================
+   RENDER MESSAGES
+===================================================== */
+
+function renderMessages() {
+
+  chat.innerHTML = "";
+
+
+  if (!messages.length) {
+
+    showEmpty();
+
+    return;
+
+  }
+
+
+  messages.forEach(
+    message => {
+
+      renderMessage(
+        message
+      );
+
+    }
+  );
+
+
+  scrollBottom();
+
+}
+
+
+function renderMessage(
+  message
+) {
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+
+  row.className =
+    "message " +
+    (
+      message.role === "user"
+        ? "user"
+        : "assistant"
+    );
+
+
+  /*
+    USER
+  */
+
+  if (
+    message.role === "user"
+  ) {
+
+    const bubble =
+      document.createElement(
+        "div"
+      );
+
+
+    bubble.className =
+      "userBubble";
+
+
+    /*
+      Multimodal
+    */
+
+    if (
+      Array.isArray(
+        message.content
+      )
+    ) {
+
+      message.content.forEach(
+        part => {
+
+          if (
+            part.type ===
+            "input_image" &&
+            part.image_url
+          ) {
+
+            const image =
+              document.createElement(
+                "img"
+              );
+
+
+            image.className =
+              "messageImage";
+
+
+            image.src =
+              part.image_url;
+
+
+            image.alt =
+              "Gönderilen görsel";
+
+
+            bubble.appendChild(
+              image
+            );
+
+          }
+
+
+          if (
+            part.type ===
+            "input_text"
+          ) {
+
+            const text =
+              document.createElement(
+                "div"
+              );
+
+
+            text.textContent =
+              part.text || "";
+
+
+            bubble.appendChild(
+              text
+            );
+
+          }
+
+        }
+      );
+
+    } else {
+
+      bubble.textContent =
+        message.content || "";
+
+    }
+
+
+    row.appendChild(
+      bubble
+    );
+
+
+    chat.appendChild(
+      row
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+    ASSISTANT
+  */
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+
+  bubble.className =
+    "assistantBubble";
+
+
+  const label =
+    document.createElement(
+      "span"
+    );
+
+
+  label.className =
+    "assistantLabel";
+
+
+  label.textContent =
+    "ASA";
+
+
+  const text =
+    document.createElement(
+      "div"
+    );
+
+
+  text.className =
+    "assistantText";
+
+
+  text.innerHTML =
+    formatAnswer(
+      message.content || ""
+    );
+
+
+  bubble.appendChild(
+    label
+  );
+
+
+  bubble.appendChild(
+    text
+  );
+
+
+  row.appendChild(
+    bubble
+  );
+
+
+  chat.appendChild(
+    row
+  );
+
+}
+
+
+/* =====================================================
+   FORMAT
+===================================================== */
+
+function escapeHtml(
+  value
+) {
+
+  return String(value)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+function formatAnswer(
+  text
+) {
+
+  let result =
+    escapeHtml(
+      text
+    );
+
+
+  result =
+    result.replace(
+      /\*\*(.*?)\*\*/g,
+      "<strong>$1</strong>"
+    );
+
+
+  result =
+    result.replace(
+      /`([^`]+)`/g,
+      "<code>$1</code>"
+    );
+
+
+  result =
+    result.replace(
+      /\n/g,
+      "<br>"
+    );
+
+
+  return result;
+
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+function showEmpty() {
+
+  chat.innerHTML = `
+
+    <div class="empty">
+
+      <div class="emptyLogo">
+        A
+      </div>
+
+      <h1>
+        Merhaba Alperen 👋
+      </h1>
+
+      <p>
+        ASA burada. Ne yapmak istersin?
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   TYPING
+===================================================== */
+
+function addTyping() {
+
+  removeTyping();
+
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+
+  row.className =
+    "message assistant";
+
+
+  row.id =
+    "typingMessage";
+
+
+  row.innerHTML = `
+
+    <div class="assistantBubble">
+
+      <span class="assistantLabel">
+        ASA
+      </span>
+
+      <div class="typing">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  chat.appendChild(
+    row
+  );
+
+
+  scrollBottom();
+
+}
+
+
+function removeTyping() {
+
+  const element =
+    document.getElementById(
+      "typingMessage"
+    );
+
+
+  if (element) {
+    element.remove();
+  }
+
+}
+
+
+/* =====================================================
+   SCROLL
+===================================================== */
+
+function scrollBottom() {
+
+  requestAnimationFrame(
+    () => {
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   ATTACH MENU
+===================================================== */
+
+document
+  .getElementById(
+    "plusButton"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      attachMenu.classList.toggle(
+        "open"
+      );
+
+    }
+  );
+
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !event.target.closest(
+        "#plusButton"
+      ) &&
+      !event.target.closest(
+        "#attachMenu"
+      )
+    ) {
+
+      attachMenu.classList.remove(
+        "open"
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   FILE
+===================================================== */
+
+document
+  .getElementById(
+    "fileButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "fileInput"
+        )
+        .click();
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "fileInput"
+  )
+  .addEventListener(
+    "change",
+    event => {
+
+      const file =
+        event.target.files[0];
+
+
+      if (!file) {
+        return;
+      }
+
+
+      if (
+        !file.type.startsWith(
+          "image/"
+        )
+      ) {
+
+        alert(
+          "Bu aşamada görsel yükleyebilirsin."
+        );
+
+        event.target.value =
+          "";
+
+        return;
+
+      }
+
+
+      readImage(
+        file
+      );
+
+    }
+  );
+
+
+/* =====================================================
+   CAMERA
+===================================================== */
+
+document
+  .getElementById(
+    "cameraButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "cameraInput"
+        )
+        .click();
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "cameraInput"
+  )
+  .addEventListener(
+    "change",
+    event => {
+
+      const file =
+        event.target.files[0];
+
+
+      if (!file) {
+        return;
+      }
+
+
+      readImage(
+        file
+      );
+
+    }
+  );
+
+
+/* =====================================================
+   READ IMAGE
+===================================================== */
+
+function readImage(
+  file
+) {
+
+  if (
+    !file.type.startsWith(
+      "image/"
+    )
+  ) {
+    return;
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    event => {
+
+      selectedImage =
+        file;
+
+      selectedImageData =
+        event.target.result;
+
+
+      attachmentPreviewImage.src =
+        selectedImageData;
+
+
+      attachmentPreview.classList.add(
+        "show"
+      );
+
+
+      attachMenu.classList.remove(
+        "open"
+      );
+
+
+      input.placeholder =
+        "Görsel hakkında bir şey sor...";
+
+
+      input.focus();
+
+    };
+
+
+  reader.readAsDataURL(
+    file
+  );
+
+}
+
+
+/* =====================================================
+   CLEAR IMAGE
+===================================================== */
+
+function clearAttachment() {
+
+  selectedImage =
+    null;
+
+  selectedImageData =
+    null;
+
+
+  attachmentPreview.classList.remove(
+    "show"
+  );
+
+
+  attachmentPreviewImage.src =
+    "";
+
+
+  document
+    .getElementById(
+      "fileInput"
+    )
+    .value =
+    "";
+
+
+  document
+    .getElementById(
+      "cameraInput"
+    )
+    .value =
+    "";
+
+
+  input.placeholder =
+    "ASA'ya bir şey sor...";
+
+}
+
+
+document
+  .getElementById(
+    "attachmentRemove"
+  )
+  .addEventListener(
+    "click",
+    clearAttachment
+  );
+
+
+/* =====================================================
+   VOICE
+===================================================== */
+
+document
+  .getElementById(
+    "voiceButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      const Recognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+      if (!Recognition) {
+
+        alert(
+          "Bu tarayıcı sesli girişi desteklemiyor."
+        );
+
+        return;
+
+      }
+
+
+      const recognition =
+        new Recognition();
+
+
+      recognition.lang =
+        "tr-TR";
+
+
+      recognition.continuous =
+        false;
+
+
+      recognition.interimResults =
+        false;
+
+
+      recognition.onresult =
+        event => {
+
+          input.value =
+            event
+              .results[0][0]
+              .transcript;
+
+          input.focus();
+
+        };
+
+
+      recognition.start();
+
+    }
+  );
+
+
+/* =====================================================
+   SEND EVENTS
+===================================================== */
+
+sendButton.addEventListener(
+  "click",
+  sendMessage
+);
+
+
+input.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Enter"
+    ) {
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
    CONTEXT MENU
 ===================================================== */
 
@@ -2837,7 +3798,7 @@ function showContextMenu(
       10,
       Math.min(
         left,
-        window.innerWidth - 220
+        window.innerWidth - 215
       )
     );
 
@@ -2906,12 +3867,10 @@ document
     "click",
     () => {
 
-      const id =
-        selectedConversationId;
-
-
       const item =
-        getConversation(id);
+        getConversation(
+          selectedConversationId
+        );
 
 
       if (!item) {
@@ -2924,8 +3883,7 @@ document
           "renameInput"
         )
         .value =
-        item.title ||
-        "Yeni Sohbet";
+        item.title;
 
 
       closeContextMenu();
@@ -2943,14 +3901,13 @@ document
       setTimeout(
         () => {
 
-          const renameInput =
+          const input =
             document.getElementById(
               "renameInput"
             );
 
-          renameInput.focus();
-
-          renameInput.select();
+          input.focus();
+          input.select();
 
         },
         100
@@ -2988,21 +3945,16 @@ document
     "click",
     () => {
 
-      const id =
-        selectedConversationId;
-
-
-      const renameInput =
-        document.getElementById(
-          "renameInput"
-        );
-
-
       const title =
-        renameInput.value.trim();
+        document
+          .getElementById(
+            "renameInput"
+          )
+          .value
+          .trim();
 
 
-      if (!id || !title) {
+      if (!title) {
         return;
       }
 
@@ -3014,26 +3966,24 @@ document
       const item =
         conversations.find(
           x =>
-            x.id === id
+            x.id ===
+            selectedConversationId
         );
 
 
-      if (!item) {
-        return;
+      if (item) {
+
+        item.title =
+          title;
+
+        item.updatedAt =
+          Date.now();
+
+        saveConversations(
+          conversations
+        );
+
       }
-
-
-      item.title =
-        title;
-
-
-      item.updatedAt =
-        Date.now();
-
-
-      saveConversations(
-        conversations
-      );
 
 
       document
@@ -3063,12 +4013,10 @@ document
     "click",
     () => {
 
-      const id =
-        selectedConversationId;
-
-
       const item =
-        getConversation(id);
+        getConversation(
+          selectedConversationId
+        );
 
 
       if (!item) {
@@ -3125,7 +4073,7 @@ document
   )
   .addEventListener(
     "click",
-    () => {
+    async () => {
 
       const id =
         selectedConversationId;
@@ -3135,6 +4083,50 @@ document
         return;
       }
 
+
+      /*
+        Önce Redis'ten sil.
+      */
+
+      try {
+
+        await fetch(
+          API_URL,
+          {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+
+                action:
+                  "deleteConversation",
+
+                conversationId:
+                  id
+
+              })
+
+          }
+        );
+
+      } catch(error) {
+
+        console.error(
+          error
+        );
+
+      }
+
+
+      /*
+        Local'den de sil.
+      */
 
       let conversations =
         loadConversations();
@@ -3152,15 +4144,6 @@ document
       );
 
 
-      document
-        .getElementById(
-          "deleteModal"
-        )
-        .classList.remove(
-          "open"
-        );
-
-
       if (
         id === conversationId
       ) {
@@ -3168,12 +4151,11 @@ document
         conversationId =
           null;
 
-        messages = [];
-
         localStorage.removeItem(
           ACTIVE_KEY
         );
 
+        messages = [];
 
         createNewConversation();
 
@@ -3182,6 +4164,15 @@ document
 
       selectedConversationId =
         null;
+
+
+      document
+        .getElementById(
+          "deleteModal"
+        )
+        .classList.remove(
+          "open"
+        );
 
 
       renderChatList();
@@ -3200,948 +4191,12 @@ document
   )
   .addEventListener(
     "click",
-    () => {
-
-      createNewConversation();
-
-      closeHistory();
-
-      closeMenu();
-
-    }
-  );
-
-
-function createNewConversation() {
-
-  const conversation =
-    createConversation();
-
-
-  conversationId =
-    conversation.id;
-
-
-  messages = [];
-
-
-  setActiveId(
-    conversationId
-  );
-
-
-  showEmpty();
-
-  renderChatList();
-
-  input.focus();
-
-}
-
-
-/* =====================================================
-   OPEN CONVERSATION
-===================================================== */
-
-async function openConversation(
-  id
-) {
-
-  const item =
-    getConversation(id);
-
-
-  if (!item) {
-    return;
-  }
-
-
-  conversationId =
-    id;
-
-
-  setActiveId(id);
-
-
-  selectedConversationId =
-    null;
-
-
-  closeContextMenu();
-
-  closeHistory();
-
-  closeMenu();
-
-
-  messages =
-    Array.isArray(
-      item.messages
-    )
-      ? item.messages
-      : [];
-
-
-  renderMessages();
-
-
-  /*
-    API'den geçmişi de kontrol et.
-  */
-
-  try {
-
-    const response =
-      await fetch(
-        API_URL,
-        {
-
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-
-              conversationId:
-                id,
-
-              getHistory:
-                true
-
-            })
-
-        }
-      );
-
-
-    if (!response.ok) {
-      return;
-    }
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      Array.isArray(
-        data.history
-      )
-    ) {
-
-      messages =
-        data.history;
-
-
-      const conversations =
-        loadConversations();
-
-
-      const current =
-        conversations.find(
-          x =>
-            x.id === id
-        );
-
-
-      if (current) {
-
-        current.messages =
-          messages;
-
-        saveConversations(
-          conversations
-        );
-
-      }
-
-
-      if (
-        conversationId === id
-      ) {
-
-        renderMessages();
-
-      }
-
-    }
-
-  } catch {
-
-    /*
-      API ulaşılmazsa
-      local mesajlar kullanılmaya
-      devam eder.
-    */
-
-  }
-
-}
-
-
-/* =====================================================
-   SEND
-===================================================== */
-
-async function sendMessage() {
-
-  const text =
-    input.value.trim();
-
-
-  if (!text) {
-    return;
-  }
-
-
-  if (!conversationId) {
-
-    createNewConversation();
-
-  }
-
-
-  let item =
-    getConversation(
-      conversationId
-    );
-
-
-  if (!item) {
-
-    const newConversation =
-      createConversation(
-        text
-      );
-
-
-    conversationId =
-      newConversation.id;
-
-
-    setActiveId(
-      conversationId
-    );
-
-
-    item =
-      newConversation;
-
-  }
-
-
-  if (
-    item.title ===
-    "Yeni Sohbet"
-  ) {
-
-    item.title =
-      generateTitle(
-        text
-      );
-
-  }
-
-
-  input.value = "";
-
-  sendButton.disabled =
-    true;
-
-
-  messages.push({
-
-    role: "user",
-
-    content: text
-
-  });
-
-
-  saveCurrentMessages();
-
-  renderMessages();
-
-  renderChatList();
-
-  addTyping();
-
-
-  try {
-
-    const response =
-      await fetch(
-        API_URL,
-        {
-
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-
-              conversationId,
-
-              messages: [
-
-                {
-                  role: "user",
-
-                  content: text
-                }
-
-              ]
-
-            })
-
-        }
-      );
-
-
-    const data =
-      await response.json();
-
-
-    removeTyping();
-
-
-    if (
-      !response.ok ||
-      !data.success
-    ) {
-
-      throw new Error(
-        data.error ||
-        "ASA cevap veremedi."
-      );
-
-    }
-
-
-    const answer =
-      data.answer ||
-      "Şu anda cevap oluşturamadım.";
-
-
-    messages.push({
-
-      role: "assistant",
-
-      content: answer
-
-    });
-
-
-    if (
-      Array.isArray(
-        data.history
-      )
-    ) {
-
-      messages =
-        data.history;
-
-    }
-
-
-    saveCurrentMessages();
-
-    renderMessages();
-
-    renderChatList();
-
-
-  } catch(error) {
-
-    removeTyping();
-
-
-    messages.push({
-
-      role: "assistant",
-
-      content:
-        "Bir bağlantı sorunu oluştu. Birazdan tekrar deneyelim."
-
-    });
-
-
-    saveCurrentMessages();
-
-    renderMessages();
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  sendButton.disabled =
-    false;
-
-
-  input.focus();
-
-}
-
-
-/* =====================================================
-   SEND EVENTS
-===================================================== */
-
-sendButton.addEventListener(
-  "click",
-  sendMessage
-);
-
-
-input.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key === "Enter"
-    ) {
-
-      event.preventDefault();
-
-      sendMessage();
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   RENDER
-===================================================== */
-
-function renderMessages() {
-
-  chat.innerHTML = "";
-
-
-  if (!messages.length) {
-
-    showEmpty();
-
-    return;
-
-  }
-
-
-  messages.forEach(
-    message => {
-
-      const row =
-        document.createElement(
-          "div"
-        );
-
-
-      row.className =
-        "message " +
-        (
-          message.role === "user"
-            ? "user"
-            : "assistant"
-        );
-
-
-      const bubble =
-        document.createElement(
-          "div"
-        );
-
-
-      bubble.className =
-        "bubble";
-
-
-      if (
-        message.role ===
-        "assistant"
-      ) {
-
-        const label =
-          document.createElement(
-            "span"
-          );
-
-
-        label.className =
-          "assistantLabel";
-
-
-        label.textContent =
-          "ASA";
-
-
-        const text =
-          document.createElement(
-            "div"
-          );
-
-
-        text.className =
-          "assistantText";
-
-
-        text.innerHTML =
-          formatAnswer(
-            message.content
-          );
-
-
-        bubble.appendChild(
-          label
-        );
-
-
-        bubble.appendChild(
-          text
-        );
-
-      } else {
-
-        bubble.textContent =
-          message.content;
-
-      }
-
-
-      row.appendChild(
-        bubble
-      );
-
-
-      chat.appendChild(
-        row
-      );
-
-    }
-  );
-
-
-  scrollToBottom();
-
-}
-
-
-/* =====================================================
-   FORMAT
-===================================================== */
-
-function formatAnswer(
-  text
-) {
-
-  let result =
-    escapeHtml(
-      String(text || "")
-    );
-
-
-  result =
-    result.replace(
-      /\*\*(.*?)\*\*/g,
-      "<strong>$1</strong>"
-    );
-
-
-  result =
-    result.replace(
-      /\n/g,
-      "<br>"
-    );
-
-
-  return result;
-
-}
-
-
-function escapeHtml(
-  text
-) {
-
-  return String(text)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-
-}
-
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
-function showEmpty() {
-
-  chat.innerHTML = `
-
-    <div class="empty">
-
-      <div class="emptyLogo">
-        A
-      </div>
-
-      <h1>
-        Merhaba Alperen 👋
-      </h1>
-
-      <p>
-        ASA burada. Ne yapmak istersin?
-      </p>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =====================================================
-   TYPING
-===================================================== */
-
-function addTyping() {
-
-  removeTyping();
-
-
-  const row =
-    document.createElement(
-      "div"
-    );
-
-
-  row.className =
-    "message assistant";
-
-
-  row.id =
-    "typingMessage";
-
-
-  row.innerHTML = `
-
-    <div class="bubble">
-
-      <span class="assistantLabel">
-        ASA
-      </span>
-
-      <div class="typing">
-
-        <span></span>
-        <span></span>
-        <span></span>
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  chat.appendChild(
-    row
-  );
-
-
-  scrollToBottom();
-
-}
-
-
-function removeTyping() {
-
-  const typing =
-    document.getElementById(
-      "typingMessage"
-    );
-
-
-  if (typing) {
-
-    typing.remove();
-
-  }
-
-}
-
-
-/* =====================================================
-   SCROLL
-===================================================== */
-
-function scrollToBottom() {
-
-  requestAnimationFrame(
-    () => {
-
-      chat.scrollTop =
-        chat.scrollHeight;
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   ATTACHMENTS
-===================================================== */
-
-document
-  .getElementById(
-    "plusButton"
-  )
-  .addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-      attachMenu.classList.toggle(
-        "open"
-      );
-
-    }
-  );
-
-
-document.addEventListener(
-  "click",
-  event => {
-
-    if (
-      !event.target.closest(
-        "#plusButton"
-      ) &&
-      !event.target.closest(
-        "#attachMenu"
-      )
-    ) {
-
-      attachMenu.classList.remove(
-        "open"
-      );
-
-    }
-
-  }
-);
-
-
-/* FILE */
-
-document
-  .getElementById(
-    "fileButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "fileInput"
-        )
-        .click();
-
-    }
-  );
-
-
-/* CAMERA */
-
-document
-  .getElementById(
-    "cameraButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "cameraInput"
-        )
-        .click();
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "fileInput"
-  )
-  .addEventListener(
-    "change",
-    event => {
-
-      const files =
-        Array.from(
-          event.target.files
-        );
-
-
-      if (!files.length) {
-        return;
-      }
-
-
-      input.value =
-        files.length === 1
-          ? `📎 ${files[0].name}`
-          : `📎 ${files.length} dosya seçildi`;
-
-
-      attachMenu.classList.remove(
-        "open"
-      );
-
-
-      input.focus();
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "cameraInput"
-  )
-  .addEventListener(
-    "change",
-    event => {
-
-      const file =
-        event.target.files[0];
-
-
-      if (!file) {
-        return;
-      }
-
-
-      input.value =
-        "📷 Fotoğraf seçildi";
-
-
-      attachMenu.classList.remove(
-        "open"
-      );
-
-
-      input.focus();
-
-    }
+    createNewConversation
   );
 
 
 /* =====================================================
-   VOICE
-===================================================== */
-
-document
-  .getElementById(
-    "voiceButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-
-      if (!SpeechRecognition) {
-
-        alert(
-          "Bu tarayıcı sesli girişi desteklemiyor."
-        );
-
-        return;
-
-      }
-
-
-      const recognition =
-        new SpeechRecognition();
-
-
-      recognition.lang =
-        "tr-TR";
-
-
-      recognition.continuous =
-        false;
-
-
-      recognition.interimResults =
-        false;
-
-
-      recognition.onresult =
-        event => {
-
-          input.value =
-            event
-              .results[0][0]
-              .transcript;
-
-
-          input.focus();
-
-        };
-
-
-      recognition.start();
-
-    }
-  );
-
-
-/* =====================================================
-   MEMORY
+   MEMORY / SETTINGS
 ===================================================== */
 
 document
@@ -4153,7 +4208,7 @@ document
     () => {
 
       alert(
-        "🧠 ASA hafızası aktif."
+        "🧠 ASA kalıcı hafızası aktif."
       );
 
     }
@@ -4168,19 +4223,15 @@ document
     "click",
     () => {
 
-      closeMenu();
+      closeSidebar();
 
       alert(
-        "🧠 ASA hafızası aktif."
+        "🧠 ASA kalıcı hafızası aktif."
       );
 
     }
   );
 
-
-/* =====================================================
-   SETTINGS
-===================================================== */
 
 document
   .getElementById(
@@ -4206,7 +4257,7 @@ document
     "click",
     () => {
 
-      closeMenu();
+      closeSidebar();
 
       alert(
         "⚙️ Ayarlar panelini sonraki aşamada geliştireceğiz."
@@ -4217,12 +4268,14 @@ document
 
 
 /* =====================================================
-   KEYBOARD / VISUAL VIEWPORT
+   KEYBOARD
 ===================================================== */
 
-function updateKeyboardPosition() {
+function updateKeyboard() {
 
-  if (!window.visualViewport) {
+  if (
+    !window.visualViewport
+  ) {
     return;
   }
 
@@ -4231,7 +4284,7 @@ function updateKeyboardPosition() {
     window.visualViewport;
 
 
-  const keyboardHeight =
+  const keyboard =
     Math.max(
       0,
       window.innerHeight -
@@ -4241,36 +4294,36 @@ function updateKeyboardPosition() {
 
 
   if (
-    keyboardHeight > 100
+    keyboard > 100
   ) {
 
     inputArea.style.bottom =
       (
-        keyboardHeight +
-        8
+        keyboard + 7
       ) + "px";
 
   } else {
 
     inputArea.style.bottom =
-      "calc(12px + env(safe-area-inset-bottom))";
+      "calc(11px + env(safe-area-inset-bottom))";
 
   }
 
 }
 
 
-if (window.visualViewport) {
+if (
+  window.visualViewport
+) {
 
   window.visualViewport.addEventListener(
     "resize",
-    updateKeyboardPosition
+    updateKeyboard
   );
-
 
   window.visualViewport.addEventListener(
     "scroll",
-    updateKeyboardPosition
+    updateKeyboard
   );
 
 }
@@ -4280,9 +4333,22 @@ if (window.visualViewport) {
    START
 ===================================================== */
 
-function startApp() {
+async function start() {
 
-  if (!conversationId) {
+  let active =
+    conversationId
+      ? getConversation(
+          conversationId
+        )
+      : null;
+
+
+  /*
+    Eski local sohbetler varsa
+    ilkini kullan.
+  */
+
+  if (!active) {
 
     const conversations =
       loadConversations();
@@ -4292,34 +4358,26 @@ function startApp() {
       conversations.length
     ) {
 
-      conversationId =
-        conversations[0].id;
+      active =
+        conversations[0];
 
-
-      setActiveId(
-        conversationId
+      setActive(
+        active.id
       );
-
-    } else {
-
-      createNewConversation();
-
-      return;
 
     }
 
   }
 
 
-  const item =
-    getConversation(
-      conversationId
-    );
+  /*
+    Hiç sohbet yoksa
+    boş yeni sohbet.
+  */
 
+  if (!active) {
 
-  if (!item) {
-
-    createNewConversation();
+    showEmpty();
 
     return;
 
@@ -4328,9 +4386,9 @@ function startApp() {
 
   messages =
     Array.isArray(
-      item.messages
+      active.messages
     )
-      ? item.messages
+      ? active.messages
       : [];
 
 
@@ -4339,7 +4397,7 @@ function startApp() {
 }
 
 
-startApp();
+start();
 
 </script>
 
