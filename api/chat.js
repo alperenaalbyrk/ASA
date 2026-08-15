@@ -4,7 +4,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Vercel + Upstash Redis bağlantısı
 const redisUrl =
   process.env.KV_REST_API_URL ||
   process.env.KV_URL;
@@ -12,52 +11,12 @@ const redisUrl =
 const redisToken =
   process.env.KV_REST_API_TOKEN;
 
-// ASA hafıza anahtarı
 const MEMORY_KEY = "asa:memory:alperen";
+const CHAT_KEY = "asa:chat:alperen";
 
-// Redis'ten hafızayı oku
-async function getMemory() {
+async function redisCommand(command) {
   if (!redisUrl || !redisToken) {
-    console.error("Redis değişkenleri bulunamadı.");
-    return [];
-  }
-
-  const response = await fetch(
-    `${redisUrl}/get/${encodeURIComponent(MEMORY_KEY)}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${redisToken}`,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `Redis hafızası okunamadı: ${errorText}`
-    );
-  }
-
-  const data = await response.json();
-
-  if (!data.result) {
-    return [];
-  }
-
-  try {
-    return JSON.parse(data.result);
-  } catch {
-    return [];
-  }
-}
-
-// Redis'e hafızayı kaydet
-async function saveMemory(memory) {
-  if (!redisUrl || !redisToken) {
-    throw new Error(
-      "KV_REST_API_URL veya KV_REST_API_TOKEN bulunamadı."
-    );
+    throw new Error("Redis bağlantı bilgileri bulunamadı.");
   }
 
   const response = await fetch(redisUrl, {
@@ -66,20 +25,71 @@ async function saveMemory(memory) {
       Authorization: `Bearer ${redisToken}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify([
-      "SET",
-      MEMORY_KEY,
-      JSON.stringify(memory),
-    ]),
+    body: JSON.stringify(command),
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-
-    throw new Error(
-      `Redis hafızası kaydedilemedi: ${errorText}`
-    );
+    const text = await response.text();
+    throw new Error(`Redis hatası: ${text}`);
   }
+
+  return response.json();
+}
+
+async function getValue(key) {
+  const data = await redisCommand(["GET", key]);
+
+  if (!data.result) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(data.result);
+  } catch {
+    return data.result;
+  }
+}
+
+async function setValue(key, value) {
+  await redisCommand([
+    "SET",
+    key,
+    JSON.stringify(value),
+  ]);
+}
+
+async function getMemory() {
+  const memory = await getValue(MEMORY_KEY);
+
+  if (!Array.isArray(memory)) {
+    return [];
+  }
+
+  return memory;
+}
+
+async function saveMemory(memory) {
+  await setValue(
+    MEMORY_KEY,
+    memory.slice(-100)
+  );
+}
+
+async function getChatHistory() {
+  const history = await getValue(CHAT_KEY);
+
+  if (!Array.isArray(history)) {
+    return [];
+  }
+
+  return history;
+}
+
+async function saveChatHistory(history) {
+  await setValue(
+    CHAT_KEY,
+    history.slice(-50)
+  );
 }
 
 export default async function handler(req, res) {
@@ -92,75 +102,83 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
 
-    const newMessage =
+    const message =
       typeof body.message === "string"
         ? body.message.trim()
-        : null;
+        : "";
 
-    let messages = Array.isArray(body.messages)
-      ? body.messages
-      : [];
-
-    // Tek mesaj geldiyse konuşmaya ekle
-    if (newMessage) {
-      messages = [
-        ...messages,
-        {
-          role: "user",
-          content: newMessage,
-        },
-      ];
-    }
-
-    if (!messages.length) {
+    if (!message) {
       return res.status(400).json({
         error: "Mesaj gönderilmedi.",
       });
     }
 
-    // Kalıcı hafızayı Redis'ten getir
-    let memory = await getMemory();
+    /*
+      --------------------------------
+      1. HAFIZA KOMUTLARI
+      --------------------------------
+    */
 
-    if (!Array.isArray(memory)) {
-      memory = [];
-    }
+    const lowerMessage = message.toLocaleLowerCase("tr-TR");
 
-    // Geçerli mesajları temizle
-    const cleanMessages = messages
-      .filter(
-        (message) =>
-          message &&
-          typeof message === "object" &&
-          (message.role === "user" ||
-            message.role === "assistant") &&
-          typeof message.content === "string"
-      )
-      .map((message) => ({
-        role: message.role,
-        content: message.content,
-      }));
+    if (
+      lowerMessage.includes("beni unut") ||
+      lowerMessage.includes("hafızanı temizle") ||
+      lowerMessage.includes("hafızanı sıfırla")
+    ) {
+      await setValue(MEMORY_KEY, []);
 
-    if (!cleanMessages.length) {
-      return res.status(400).json({
-        error: "Geçerli mesaj bulunamadı.",
+      return res.status(200).json({
+        answer:
+          "Tamam Alperen. Kalıcı hafızamdaki bilgileri temizledim. 🧠🗑️",
       });
     }
 
-    // Redis hafızası + mevcut konuşma
-    const conversation = [
-      ...memory,
-      ...cleanMessages,
-    ];
+    /*
+      --------------------------------
+      2. MEVCUT VERİLER
+      --------------------------------
+    */
 
-    // Son 30 mesajı tut
-    const limitedConversation =
-      conversation.slice(-30);
+    const memory = await getMemory();
+    const chatHistory = await getChatHistory();
 
-    // OpenAI
-    const response = await openai.responses.create({
-      model: "gpt-5.6",
+    /*
+      --------------------------------
+      3. OPENAI'YE GÖNDERİLECEK
+         BAĞLAM
+      --------------------------------
+    */
 
-      instructions: `
+    const context = [
+      ...chatHistory,
+      {
+        role: "user",
+        content: message,
+      },
+    ].slice(-30);
+
+    const memoryText =
+      memory.length > 0
+        ? memory
+            .map(
+              (item) =>
+                `- ${item}`
+            )
+            .join("\n")
+        : "Henüz kayıtlı özel bilgi yok.";
+
+    /*
+      --------------------------------
+      4. ASA
+      --------------------------------
+    */
+
+    const response =
+      await openai.responses.create({
+        model: "gpt-5.6",
+
+        instructions: `
 Sen ASA'sın.
 
 Kullanıcının adı Alperen.
@@ -171,38 +189,96 @@ Samimi, doğal, sıcak ve yardımcı ol.
 
 Sen Alperen'in kişisel yapay zekâ asistanısın.
 
-Önceki konuşmalardan gelen bilgileri dikkate al.
+Aşağıdaki bilgiler ASA'nın kalıcı hafızasında
+saklanan bilgilerdir:
 
-Alperen daha önce bir bilgi verdiyse ve bu bilgi konuşma hafızasında varsa,
-bunu hatırla ve gerektiğinde kullan.
+${memoryText}
+
+Bu bilgileri gerektiğinde kullan.
+
+Önemli:
+Kullanıcı sana kendisi hakkında kalıcı olması
+mantıklı bir bilgi verdiğinde bunu hafızaya
+alınabilecek bir bilgi olarak değerlendir.
+
+Örneğin:
+- adı
+- sevdiği şeyler
+- tercihleri
+- işi
+- kullandığı araçlar
+- projeleri
+- önemli kişisel tercihleri
+
+Fakat her konuşmayı hafızaya alma.
+
+Sadece gerçekten ileride işe yarayacak
+kalıcı bilgileri dikkate al.
+
+Kullanıcı "bunu hatırla", "bunu kaydet",
+"aklında tut" gibi açık bir ifade kullanırsa
+bu bilgiyi özellikle önemli kabul et.
 
 Cevaplarını gereksiz yere uzatma.
 
-Teknik işlemlerde Alperen'e adım adım ve net şekilde yardımcı ol.
-
-Kod verirken eksiksiz ve çalışabilir kod ver.
+Teknik işlemlerde adım adım ve net şekilde
+yardımcı ol.
 
 Bilmediğin bilgileri uydurma.
 `,
 
-      input: limitedConversation,
-    });
+        input: context,
+      });
 
     const answer =
       response.output_text?.trim() ||
       "Şu anda cevap oluşturamadım.";
 
-    // Yeni konuşmayı kalıcı hafızaya ekle
-    const updatedMemory = [
-      ...limitedConversation,
+    /*
+      --------------------------------
+      5. SOHBET GEÇMİŞİNİ KAYDET
+      --------------------------------
+    */
+
+    const updatedHistory = [
+      ...chatHistory,
+      {
+        role: "user",
+        content: message,
+      },
       {
         role: "assistant",
         content: answer,
       },
-    ].slice(-30);
+    ];
 
-    // Redis'e kaydet
-    await saveMemory(updatedMemory);
+    await saveChatHistory(updatedHistory);
+
+    /*
+      --------------------------------
+      6. BASİT HAFIZA ALGILAMA
+      --------------------------------
+
+      Kullanıcı açıkça "hatırla/kaydet"
+      diyorsa bilgiyi Redis'e ekliyoruz.
+    */
+
+    const wantsMemory =
+      lowerMessage.includes("bunu hatırla") ||
+      lowerMessage.includes("bunu kaydet") ||
+      lowerMessage.includes("aklında tut") ||
+      lowerMessage.includes("unutma");
+
+    if (wantsMemory) {
+      const newMemory = [
+        ...memory,
+        message,
+      ];
+
+      await saveMemory([
+        ...new Set(newMemory),
+      ]);
+    }
 
     return res.status(200).json({
       answer,
