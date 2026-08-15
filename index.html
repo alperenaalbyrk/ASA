@@ -290,49 +290,54 @@ function addMessage(text, type) {
 }
 
 
-function sendMessage() {
-
+async function sendMessage() {
     const text = input.value.trim();
 
     if (!text) return;
 
     addMessage(text, "user");
-
     input.value = "";
 
-    setTimeout(() => {
+    // Geçici "düşünüyor" mesajı
+    addMessage("ASA düşünüyor...", "asa");
 
-        let answer =
-        "Buradayım Alperen. Şu anda ASA'nın temel sürümündeyiz. Gerçek yapay zekâ bağlantısını bir sonraki aşamada ekleyeceğiz.";
+    try {
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: text
+            })
+        });
 
-        const lower = text.toLowerCase();
+        const data = await response.json();
 
-        if (
-            lower.includes("merhaba") ||
-            lower.includes("selam")
-        ) {
-            answer =
-            "Selam Alperen 👋 Ben ASA. Hazırım.";
+        // Son "ASA düşünüyor..." mesajını kaldır
+        const messages = chat.querySelectorAll(".message");
+        if (messages.length > 0) {
+            messages[messages.length - 1].remove();
         }
 
-        else if (
-            lower.includes("nasılsın") ||
-            lower.includes("naber")
-        ) {
-            answer =
-            "Gayet iyiyim 😎 Seninle ASA'yı geliştirmeye hazırım.";
+        if (!response.ok) {
+            throw new Error(data.error || "API bağlantısı başarısız.");
         }
 
-        else if (
-            lower.includes("sen kimsin")
-        ) {
-            answer =
-            "Ben ASA. Alperen'in kişisel yapay zekâ asistanı.";
+        addMessage(data.answer, "asa");
+
+    } catch (error) {
+        const messages = chat.querySelectorAll(".message");
+        if (messages.length > 0) {
+            messages[messages.length - 1].remove();
         }
 
-        addMessage(answer, "asa");
-
-    }, 600);
+        addMessage(
+            "Üzgünüm Alperen, şu anda yapay zekâ bağlantısında bir sorun oluştu. " +
+            error.message,
+            "asa"
+        );
+    }
 }
 
 
