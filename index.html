@@ -399,6 +399,154 @@ input.addEventListener("keydown", function(event) {
 
 });
 
+<script>
+
+const input = document.getElementById("messageInput");
+const button = document.getElementById("sendButton");
+const chat = document.getElementById("chat");
+const welcome = document.getElementById("welcome");
+
+let conversation = [];
+
+function addMessage(text, type) {
+
+    if (welcome) {
+        welcome.style.display = "none";
+    }
+
+    const message = document.createElement("div");
+    message.className = "message " + type;
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    bubble.textContent = String(text ?? "");
+
+    message.appendChild(bubble);
+    chat.appendChild(message);
+
+    chat.scrollTop = chat.scrollHeight;
+
+    return message;
+}
+
+async function sendMessage() {
+
+    const text = input.value.trim();
+
+    if (!text || button.disabled) {
+        return;
+    }
+
+    addMessage(text, "user");
+
+    input.value = "";
+    button.disabled = true;
+
+    conversation.push({
+        role: "user",
+        content: text
+    });
+
+    const thinkingMessage = addMessage(
+        "ASA düşünüyor...",
+        "asa"
+    );
+
+    try {
+
+        const response = await fetch("/api/chat", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                messages: conversation
+            })
+        });
+
+        const rawText = await response.text();
+
+        let data = {};
+
+        try {
+            data = rawText ? JSON.parse(rawText) : {};
+        } catch {
+            throw new Error(
+                "Sunucudan geçerli JSON cevabı alınamadı."
+            );
+        }
+
+        if (thinkingMessage) {
+            thinkingMessage.remove();
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                data.error ||
+                "Sunucu hatası: " + response.status
+            );
+        }
+
+        const answer =
+            data.answer ||
+            data.reply ||
+            "";
+
+        if (!answer) {
+            throw new Error(
+                "ASA boş cevap döndürdü."
+            );
+        }
+
+        conversation.push({
+            role: "assistant",
+            content: answer
+        });
+
+        addMessage(answer, "asa");
+
+    } catch (error) {
+
+        if (thinkingMessage) {
+            thinkingMessage.remove();
+        }
+
+        addMessage(
+            "ASA bağlantısında bir sorun oluştu:\n" +
+            (error.message || "Bilinmeyen hata"),
+            "asa"
+        );
+
+    } finally {
+
+        button.disabled = false;
+        input.focus();
+
+    }
+}
+
+button.addEventListener(
+    "click",
+    sendMessage
+);
+
+input.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            sendMessage();
+        }
+
+    }
+);
+
 </script>
 
 </body>
