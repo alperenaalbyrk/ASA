@@ -5,16 +5,24 @@
 
 <meta
   name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
 >
 
 <title>ASA</title>
 
 <style>
-
-/* =========================================================
-   ASA — FINAL UI
-========================================================= */
+:root {
+  --bg: #05060a;
+  --panel: #101118;
+  --panel2: #151720;
+  --border: rgba(255,255,255,.09);
+  --text: #f5f5f7;
+  --muted: #8d909c;
+  --accent: #a331ff;
+  --accent2: #c13cff;
+  --danger: #ff536d;
+  --radius: 22px;
+}
 
 * {
   box-sizing: border-box;
@@ -23,52 +31,20 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-:root {
-  --bg: #05040a;
-  --bg2: #080611;
-  --panel: rgba(15,14,25,.94);
-  --panel-solid: #11101a;
-
-  --text: #f7f5fb;
-  --muted: #8b8797;
-  --muted2: #666272;
-
-  --accent: #a331ff;
-  --accent2: #c13cff;
-  --accent3: #7021bd;
-
-  --border: rgba(255,255,255,.095);
-  --border-strong: rgba(255,255,255,.14);
-
-  --radius: 24px;
-
-  --font:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "SF Pro Text",
-    "Avenir Next",
-    "Segoe UI",
-    sans-serif;
-}
-
 html,
 body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-
   background: var(--bg);
   color: var(--text);
-
-  font-family: var(--font);
-
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Segoe UI",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  overscroll-behavior: none;
 }
 
 button,
@@ -82,118 +58,75 @@ button {
   cursor: pointer;
 }
 
-button,
-.historyItem,
-.menuItem,
-.iconButton {
-  touch-action: manipulation;
-}
-
-
-/* =========================================================
-   APP
-========================================================= */
-
 .app {
-  position: relative;
-
   width: 100%;
   height: 100dvh;
-
+  position: relative;
   overflow: hidden;
-
   background:
     radial-gradient(
-      circle at 55% 8%,
-      rgba(142,34,220,.18),
-      transparent 31%
-    ),
-    radial-gradient(
-      circle at 92% 76%,
-      rgba(93,0,170,.13),
-      transparent 34%
+      circle at 50% 5%,
+      rgba(145,35,230,.17),
+      transparent 32%
     ),
     linear-gradient(
       180deg,
-      #05040a,
-      #06040b
+      #05060a,
+      #07080d
     );
 }
 
-
-/* =========================================================
-   HEADER
-========================================================= */
+/* HEADER */
 
 .header {
   position: absolute;
-
+  z-index: 20;
   top: 0;
   left: 0;
   right: 0;
 
-  height: 108px;
+  height: calc(92px + env(safe-area-inset-top));
 
   padding:
-    calc(14px + env(safe-area-inset-top))
-    22px
-    12px;
+    calc(12px + env(safe-area-inset-top))
+    16px
+    10px;
 
   display: flex;
   align-items: center;
-
-  gap: 17px;
-
-  z-index: 30;
+  gap: 14px;
 
   background:
-    linear-gradient(
-      180deg,
-      rgba(5,4,10,.99),
-      rgba(5,4,10,.88)
-    );
+    rgba(5,6,10,.94);
 
   border-bottom:
-    1px solid rgba(255,255,255,.065);
+    1px solid var(--border);
 
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
-
-/* =========================================================
-   MENU BUTTON
-========================================================= */
-
 .menuButton {
-  width: 58px;
-  height: 58px;
-
+  width: 54px;
+  height: 54px;
   flex-shrink: 0;
+
+  border-radius: 17px;
+
+  background: #151720;
+  border: 1px solid var(--border);
 
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 19px;
-
-  background:
-    rgba(20,19,30,.74);
-
-  border:
-    1px solid var(--border);
-
-  transition:
-    transform .18s ease,
-    background .18s ease;
 }
 
 .menuButton:active {
-  transform: scale(.94);
+  transform: scale(.95);
 }
 
 .menuLines {
-  width: 25px;
+  width: 24px;
   height: 18px;
 
   display: flex;
@@ -202,72 +135,41 @@ button,
 }
 
 .menuLines span {
-  display: block;
-
-  width: 25px;
+  width: 24px;
   height: 2px;
-
   border-radius: 2px;
-
-  background: #f4f1f8;
+  background: #eeeef2;
 }
-
-
-/* =========================================================
-   ASA WORDMARK
-========================================================= */
 
 .brand {
   display: flex;
   align-items: center;
-
-  user-select: none;
 }
 
 .brandText {
-  font-family:
-    "Avenir Next",
-    "SF Pro Display",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-
-  font-size: 31px;
-  line-height: 1;
-
-  font-weight: 650;
-
-  letter-spacing: .31em;
-
-  color: #f7f4fa;
-
-  transform: translateY(-1px);
+  font-size: 29px;
+  font-weight: 700;
+  letter-spacing: .25em;
 }
 
-
-/* =========================================================
-   CHAT
-========================================================= */
+/* CHAT */
 
 .chat {
   position: absolute;
 
-  top: 108px;
+  top: calc(92px + env(safe-area-inset-top));
+  bottom: calc(88px + env(safe-area-inset-bottom));
+
   left: 0;
   right: 0;
-  bottom: 101px;
 
   overflow-y: auto;
-  overflow-x: hidden;
 
   padding:
-    34px
-    24px
+    28px 18px
     150px;
 
   scroll-behavior: smooth;
-
-  overscroll-behavior: contain;
 }
 
 .chat::-webkit-scrollbar {
@@ -275,87 +177,62 @@ button,
 }
 
 .chat::-webkit-scrollbar-thumb {
-  background:
-    rgba(176,55,255,.30);
-
-  border-radius: 10px;
+  background: rgba(193,60,255,.3);
 }
-
-
-/* =========================================================
-   EMPTY
-========================================================= */
 
 .empty {
   min-height: 100%;
 
   display: flex;
   flex-direction: column;
-
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
   text-align: center;
-
   padding: 30px;
 }
 
 .emptyOrb {
-  width: 74px;
-  height: 74px;
+  width: 72px;
+  height: 72px;
 
-  margin-bottom: 25px;
+  margin-bottom: 24px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
-      circle at 34% 28%,
-      rgba(255,255,255,.85),
+      circle at 32% 27%,
+      white,
       transparent 10%
     ),
     radial-gradient(
       circle at 52% 52%,
-      #c33cff,
-      #711db6 58%,
-      #1d092d
+      #d047ff,
+      #721db5 60%,
+      #190925
     );
 
   box-shadow:
-    0 0 55px rgba(163,48,255,.28);
+    0 0 65px rgba(163,48,255,.3);
 }
 
 .empty h1 {
-  font-size: 28px;
-
-  line-height: 1.2;
-
-  font-weight: 650;
-
-  letter-spacing: -.025em;
-
-  margin-bottom: 10px;
+  font-size: 27px;
+  margin-bottom: 9px;
 }
 
 .empty p {
   color: var(--muted);
-
-  font-size: 17px;
-
-  line-height: 1.5;
+  font-size: 16px;
 }
 
-
-/* =========================================================
-   MESSAGE
-========================================================= */
+/* MESSAGE */
 
 .message {
-  width: 100%;
-
   display: flex;
-
-  margin-bottom: 27px;
+  width: 100%;
+  margin-bottom: 24px;
 }
 
 .message.user {
@@ -366,21 +243,13 @@ button,
   justify-content: flex-start;
 }
 
-
-/* USER */
-
 .user .bubble {
-  max-width: min(78%, 680px);
+  max-width: 88%;
 
-  padding:
-    16px
-    20px;
+  padding: 14px 17px;
 
   border-radius:
-    24px
-    24px
-    7px
-    24px;
+    22px 22px 7px 22px;
 
   background:
     linear-gradient(
@@ -389,95 +258,67 @@ button,
       var(--accent2)
     );
 
-  color: #fff;
+  color: white;
 
-  font-size: 18px;
-
+  font-size: 17px;
   line-height: 1.5;
 
   box-shadow:
-    0 12px 35px
-    rgba(126,37,235,.14);
+    0 12px 35px rgba(110,20,220,.15);
 }
 
-
-/* ASSISTANT */
-
 .assistant .bubble {
-  max-width: min(92%, 820px);
+  max-width: 95%;
 
-  padding:
-    4px
-    0;
+  color: #f1f1f5;
 
-  background: transparent;
-
-  font-size: 18px;
-
-  line-height: 1.72;
-
-  color: #f4f1f7;
+  font-size: 17px;
+  line-height: 1.7;
 }
 
 .assistantLabel {
   display: block;
 
-  margin-bottom: 13px;
+  margin-bottom: 8px;
 
   color: var(--accent2);
 
-  font-size: 12px;
-
-  font-weight: 700;
-
-  letter-spacing: .48em;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .4em;
 }
 
 .assistantText strong {
-  font-weight: 700;
+  font-weight: 750;
 }
 
 .assistantText a {
   color: var(--accent2);
-
-  text-decoration: underline;
 }
 
-
-/* =========================================================
-   IMAGE
-========================================================= */
+/* IMAGES */
 
 .messageImage {
-  display: block;
-
-  width: min(320px, 70vw);
-  max-height: 420px;
+  width: min(300px, 72vw);
+  max-height: 380px;
 
   object-fit: cover;
 
-  border-radius: 22px;
+  display: block;
 
-  margin-bottom: 9px;
+  margin-bottom: 8px;
 
-  border:
-    1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
 
-  box-shadow:
-    0 14px 45px rgba(0,0,0,.28);
+  border: 1px solid var(--border);
 }
 
-
-/* =========================================================
-   TYPING
-========================================================= */
+/* TYPING */
 
 .typing {
   display: flex;
-
-  gap: 7px;
-
-  padding-top: 2px;
+  gap: 6px;
+  padding-top: 3px;
 }
 
 .typing span {
@@ -488,213 +329,157 @@ button,
 
   background: var(--accent2);
 
-  animation:
-    typing 1.15s infinite ease-in-out;
+  animation: typing 1s infinite ease-in-out;
 }
 
 .typing span:nth-child(2) {
-  animation-delay: .14s;
+  animation-delay: .15s;
 }
 
 .typing span:nth-child(3) {
-  animation-delay: .28s;
+  animation-delay: .3s;
 }
 
 @keyframes typing {
-
-  0%,
-  60%,
-  100% {
+  0%,100% {
     opacity: .25;
     transform: translateY(0);
   }
 
-  30% {
+  50% {
     opacity: 1;
     transform: translateY(-4px);
   }
-
 }
 
-
-/* =========================================================
-   INPUT AREA
-========================================================= */
+/* INPUT */
 
 .inputArea {
   position: absolute;
 
-  left: 18px;
-  right: 18px;
+  z-index: 30;
+
+  left: 12px;
+  right: 12px;
 
   bottom:
-    calc(13px + env(safe-area-inset-bottom));
-
-  z-index: 40;
+    calc(9px + env(safe-area-inset-bottom));
 }
 
 .inputBox {
-  min-height: 72px;
+  min-height: 67px;
 
   display: flex;
   align-items: center;
 
-  gap: 5px;
+  gap: 3px;
 
-  padding: 7px 8px;
+  padding: 6px;
 
-  border-radius: 25px;
+  border-radius: 23px;
 
   background:
-    rgba(16,15,25,.95);
+    rgba(16,17,24,.96);
 
   border:
     1px solid rgba(255,255,255,.11);
 
   box-shadow:
-    0 18px 55px rgba(0,0,0,.38),
-    0 0 40px rgba(139,37,255,.07);
+    0 20px 60px rgba(0,0,0,.4);
 
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(20px);
 }
-
-
-/* INPUT */
 
 .input {
   flex: 1;
-
   min-width: 0;
 
-  height: 54px;
-
-  padding:
-    0 11px;
+  height: 50px;
 
   border: 0;
   outline: 0;
 
   background: transparent;
 
-  color: #f7f4fa;
+  color: white;
 
-  font-size: 17px;
+  font-size: 16px;
 
-  font-weight: 450;
-
-  letter-spacing: -.01em;
+  padding: 0 6px;
 }
 
 .input::placeholder {
-  color: #777483;
+  color: #777a86;
 }
 
-
-/* =========================================================
-   PLUS
-========================================================= */
-
-.plusButton {
-  width: 54px;
-  height: 54px;
+.actionButton {
+  width: 50px;
+  height: 50px;
 
   flex-shrink: 0;
-
-  border-radius: 18px;
-
-  background:
-    rgba(255,255,255,.035);
-
-  border:
-    1px solid rgba(255,255,255,.08);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 29px;
-
-  font-weight: 300;
-
-  color: #f0edf5;
-
-  transition: transform .18s ease;
-}
-
-.plusButton:active {
-  transform: scale(.94);
-}
-
-
-/* =========================================================
-   VOICE BUTTON
-========================================================= */
-
-.voiceButton {
-  width: 52px;
-  height: 52px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   border-radius: 17px;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   background: transparent;
-
-  color: #e8e4ed;
-
-  transition:
-    transform .18s ease,
-    color .18s ease;
 }
 
-.voiceButton:active {
-  transform: scale(.94);
+.plusButton {
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.07);
+
+  font-size: 28px;
+  font-weight: 300;
 }
 
-.voiceIcon {
-  width: 20px;
-  height: 26px;
+.voiceButton {
+  font-size: 22px;
+}
 
-  border:
-    2px solid currentColor;
+.sendButton {
+  color: var(--accent2);
+  font-size: 29px;
+}
 
-  border-radius: 12px;
+.sendButton:disabled {
+  opacity: .3;
+}
+
+/* MICROPHONE ICON */
+
+.micIcon {
+  width: 18px;
+  height: 24px;
+
+  border: 2px solid currentColor;
+  border-radius: 10px;
 
   position: relative;
 }
 
-.voiceIcon::before {
+.micIcon::before {
   content: "";
 
   position: absolute;
 
   left: 50%;
-  bottom: -9px;
+  bottom: -8px;
 
-  width: 13px;
+  width: 12px;
   height: 8px;
 
   transform: translateX(-50%);
 
-  border-bottom:
-    2px solid currentColor;
+  border:
+    0 2px 2px 2px solid currentColor;
 
-  border-left:
-    2px solid transparent;
-
-  border-right:
-    2px solid transparent;
-
-  border-radius:
-    0 0 10px 10px;
+  border-radius: 0 0 10px 10px;
 }
 
-.voiceIcon::after {
+.micIcon::after {
   content: "";
 
   position: absolute;
@@ -707,421 +492,230 @@ button,
 
   transform: translateX(-50%);
 
-  background:
-    currentColor;
-
-  border-radius: 2px;
+  background: currentColor;
 }
 
+/* PREVIEW */
 
-/* =========================================================
-   SEND
-========================================================= */
-
-.sendButton {
-  width: 52px;
-  height: 52px;
-
-  flex-shrink: 0;
-
-  border-radius: 17px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: transparent;
-
-  color: var(--accent2);
-
-  font-size: 31px;
-
-  font-weight: 300;
-
-  line-height: 1;
-
-  transition:
-    transform .18s ease,
-    opacity .18s ease;
-}
-
-.sendButton:active {
-  transform: scale(.94);
-}
-
-.sendButton:disabled {
-  opacity: .32;
-}
-
-
-/* =========================================================
-   ATTACHMENT SHEET
-========================================================= */
-
-.sheetOverlay {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 80;
-
-  background:
-    rgba(0,0,0,.60);
-
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
-  opacity: 0;
-
-  pointer-events: none;
-
-  transition: opacity .22s ease;
-}
-
-.sheetOverlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.attachmentSheet {
+.selectedPreview {
   position: absolute;
 
-  left: 14px;
-  right: 14px;
-  bottom: 14px;
+  left: 0;
+  right: 0;
 
-  padding: 10px;
-
-  border-radius: 27px;
-
-  background:
-    rgba(20,19,30,.98);
-
-  border:
-    1px solid rgba(255,255,255,.10);
-
-  transform:
-    translateY(25px);
-
-  transition:
-    transform .25s
-    cubic-bezier(.22,.8,.25,1);
-
-  box-shadow:
-    0 30px 100px rgba(0,0,0,.60);
-}
-
-.sheetOverlay.open
-.attachmentSheet {
-  transform:
-    translateY(0);
-}
-
-.sheetTitle {
-  padding:
-    13px
-    12px
-    10px;
-
-  color: #777483;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: .25em;
-}
-
-.sheetItem {
-  width: 100%;
-
-  min-height: 57px;
-
-  padding:
-    0 14px;
+  bottom: 76px;
 
   display: flex;
-  align-items: center;
+  gap: 8px;
 
-  text-align: left;
+  padding: 8px;
 
-  background: transparent;
-
-  color: #f5f2f8;
-
-  font-size: 17px;
-
-  border-radius: 16px;
-}
-
-.sheetItem:active {
-  background:
-    rgba(255,255,255,.06);
-}
-
-.sheetCancel {
-  width: 100%;
-
-  height: 53px;
-
-  margin-top: 7px;
+  overflow-x: auto;
 
   border-radius: 17px;
 
-  background:
-    rgba(255,255,255,.06);
+  background: rgba(15,16,23,.98);
 
-  color: #aaa7b5;
-
-  font-size: 16px;
+  border: 1px solid var(--border);
 }
 
+.previewItem {
+  position: relative;
+  flex-shrink: 0;
+}
 
-/* =========================================================
-   MAIN OVERLAY
-========================================================= */
+.previewItem img {
+  width: 58px;
+  height: 58px;
+
+  object-fit: cover;
+
+  border-radius: 13px;
+}
+
+.previewRemove {
+  position: absolute;
+
+  top: -5px;
+  right: -5px;
+
+  width: 21px;
+  height: 21px;
+
+  border-radius: 50%;
+
+  background: #171821;
+  border: 1px solid var(--border);
+
+  font-size: 14px;
+}
+
+/* SIDEBAR OVERLAY */
 
 .overlay {
   position: fixed;
-
   inset: 0;
 
   z-index: 90;
 
-  background:
-    rgba(0,0,0,.58);
+  background: rgba(0,0,0,.62);
 
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(7px);
 
   opacity: 0;
-
   pointer-events: none;
 
-  transition: opacity .25s ease;
+  transition: .2s;
 }
 
 .overlay.open {
   opacity: 1;
-
   pointer-events: auto;
 }
 
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
+/* SIDEBAR */
 
 .sidebar {
   position: fixed;
+
+  z-index: 100;
 
   top: 0;
   left: 0;
   bottom: 0;
 
-  z-index: 100;
-
-  width: min(430px, 88vw);
+  width: min(390px,88vw);
 
   padding:
-    calc(23px + env(safe-area-inset-top))
-    20px
-    calc(18px + env(safe-area-inset-bottom));
+    calc(20px + env(safe-area-inset-top))
+    16px
+    calc(16px + env(safe-area-inset-bottom));
 
   background:
     linear-gradient(
       180deg,
-      #0d0c17,
-      #080710
+      #0d0e15,
+      #08090e
     );
 
-  border-right:
-    1px solid rgba(255,255,255,.09);
+  border-right: 1px solid var(--border);
 
-  transform:
-    translateX(-105%);
+  transform: translateX(-105%);
 
   transition:
-    transform .3s
+    transform .28s
     cubic-bezier(.22,.8,.25,1);
 
   display: flex;
   flex-direction: column;
-
-  box-shadow:
-    30px 0 90px rgba(0,0,0,.35);
 }
 
 .sidebar.open {
-  transform:
-    translateX(0);
+  transform: translateX(0);
 }
-
-
-/* =========================================================
-   SIDEBAR HEADER
-========================================================= */
 
 .sidebarHeader {
   display: flex;
   align-items: center;
 
-  margin-bottom: 42px;
+  margin-bottom: 35px;
 }
 
 .sidebarBrand {
   flex: 1;
 
-  font-family:
-    "Avenir Next",
-    "SF Pro Display",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-
   font-size: 26px;
+  font-weight: 700;
 
-  font-weight: 650;
-
-  letter-spacing: .30em;
+  letter-spacing: .25em;
 }
 
 .closeButton {
-  width: 54px;
-  height: 54px;
+  width: 50px;
+  height: 50px;
 
-  border-radius: 18px;
+  border-radius: 16px;
 
-  background:
-    rgba(255,255,255,.045);
+  background: rgba(255,255,255,.045);
 
-  border:
-    1px solid rgba(255,255,255,.07);
-
-  color: #eeeaf2;
-
-  font-size: 30px;
-
-  font-weight: 300;
+  font-size: 28px;
 }
 
+.sectionTitle {
+  color: #727581;
 
-/* =========================================================
-   SIDEBAR SECTIONS
-========================================================= */
+  font-size: 10px;
+  font-weight: 800;
 
-.menuSectionTitle {
-  color: #777484;
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: .35em;
+  letter-spacing: .3em;
 
   margin:
-    0 8px 14px;
+    0 8px 10px;
 }
 
 .menuItem {
   width: 100%;
-
-  min-height: 59px;
+  min-height: 55px;
 
   display: flex;
   align-items: center;
 
-  gap: 17px;
+  gap: 15px;
 
-  padding:
-    0 12px;
+  padding: 0 12px;
 
-  border-radius: 17px;
+  border-radius: 16px;
 
   background: transparent;
 
   text-align: left;
 
-  color: #f3f0f6;
-
-  font-size: 17px;
-
-  font-weight: 550;
-
-  transition:
-    background .18s ease,
-    transform .18s ease;
+  font-size: 16px;
 }
 
 .menuItem:active {
-  background:
-    rgba(255,255,255,.06);
-
-  transform: scale(.985);
+  background: rgba(255,255,255,.06);
 }
 
 .menuIcon {
   width: 25px;
+  text-align: center;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #aaaeba;
 
-  color: #aaa6b5;
-
-  font-size: 22px;
-
-  font-weight: 300;
+  font-size: 21px;
 }
 
-.menuDivider {
+.divider {
   height: 1px;
 
-  margin:
-    20px 8px;
+  margin: 17px 8px;
 
-  background:
-    rgba(255,255,255,.075);
+  background: var(--border);
 }
-
-
-/* =========================================================
-   CHAT LIST
-========================================================= */
 
 .chatList {
   flex: 1;
 
   overflow-y: auto;
 
-  padding:
-    0 2px;
-}
-
-.chatList::-webkit-scrollbar {
-  width: 3px;
-}
-
-.chatList::-webkit-scrollbar-thumb {
-  background:
-    rgba(172,52,255,.30);
+  padding-top: 10px;
 }
 
 .historyGroup {
-  margin-bottom: 23px;
+  margin-bottom: 20px;
 }
 
 .historyDate {
-  color: #666372;
+  margin:
+    0 8px 9px;
+
+  color: #656875;
 
   font-size: 10px;
+  font-weight: 800;
 
-  font-weight: 700;
-
-  letter-spacing: .25em;
-
-  margin:
-    10px 8px;
+  letter-spacing: .22em;
 }
 
 .historyItem {
@@ -1129,135 +723,92 @@ button,
 
   width: 100%;
 
-  min-height: 70px;
+  min-height: 65px;
+
+  margin-bottom: 7px;
 
   padding:
-    13px
-    52px
-    13px
-    15px;
+    11px 48px 11px 13px;
 
-  margin-bottom: 8px;
-
-  border-radius: 17px;
+  border-radius: 16px;
 
   background:
     rgba(255,255,255,.025);
 
   border:
-    1px solid rgba(255,255,255,.055);
-
-  transition:
-    transform .18s ease,
-    background .18s ease,
-    border-color .18s ease;
+    1px solid rgba(255,255,255,.05);
 }
 
 .historyItem.active {
   background:
-    linear-gradient(
-      135deg,
-      rgba(148,44,245,.18),
-      rgba(81,21,130,.12)
-    );
+    rgba(150,45,245,.13);
 
   border-color:
-    rgba(169,51,255,.45);
-}
-
-.historyItem:active {
-  transform:
-    scale(.985);
+    rgba(170,55,255,.38);
 }
 
 .historyTitle {
-  color: #f2eef6;
-
-  font-size: 16px;
-
-  font-weight: 550;
-
   white-space: nowrap;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
+
+  font-size: 15px;
 }
 
 .historyTime {
-  margin-top: 5px;
+  margin-top: 4px;
 
-  color: #706d7c;
+  color: #6e717d;
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .historyMore {
   position: absolute;
 
-  right: 9px;
   top: 50%;
+  right: 8px;
 
-  width: 38px;
-  height: 38px;
+  transform: translateY(-50%);
 
-  transform:
-    translateY(-50%);
+  width: 35px;
+  height: 35px;
 
-  border-radius: 13px;
+  border-radius: 12px;
 
-  background:
-    rgba(255,255,255,.045);
+  background: rgba(255,255,255,.045);
 
-  color: #aaa7b4;
+  color: #a4a7b2;
 
-  font-size: 15px;
-}
-
-.noHistory {
-  padding:
-    30px 10px;
-
-  text-align: center;
-
-  color: #686574;
-
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .sidebarFooter {
-  padding-top: 15px;
+  padding-top: 13px;
 
-  color: #555260;
+  color: #555862;
 
   text-align: center;
 
-  font-size: 11px;
-
-  letter-spacing: .04em;
+  font-size: 10px;
 }
 
-
-/* =========================================================
-   CONTEXT MENU
-========================================================= */
+/* CONTEXT */
 
 .contextMenu {
   position: fixed;
 
-  z-index: 150;
+  z-index: 200;
 
-  width: 205px;
+  width: 200px;
 
-  padding: 7px;
+  padding: 6px;
 
-  border-radius: 18px;
+  border-radius: 17px;
 
-  background:
-    #161520;
+  background: #171820;
 
-  border:
-    1px solid rgba(255,255,255,.10);
+  border: 1px solid var(--border);
 
   box-shadow:
     0 25px 70px rgba(0,0,0,.55);
@@ -1272,14 +823,11 @@ button,
 .contextItem {
   width: 100%;
 
-  padding:
-    13px 14px;
+  padding: 13px;
 
-  border-radius: 13px;
+  border-radius: 12px;
 
   background: transparent;
-
-  color: #f2eff5;
 
   text-align: left;
 
@@ -1287,38 +835,31 @@ button,
 }
 
 .contextItem:active {
-  background:
-    rgba(255,255,255,.06);
+  background: rgba(255,255,255,.06);
 }
 
 .contextItem.delete {
-  color: #ff7183;
+  color: var(--danger);
 }
 
-
-/* =========================================================
-   MODALS
-========================================================= */
+/* MODAL */
 
 .modalOverlay {
   position: fixed;
-
   inset: 0;
 
-  z-index: 200;
+  z-index: 300;
 
   display: none;
 
   align-items: center;
   justify-content: center;
 
-  padding: 22px;
+  padding: 20px;
 
-  background:
-    rgba(0,0,0,.72);
+  background: rgba(0,0,0,.7);
 
-  backdrop-filter: blur(11px);
-  -webkit-backdrop-filter: blur(11px);
+  backdrop-filter: blur(10px);
 }
 
 .modalOverlay.open {
@@ -1326,67 +867,55 @@ button,
 }
 
 .modal {
-  width: min(470px,100%);
+  width: min(450px,100%);
 
-  padding: 27px;
+  padding: 24px;
 
-  border-radius: 27px;
+  border-radius: 24px;
 
-  background:
-    #12111d;
+  background: #12131b;
 
-  border:
-    1px solid rgba(255,255,255,.11);
+  border: 1px solid var(--border);
 
   box-shadow:
-    0 35px 100px rgba(0,0,0,.65);
+    0 30px 100px rgba(0,0,0,.65);
 }
 
 .modal h2 {
-  margin-bottom: 19px;
+  margin-bottom: 17px;
 
-  font-size: 23px;
-
-  line-height: 1.2;
-
-  letter-spacing: -.02em;
+  font-size: 22px;
 }
 
 .modalText {
-  color: #898796;
-
-  line-height: 1.55;
-
-  margin-bottom: 5px;
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .modalInput {
   width: 100%;
+  height: 54px;
 
-  height: 57px;
+  margin-top: 10px;
 
-  padding:
-    0 17px;
+  padding: 0 15px;
 
-  border-radius: 17px;
+  border-radius: 15px;
 
-  background:
-    #090811;
+  border: 1px solid var(--border);
 
-  border:
-    1px solid rgba(255,255,255,.09);
+  outline: none;
 
-  outline: 0;
+  background: #080910;
 
-  color: #fff;
+  color: white;
 
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .modalButtons {
   display: flex;
-
-  gap: 9px;
+  gap: 8px;
 
   margin-top: 18px;
 }
@@ -1394,14 +923,11 @@ button,
 .modalButton {
   flex: 1;
 
-  height: 53px;
+  height: 50px;
 
-  border-radius: 16px;
+  border-radius: 15px;
 
-  background:
-    rgba(255,255,255,.055);
-
-  color: #f3eff7;
+  background: rgba(255,255,255,.06);
 }
 
 .modalButton.primary {
@@ -1414,141 +940,103 @@ button,
 }
 
 .modalButton.danger {
-  background:
-    #a72b45;
+  background: #a52b43;
 }
 
-
-/* =========================================================
-   SETTINGS
-========================================================= */
+/* SETTINGS */
 
 .settingsList {
   display: flex;
   flex-direction: column;
-
-  gap: 9px;
+  gap: 8px;
 }
 
 .settingOption {
   width: 100%;
+  min-height: 57px;
 
-  min-height: 59px;
-
-  padding:
-    0 15px;
+  padding: 0 15px;
 
   display: flex;
   align-items: center;
-
   justify-content: space-between;
 
-  border-radius: 17px;
+  border-radius: 15px;
 
-  background:
-    rgba(255,255,255,.035);
+  background: rgba(255,255,255,.035);
 
-  border:
-    1px solid rgba(255,255,255,.06);
-
-  color: #f3eff7;
+  border: 1px solid rgba(255,255,255,.06);
 
   text-align: left;
-
-  font-size: 16px;
 }
 
 .settingOption.active {
-  border-color:
-    rgba(169,51,255,.55);
-
-  background:
-    rgba(148,44,245,.13);
+  background: rgba(150,45,245,.13);
+  border-color: rgba(170,55,255,.45);
 }
 
-.settingCheck {
+.settingDescription {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #777a86;
+
+  font-size: 11px;
+}
+
+.check {
   color: var(--accent2);
-
-  font-size: 18px;
 }
 
-
-/* =========================================================
-   VOICE MODE
-========================================================= */
+/* VOICE */
 
 .voiceMode {
   position: fixed;
-
   inset: 0;
 
-  z-index: 300;
+  z-index: 500;
 
   display: flex;
   flex-direction: column;
 
-  align-items: center;
-
   background:
     radial-gradient(
       circle at 50% 45%,
-      rgba(133,25,205,.18),
-      transparent 32%
+      rgba(140,25,220,.2),
+      transparent 33%
     ),
-    #05040a;
+    #05060a;
 
   opacity: 0;
-
   pointer-events: none;
 
-  transform:
-    scale(.97);
+  transform: scale(.97);
 
-  transition:
-    opacity .3s ease,
-    transform .3s ease;
+  transition: .3s;
 }
 
 .voiceMode.open {
   opacity: 1;
-
   pointer-events: auto;
 
-  transform:
-    scale(1);
+  transform: scale(1);
 }
-
-
-/* =========================================================
-   VOICE TOP
-========================================================= */
 
 .voiceTop {
-  width: 100%;
-
-  padding:
-    calc(20px + env(safe-area-inset-top))
-    22px
-    0;
-
   display: flex;
   align-items: center;
-
   justify-content: space-between;
+
+  padding:
+    calc(18px + env(safe-area-inset-top))
+    20px
+    0;
 }
 
-.voiceTopTitle {
-  font-family:
-    "Avenir Next",
-    "SF Pro Display",
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
-
-  font-size: 17px;
-
-  font-weight: 650;
-
+.voiceTitle {
+  font-size: 18px;
+  font-weight: 700;
   letter-spacing: .28em;
 }
 
@@ -1556,28 +1044,15 @@ button,
   width: 48px;
   height: 48px;
 
-  border-radius: 16px;
+  border-radius: 15px;
 
-  background:
-    rgba(255,255,255,.045);
-
-  border:
-    1px solid rgba(255,255,255,.08);
-
-  color: #f1edf5;
+  background: rgba(255,255,255,.05);
 
   font-size: 28px;
 }
 
-
-/* =========================================================
-   VOICE CENTER
-========================================================= */
-
 .voiceCenter {
   flex: 1;
-
-  width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -1588,16 +1063,9 @@ button,
   padding-bottom: 8vh;
 }
 
-
-/* =========================================================
-   ASA ORB
-========================================================= */
-
-.asaOrb {
-  width: 190px;
-  height: 190px;
-
-  position: relative;
+.orb {
+  width: 175px;
+  height: 175px;
 
   display: flex;
   align-items: center;
@@ -1607,378 +1075,157 @@ button,
 
   background:
     radial-gradient(
-      circle at 34% 28%,
-      rgba(255,255,255,.8),
-      rgba(255,255,255,.1) 9%,
-      transparent 20%
+      circle at 32% 27%,
+      rgba(255,255,255,.85),
+      transparent 10%
     ),
     radial-gradient(
       circle at 52% 52%,
-      #d247ff 0%,
-      #9c2fe9 30%,
-      #57138d 64%,
-      #170a27 100%
+      #d247ff,
+      #8e27d2 40%,
+      #280b42
     );
 
   box-shadow:
-    0 0 45px rgba(170,45,255,.32),
-    0 0 120px rgba(128,27,208,.22);
+    0 0 50px rgba(170,45,255,.35),
+    0 0 120px rgba(128,27,208,.2);
 
   animation:
-    orbIdle 3.6s ease-in-out infinite;
-}
-
-.asaOrb::before,
-.asaOrb::after {
-  content: "";
-
-  position: absolute;
-
-  inset: -22px;
-
-  border-radius: 50%;
-
-  border:
-    1px solid rgba(181,66,255,.18);
-
-  animation:
-    orbRing 3.4s ease-in-out infinite;
-}
-
-.asaOrb::after {
-  inset: -42px;
-
-  border-color:
-    rgba(164,52,255,.08);
-
-  animation-delay:
-    -.8s;
+    orbIdle 3.5s ease-in-out infinite;
 }
 
 .orbCore {
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle at 35% 30%,
-      #fff,
-      #e5b5ff 17%,
-      #b735ff 45%,
-      rgba(110,20,170,.15) 75%
+      white,
+      #d68cff 25%,
+      #a72fff
     );
 
   box-shadow:
-    0 0 35px rgba(224,161,255,.6);
+    0 0 35px rgba(224,161,255,.65);
 
   animation:
-    corePulse 1.9s ease-in-out infinite;
+    corePulse 1.8s ease-in-out infinite;
 }
 
-.voiceMode.listening .asaOrb {
+.voiceMode.listening .orb {
   animation:
-    orbListening 1.15s ease-in-out infinite;
+    orbListening 1.1s ease-in-out infinite;
 }
 
-.voiceMode.speaking .asaOrb {
+.voiceMode.speaking .orb {
   animation:
-    orbSpeaking .72s ease-in-out infinite;
+    orbSpeaking .7s ease-in-out infinite;
 }
 
 @keyframes orbIdle {
-
   0%,100% {
     transform: scale(1);
   }
 
   50% {
-    transform: scale(1.045);
+    transform: scale(1.04);
   }
-
 }
 
 @keyframes orbListening {
-
   0%,100% {
-    transform: scale(.97);
+    transform: scale(.96);
   }
 
   50% {
     transform: scale(1.1);
   }
-
 }
 
 @keyframes orbSpeaking {
-
   0%,100% {
     transform: scale(.94);
   }
 
   50% {
-    transform: scale(1.13);
+    transform: scale(1.12);
   }
-
 }
 
 @keyframes corePulse {
-
   0%,100% {
     transform: scale(.85);
-    opacity: .82;
   }
 
   50% {
     transform: scale(1.12);
-    opacity: 1;
   }
-
 }
-
-@keyframes orbRing {
-
-  0%,100% {
-    transform: scale(.96);
-    opacity: .35;
-  }
-
-  50% {
-    transform: scale(1.08);
-    opacity: .8;
-  }
-
-}
-
-
-/* =========================================================
-   VOICE STATUS
-========================================================= */
 
 .voiceStatus {
-  margin-top: 58px;
+  margin-top: 52px;
 
-  min-height: 27px;
+  min-height: 26px;
 
-  color: #aaa6b4;
+  color: #aeb0bb;
 
-  font-size: 17px;
-
-  font-weight: 500;
+  font-size: 16px;
 
   text-align: center;
 }
 
-.voiceStatus strong {
-  color: #f3eef7;
-}
-
-
-/* =========================================================
-   VOICE CONTROL
-========================================================= */
-
 .voiceBottom {
-  width: 100%;
-
   padding:
     0
-    24px
-    calc(30px + env(safe-area-inset-bottom));
+    20px
+    calc(28px + env(safe-area-inset-bottom));
 
   display: flex;
   justify-content: center;
 }
 
 .voiceControl {
-  width: 60px;
-  height: 60px;
+  width: 62px;
+  height: 62px;
 
   border-radius: 21px;
 
-  background:
-    rgba(255,255,255,.055);
+  background: rgba(255,255,255,.06);
 
-  border:
-    1px solid rgba(255,255,255,.10);
+  border: 1px solid var(--border);
 
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.voiceControl.active {
-  color: var(--accent2);
+/* HIDDEN INPUTS */
 
-  border-color:
-    rgba(193,60,255,.40);
-
-  background:
-    rgba(163,49,255,.10);
-}
-
-.voiceControl .voiceIcon {
-  transform:
-    scale(.82);
-}
-
-
-/* =========================================================
-   HIDDEN INPUTS
-========================================================= */
-
-.hiddenInput {
+.hidden {
   position: fixed;
 
   width: 1px;
   height: 1px;
 
   opacity: 0;
-
   pointer-events: none;
 }
 
+@media (max-width: 600px) {
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media (max-width:600px) {
-
-  .header {
-    height: 100px;
-
-    padding:
-      calc(12px + env(safe-area-inset-top))
-      14px
-      10px;
-
-    gap: 13px;
-  }
-
-  .menuButton {
-    width: 55px;
-    height: 55px;
-
-    border-radius: 18px;
-  }
-
-  .brandText {
-    font-size: 28px;
-
-    letter-spacing: .27em;
+  .orb {
+    width: 155px;
+    height: 155px;
   }
 
   .chat {
-    top: 100px;
-
-    bottom: 91px;
-
-    padding:
-      30px
-      18px
-      145px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
-
-  .user .bubble {
-    max-width: 88%;
-
-    padding:
-      14px
-      17px;
-
-    font-size: 17px;
-  }
-
-  .assistant .bubble {
-    max-width: 94%;
-
-    font-size: 17px;
-
-    line-height: 1.7;
-  }
-
-  .assistantLabel {
-    font-size: 11px;
-
-    margin-bottom: 10px;
-  }
-
-  .inputArea {
-    left: 12px;
-    right: 12px;
-
-    bottom:
-      calc(9px + env(safe-area-inset-bottom));
-  }
-
-  .inputBox {
-    min-height: 67px;
-
-    padding: 6px;
-
-    border-radius: 23px;
-  }
-
-  .plusButton {
-    width: 50px;
-    height: 50px;
-
-    border-radius: 17px;
-  }
-
-  .voiceButton {
-    width: 48px;
-    height: 50px;
-  }
-
-  .sendButton {
-    width: 48px;
-    height: 50px;
-  }
-
-  .input {
-    font-size: 16px;
-
-    height: 50px;
-
-    padding:
-      0 5px;
-  }
-
-  .asaOrb {
-    width: 160px;
-    height: 160px;
-  }
-
-  .voiceStatus {
-    margin-top: 50px;
-
-    font-size: 16px;
-  }
-
 }
-
-
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: .01ms !important;
-
-    animation-iteration-count: 1 !important;
-
-    transition-duration: .01ms !important;
-  }
-
-}
-
 </style>
 </head>
 
@@ -1993,6 +1240,7 @@ button,
     <button
       class="menuButton"
       id="menuButton"
+      type="button"
       aria-label="Menü"
     >
       <span class="menuLines">
@@ -2002,13 +1250,8 @@ button,
       </span>
     </button>
 
-    <div
-      class="brand"
-      aria-label="ASA"
-    >
-      <span class="brandText">
-        ASA
-      </span>
+    <div class="brand">
+      <span class="brandText">ASA</span>
     </div>
 
   </header>
@@ -2026,13 +1269,15 @@ button,
 
   <div class="inputArea">
 
-    <div class="inputBox">
+    <div
+      class="inputBox"
+      id="inputBox"
+    >
 
       <button
-        class="plusButton"
+        class="actionButton plusButton"
         id="plusButton"
         type="button"
-        aria-label="Ekle"
       >
         +
       </button>
@@ -2047,19 +1292,18 @@ button,
       >
 
       <button
-        class="voiceButton"
+        class="actionButton voiceButton"
         id="voiceButton"
         type="button"
         aria-label="Sesli sohbet"
       >
-        <span class="voiceIcon"></span>
+        <span class="micIcon"></span>
       </button>
 
       <button
-        class="sendButton"
+        class="actionButton sendButton"
         id="sendButton"
         type="button"
-        aria-label="Gönder"
       >
         →
       </button>
@@ -2071,69 +1315,10 @@ button,
 </div>
 
 
-<!-- =======================================================
-     ATTACHMENTS
-======================================================== -->
-
-<div
-  class="sheetOverlay"
-  id="sheetOverlay"
->
-
-  <div class="attachmentSheet">
-
-    <div class="sheetTitle">
-      EKLE
-    </div>
-
-    <button
-      class="sheetItem"
-      id="photosButton"
-      type="button"
-    >
-      Fotoğraflar
-    </button>
-
-    <button
-      class="sheetItem"
-      id="cameraButton"
-      type="button"
-    >
-      Kamera
-    </button>
-
-    <button
-      class="sheetItem"
-      id="filesButton"
-      type="button"
-    >
-      Dosyalar
-    </button>
-
-    <button
-      class="sheetCancel"
-      id="sheetCancel"
-      type="button"
-    >
-      Vazgeç
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- HIDDEN FILE PICKERS -->
+<!-- FILE PICKERS -->
 
 <input
-  class="hiddenInput"
-  id="fileInput"
-  type="file"
-  multiple
->
-
-<input
-  class="hiddenInput"
+  class="hidden"
   id="photoInput"
   type="file"
   accept="image/*"
@@ -2141,17 +1326,81 @@ button,
 >
 
 <input
-  class="hiddenInput"
+  class="hidden"
   id="cameraInput"
   type="file"
   accept="image/*"
   capture="environment"
 >
 
+<input
+  class="hidden"
+  id="fileInput"
+  type="file"
+  multiple
+>
 
-<!-- =======================================================
-     SIDEBAR OVERLAY
-======================================================== -->
+
+<!-- ATTACHMENT SHEET -->
+
+<div
+  class="modalOverlay"
+  id="attachmentModal"
+>
+
+  <div class="modal">
+
+    <h2>Eklemek istediğin şey</h2>
+
+    <div class="settingsList">
+
+      <button
+        class="settingOption"
+        id="photosButton"
+        type="button"
+      >
+        <span>Fotoğraflar</span>
+        <span>›</span>
+      </button>
+
+      <button
+        class="settingOption"
+        id="cameraButton"
+        type="button"
+      >
+        <span>Kamera</span>
+        <span>›</span>
+      </button>
+
+      <button
+        class="settingOption"
+        id="filesButton"
+        type="button"
+      >
+        <span>Dosyalar</span>
+        <span>›</span>
+      </button>
+
+    </div>
+
+    <div class="modalButtons">
+
+      <button
+        class="modalButton"
+        id="attachmentCancel"
+        type="button"
+      >
+        Vazgeç
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- SIDEBAR OVERLAY -->
 
 <div
   class="overlay"
@@ -2159,9 +1408,7 @@ button,
 ></div>
 
 
-<!-- =======================================================
-     SIDEBAR
-======================================================== -->
+<!-- SIDEBAR -->
 
 <aside
   class="sidebar"
@@ -2178,7 +1425,6 @@ button,
       class="closeButton"
       id="closeMenu"
       type="button"
-      aria-label="Menüyü kapat"
     >
       ×
     </button>
@@ -2186,7 +1432,7 @@ button,
   </div>
 
 
-  <div class="menuSectionTitle">
+  <div class="sectionTitle">
     SOHBET
   </div>
 
@@ -2196,15 +1442,8 @@ button,
     id="newChatButton"
     type="button"
   >
-
-    <span class="menuIcon">
-      +
-    </span>
-
-    <span>
-      Yeni Sohbet
-    </span>
-
+    <span class="menuIcon">+</span>
+    <span>Yeni Sohbet</span>
   </button>
 
 
@@ -2213,61 +1452,40 @@ button,
     id="showChatsButton"
     type="button"
   >
-
-    <span class="menuIcon">
-      ≡
-    </span>
-
-    <span>
-      Sohbetler
-    </span>
-
+    <span class="menuIcon">≡</span>
+    <span>Sohbetler</span>
   </button>
 
 
-  <div class="menuDivider"></div>
+  <div class="divider"></div>
 
 
-  <div class="menuSectionTitle">
+  <div class="sectionTitle">
     ASA
   </div>
 
 
   <button
     class="menuItem"
-    id="memoryMenuButton"
+    id="memoryButton"
     type="button"
   >
-
-    <span class="menuIcon">
-      ◉
-    </span>
-
-    <span>
-      Hafızam
-    </span>
-
+    <span class="menuIcon">◉</span>
+    <span>Hafızam</span>
   </button>
 
 
   <button
     class="menuItem"
-    id="settingsMenuButton"
+    id="settingsButton"
     type="button"
   >
-
-    <span class="menuIcon">
-      ◌
-    </span>
-
-    <span>
-      Ayarlar
-    </span>
-
+    <span class="menuIcon">⚙</span>
+    <span>Ayarlar</span>
   </button>
 
 
-  <div class="menuDivider"></div>
+  <div class="divider"></div>
 
 
   <div
@@ -2277,15 +1495,13 @@ button,
 
 
   <div class="sidebarFooter">
-    ASA · kişisel yapay zeka asistanı
+    ASA · Alperen'in kişisel yapay zeka asistanı
   </div>
 
 </aside>
 
 
-<!-- =======================================================
-     CONTEXT MENU
-======================================================== -->
+<!-- CONTEXT MENU -->
 
 <div
   class="contextMenu"
@@ -2311,9 +1527,7 @@ button,
 </div>
 
 
-<!-- =======================================================
-     RENAME MODAL
-======================================================== -->
+<!-- RENAME -->
 
 <div
   class="modalOverlay"
@@ -2322,16 +1536,13 @@ button,
 
   <div class="modal">
 
-    <h2>
-      Sohbet başlığını değiştir
-    </h2>
+    <h2>Başlığı değiştir</h2>
 
     <input
       class="modalInput"
       id="renameInput"
-      type="text"
       maxlength="80"
-      placeholder="Sohbet adı"
+      type="text"
     >
 
     <div class="modalButtons">
@@ -2359,9 +1570,7 @@ button,
 </div>
 
 
-<!-- =======================================================
-     DELETE MODAL
-======================================================== -->
+<!-- DELETE -->
 
 <div
   class="modalOverlay"
@@ -2370,16 +1579,12 @@ button,
 
   <div class="modal">
 
-    <h2>
-      Sohbet silinsin mi?
-    </h2>
+    <h2>Sohbet silinsin mi?</h2>
 
     <p
       class="modalText"
       id="deleteText"
-    >
-      Bu sohbet silinecek.
-    </p>
+    ></p>
 
     <div class="modalButtons">
 
@@ -2406,9 +1611,7 @@ button,
 </div>
 
 
-<!-- =======================================================
-     SETTINGS MODAL
-======================================================== -->
+<!-- SETTINGS -->
 
 <div
   class="modalOverlay"
@@ -2417,39 +1620,43 @@ button,
 
   <div class="modal">
 
-    <h2>
-      Ayarlar
-    </h2>
+    <h2>Ayarlar</h2>
 
     <div class="settingsList">
 
       <button
         class="settingOption"
-        id="voiceSettingsButton"
+        id="voiceSettings"
         type="button"
       >
         <span>
           Ses
+          <small
+            class="settingDescription"
+          >
+            ASA'nın konuşma sesi
+          </small>
         </span>
 
-        <span>
-          ›
-        </span>
+        <span>›</span>
       </button>
 
 
       <button
         class="settingOption"
-        id="themeSettingsButton"
+        id="themeSettings"
         type="button"
       >
         <span>
           Tema
+          <small
+            class="settingDescription"
+          >
+            Görünüm ve renk
+          </small>
         </span>
 
-        <span>
-          ›
-        </span>
+        <span>›</span>
       </button>
 
     </div>
@@ -2471,9 +1678,7 @@ button,
 </div>
 
 
-<!-- =======================================================
-     VOICE SETTINGS
-======================================================== -->
+<!-- VOICE SETTINGS -->
 
 <div
   class="modalOverlay"
@@ -2482,9 +1687,7 @@ button,
 
   <div class="modal">
 
-    <h2>
-      ASA'nın Sesi
-    </h2>
+    <h2>ASA'nın Sesi</h2>
 
     <div
       class="settingsList"
@@ -2495,7 +1698,7 @@ button,
 
       <button
         class="modalButton"
-        id="voiceSettingsClose"
+        id="voiceBack"
         type="button"
       >
         Geri
@@ -2508,9 +1711,7 @@ button,
 </div>
 
 
-<!-- =======================================================
-     THEME SETTINGS
-======================================================== -->
+<!-- THEME SETTINGS -->
 
 <div
   class="modalOverlay"
@@ -2519,9 +1720,7 @@ button,
 
   <div class="modal">
 
-    <h2>
-      ASA Teması
-    </h2>
+    <h2>ASA Teması</h2>
 
     <div
       class="settingsList"
@@ -2532,7 +1731,7 @@ button,
 
       <button
         class="modalButton"
-        id="themeSettingsClose"
+        id="themeBack"
         type="button"
       >
         Geri
@@ -2545,19 +1744,16 @@ button,
 </div>
 
 
-<!-- =======================================================
-     VOICE MODE
-======================================================== -->
+<!-- VOICE MODE -->
 
 <section
   class="voiceMode"
   id="voiceMode"
-  aria-hidden="true"
 >
 
   <div class="voiceTop">
 
-    <div class="voiceTopTitle">
+    <div class="voiceTitle">
       ASA
     </div>
 
@@ -2565,7 +1761,6 @@ button,
       class="voiceClose"
       id="voiceClose"
       type="button"
-      aria-label="Sesli sohbeti kapat"
     >
       ×
     </button>
@@ -2576,18 +1771,17 @@ button,
   <div class="voiceCenter">
 
     <div
-      class="asaOrb"
-      id="asaOrb"
+      class="orb"
+      id="orb"
     >
       <div class="orbCore"></div>
     </div>
-
 
     <div
       class="voiceStatus"
       id="voiceStatus"
     >
-      Hazırım
+      Hazırlanıyor...
     </div>
 
   </div>
@@ -2599,19 +1793,14 @@ button,
       class="voiceControl"
       id="voiceControl"
       type="button"
-      aria-label="Mikrofon"
     >
-      <span class="voiceIcon"></span>
+      <span class="micIcon"></span>
     </button>
 
   </div>
 
 </section>
 
-
-<!-- =======================================================
-     REALTIME AUDIO
-======================================================== -->
 
 <audio
   id="remoteAudio"
@@ -2620,34 +1809,32 @@ button,
 ></audio>
 
 
-<!-- =======================================================
-     JAVASCRIPT
-======================================================== -->
-
 <script>
-
 /* =========================================================
-   ASA — FINAL JAVASCRIPT
+   ASA — NEW FRONTEND
 ========================================================= */
 
 const API_URL = "/api/chat";
 const REALTIME_URL = "/api/realtime";
 
-const STORAGE_KEY = "asa_conversations_v3";
-const ACTIVE_KEY = "asa_active_conversation_v3";
-const SETTINGS_KEY = "asa_settings_v3";
+const STORAGE_KEY = "asa_conversations_v4";
+const ACTIVE_KEY = "asa_active_v4";
+const SETTINGS_KEY = "asa_settings_v4";
 
 
 /* =========================================================
    STATE
 ========================================================= */
 
-let conversationId = getActiveConversationId();
+let conversationId =
+  localStorage.getItem(ACTIVE_KEY) ||
+  createId();
+
 let messages = [];
 
-let contextConversationId = null;
-
 let selectedFiles = [];
+
+let contextConversationId = null;
 
 let realtime = {
   pc: null,
@@ -2657,270 +1844,154 @@ let realtime = {
   starting: false
 };
 
-let realtimeVoice =
-  localStorage.getItem("asa_voice_v3") ||
-  "marin";
 
-let currentTheme =
-  localStorage.getItem("asa_theme_v3") ||
-  "purple";
+let settings = {
+  voice:
+    localStorage.getItem("asa_voice_v4") ||
+    "marin",
 
-let currentMode = "idle";
+  theme:
+    localStorage.getItem("asa_theme_v4") ||
+    "purple"
+};
 
 
 /* =========================================================
    ELEMENTS
 ========================================================= */
 
+const $ = id =>
+  document.getElementById(id);
+
 const chat =
-  document.getElementById("chat");
+  $("chat");
 
 const input =
-  document.getElementById("messageInput");
+  $("messageInput");
 
 const sendButton =
-  document.getElementById("sendButton");
-
-const menuButton =
-  document.getElementById("menuButton");
+  $("sendButton");
 
 const sidebar =
-  document.getElementById("sidebar");
+  $("sidebar");
 
 const overlay =
-  document.getElementById("overlay");
-
-const closeMenu =
-  document.getElementById("closeMenu");
+  $("overlay");
 
 const chatList =
-  document.getElementById("chatList");
+  $("chatList");
 
 const contextMenu =
-  document.getElementById("contextMenu");
-
-const renameModal =
-  document.getElementById("renameModal");
-
-const renameInput =
-  document.getElementById("renameInput");
-
-const deleteModal =
-  document.getElementById("deleteModal");
-
-const plusButton =
-  document.getElementById("plusButton");
-
-const sheetOverlay =
-  document.getElementById("sheetOverlay");
-
-const fileInput =
-  document.getElementById("fileInput");
-
-const photoInput =
-  document.getElementById("photoInput");
-
-const cameraInput =
-  document.getElementById("cameraInput");
-
-const voiceButton =
-  document.getElementById("voiceButton");
+  $("contextMenu");
 
 const voiceMode =
-  document.getElementById("voiceMode");
-
-const voiceClose =
-  document.getElementById("voiceClose");
-
-const voiceControl =
-  document.getElementById("voiceControl");
+  $("voiceMode");
 
 const voiceStatus =
-  document.getElementById("voiceStatus");
+  $("voiceStatus");
 
 const remoteAudio =
-  document.getElementById("remoteAudio");
+  $("remoteAudio");
 
-const settingsModal =
-  document.getElementById("settingsModal");
 
-const voiceSettingsModal =
-  document.getElementById("voiceSettingsModal");
+/* =========================================================
+   ID
+========================================================= */
 
-const themeSettingsModal =
-  document.getElementById("themeSettingsModal");
+function createId() {
 
-const voiceOptions =
-  document.getElementById("voiceOptions");
+  const id =
+    "asa-" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2,9);
 
-const themeOptions =
-  document.getElementById("themeOptions");
+  localStorage.setItem(
+    ACTIVE_KEY,
+    id
+  );
+
+  return id;
+}
 
 
 /* =========================================================
    SETTINGS
 ========================================================= */
 
-const SETTINGS = {
-  voice:
-    realtimeVoice,
+const THEMES = {
 
-  theme:
-    currentTheme
+  purple: {
+    name: "Siyah · Mor",
+    accent: "#a331ff",
+    accent2: "#c13cff"
+  },
+
+  red: {
+    name: "Siyah · Kırmızı",
+    accent: "#ff315d",
+    accent2: "#ff5578"
+  },
+
+  blue: {
+    name: "Siyah · Mavi",
+    accent: "#287cff",
+    accent2: "#4e9aff"
+  },
+
+  green: {
+    name: "Siyah · Yeşil",
+    accent: "#19c985",
+    accent2: "#39e8a0"
+  },
+
+  night: {
+    name: "Gece",
+    accent: "#7f8cff",
+    accent2: "#9ca5ff"
+  }
+
 };
+
+
+const VOICES = [
+
+  ["marin","Marin","Doğal ve dengeli"],
+  ["cedar","Cedar","Sakin ve güçlü"],
+  ["coral","Coral","Sıcak ve samimi"],
+  ["sage","Sage","Yumuşak ve sakin"],
+  ["ash","Ash","Net ve doğal"],
+  ["verse","Verse","Canlı ve enerjik"]
+
+];
 
 
 function saveSettings() {
 
   localStorage.setItem(
     SETTINGS_KEY,
-    JSON.stringify(SETTINGS)
+    JSON.stringify(settings)
   );
 
   localStorage.setItem(
-    "asa_voice_v3",
-    SETTINGS.voice
+    "asa_voice_v4",
+    settings.voice
   );
 
   localStorage.setItem(
-    "asa_theme_v3",
-    SETTINGS.theme
+    "asa_theme_v4",
+    settings.theme
   );
-
 }
 
 
-function loadSettings() {
-
-  try {
-
-    const saved =
-      JSON.parse(
-        localStorage.getItem(
-          SETTINGS_KEY
-        ) || "{}"
-      );
-
-    if (
-      saved.voice
-    ) {
-
-      SETTINGS.voice =
-        saved.voice;
-
-      realtimeVoice =
-        saved.voice;
-
-    }
-
-    if (
-      saved.theme
-    ) {
-
-      SETTINGS.theme =
-        saved.theme;
-
-      currentTheme =
-        saved.theme;
-
-    }
-
-  } catch {}
-
-}
-
-
-/* =========================================================
-   THEMES
-========================================================= */
-
-const THEMES = {
-
-  purple: {
-    name: "Siyah · Mor",
-
-    accent: "#a331ff",
-    accent2: "#c13cff",
-    accent3: "#7021bd",
-
-    glow:
-      "rgba(142,34,220,.18)"
-  },
-
-  red: {
-    name: "Siyah · Kırmızı",
-
-    accent: "#ff315d",
-    accent2: "#ff5578",
-    accent3: "#a7193b",
-
-    glow:
-      "rgba(220,30,70,.17)"
-  },
-
-  blue: {
-    name: "Siyah · Mavi",
-
-    accent: "#287cff",
-    accent2: "#4e9aff",
-    accent3: "#174fa9",
-
-    glow:
-      "rgba(30,90,220,.17)"
-  },
-
-  green: {
-    name: "Siyah · Yeşil",
-
-    accent: "#19c985",
-    accent2: "#39e8a0",
-    accent3: "#087c51",
-
-    glow:
-      "rgba(15,170,105,.16)"
-  },
-
-  night: {
-    name: "Gece",
-
-    accent: "#7f8cff",
-    accent2: "#9ca5ff",
-    accent3: "#4e58b7",
-
-    glow:
-      "rgba(70,80,180,.15)"
-  },
-
-  day: {
-    name: "Gündüz",
-
-    accent: "#695cff",
-    accent2: "#7e72ff",
-    accent3: "#4d43b5",
-
-    glow:
-      "rgba(100,90,240,.14)"
-  }
-
-};
-
-
-function applyTheme(
-  themeName
-) {
+function applyTheme() {
 
   const theme =
-    THEMES[themeName];
-
-  if (!theme) {
-    return;
-  }
-
-  currentTheme =
-    themeName;
-
-  SETTINGS.theme =
-    themeName;
+    THEMES[settings.theme] ||
+    THEMES.purple;
 
   document.documentElement
     .style
@@ -2936,86 +2007,18 @@ function applyTheme(
       theme.accent2
     );
 
-  document.documentElement
-    .style
-    .setProperty(
-      "--accent3",
-      theme.accent3
-    );
-
-  document.documentElement
-    .style
-    .setProperty(
-      "--theme-glow",
-      theme.glow
-    );
-
-
-  if (
-    themeName === "day"
-  ) {
-
-    document.documentElement
-      .style
-      .setProperty(
-        "--bg",
-        "#f4f3f8"
-      );
-
-    document.documentElement
-      .style
-      .setProperty(
-        "--bg2",
-        "#eceaf2"
-      );
-
-    document.documentElement
-      .style
-      .setProperty(
-        "--text",
-        "#15131c"
-      );
-
-  } else {
-
-    document.documentElement
-      .style
-      .setProperty(
-        "--bg",
-        "#05040a"
-      );
-
-    document.documentElement
-      .style
-      .setProperty(
-        "--bg2",
-        "#080611"
-      );
-
-    document.documentElement
-      .style
-      .setProperty(
-        "--text",
-        "#f7f5fb"
-      );
-
-  }
-
-
   saveSettings();
-
 }
 
 
-loadSettings();
-applyTheme(currentTheme);
+applyTheme();
 
 
 /* =========================================================
    STORAGE
 ========================================================= */
 
-function loadConversations() {
+function getConversations() {
 
   try {
 
@@ -3035,13 +2038,10 @@ function loadConversations() {
     return [];
 
   }
-
 }
 
 
-function saveConversations(
-  data
-) {
+function saveConversations(data) {
 
   localStorage.setItem(
     STORAGE_KEY,
@@ -3051,101 +2051,10 @@ function saveConversations(
 }
 
 
-function createConversationId() {
-
-  const id =
-    "asa-" +
-    Date.now() +
-    "-" +
-    Math.random()
-      .toString(36)
-      .slice(2,9);
-
-  setActiveConversationId(
-    id
-  );
-
-  return id;
-
-}
-
-
-function getActiveConversationId() {
-
-  const saved =
-    localStorage.getItem(
-      ACTIVE_KEY
-    );
-
-  if (saved) {
-    return saved;
-  }
-
-  return createConversationId();
-
-}
-
-
-function setActiveConversationId(
-  id
-) {
-
-  localStorage.setItem(
-    ACTIVE_KEY,
-    id
-  );
-
-}
-
-
-/* =========================================================
-   TITLES
-========================================================= */
-
-function generateTitle(
-  text
-) {
-
-  let title =
-    String(text || "")
-      .replace(/\s+/g, " ")
-      .trim();
-
-  if (!title) {
-    return "Yeni Sohbet";
-  }
-
-  title =
-    title
-      .replace(/[?!.]+$/g, "")
-      .trim();
-
-  if (
-    title.length > 42
-  ) {
-
-    title =
-      title
-        .substring(0,42)
-        .trim() + "…";
-
-  }
-
-  return (
-    title.charAt(0)
-      .toUpperCase() +
-    title.slice(1)
-  );
-
-}
-
-
-function ensureConversation(
-  firstMessage = ""
-) {
+function ensureConversation(title = "") {
 
   const conversations =
-    loadConversations();
+    getConversations();
 
   let item =
     conversations.find(
@@ -3163,11 +2072,8 @@ function ensureConversation(
         conversationId,
 
       title:
-        firstMessage
-          ? generateTitle(
-              firstMessage
-            )
-          : "Yeni Sohbet",
+        title ||
+        "Yeni Sohbet",
 
       createdAt:
         Date.now(),
@@ -3185,15 +2091,13 @@ function ensureConversation(
 
 
   if (
-    firstMessage &&
+    title &&
     item.title ===
       "Yeni Sohbet"
   ) {
 
     item.title =
-      generateTitle(
-        firstMessage
-      );
+      makeTitle(title);
 
   }
 
@@ -3201,11 +2105,42 @@ function ensureConversation(
   item.updatedAt =
     Date.now();
 
+
   saveConversations(
     conversations
   );
 
-  return item;
+}
+
+
+function makeTitle(text) {
+
+  let title =
+    String(text || "")
+      .replace(/\s+/g," ")
+      .trim();
+
+
+  if (!title) {
+    return "Yeni Sohbet";
+  }
+
+
+  if (title.length > 45) {
+
+    title =
+      title
+        .slice(0,45)
+        .trim() + "…";
+
+  }
+
+
+  return (
+    title.charAt(0)
+      .toUpperCase() +
+    title.slice(1)
+  );
 
 }
 
@@ -3214,19 +2149,23 @@ function ensureConversation(
    MENU
 ========================================================= */
 
-function openMenu() {
+$("menuButton")
+  .addEventListener(
+    "click",
+    () => {
 
-  sidebar.classList.add(
-    "open"
+      sidebar.classList.add(
+        "open"
+      );
+
+      overlay.classList.add(
+        "open"
+      );
+
+      renderChatList();
+
+    }
   );
-
-  overlay.classList.add(
-    "open"
-  );
-
-  renderChatList();
-
-}
 
 
 function closeSidebar() {
@@ -3239,25 +2178,23 @@ function closeSidebar() {
     "open"
   );
 
-  closeContextMenu();
+  closeContext();
 
 }
 
 
-menuButton.addEventListener(
-  "click",
-  openMenu
-);
+$("closeMenu")
+  .addEventListener(
+    "click",
+    closeSidebar
+  );
 
-closeMenu.addEventListener(
-  "click",
-  closeSidebar
-);
 
-overlay.addEventListener(
-  "click",
-  closeSidebar
-);
+overlay
+  .addEventListener(
+    "click",
+    closeSidebar
+  );
 
 
 /* =========================================================
@@ -3267,23 +2204,27 @@ overlay.addEventListener(
 function renderChatList() {
 
   const conversations =
-    loadConversations()
+    getConversations()
       .sort(
         (a,b) =>
           (b.updatedAt || 0) -
           (a.updatedAt || 0)
       );
 
+
   chatList.innerHTML = "";
 
 
-  if (
-    !conversations.length
-  ) {
+  if (!conversations.length) {
 
     chatList.innerHTML = `
-      <div class="noHistory">
-        Henüz kayıtlı sohbet yok.
+      <div style="
+        color:#666a76;
+        text-align:center;
+        padding:30px 10px;
+        font-size:14px;
+      ">
+        Henüz sohbet yok.
       </div>
     `;
 
@@ -3292,241 +2233,118 @@ function renderChatList() {
   }
 
 
-  const groups = {};
-
-
   conversations.forEach(
     item => {
 
-      const date =
-        new Date(
-          item.updatedAt ||
-          item.createdAt
+      const el =
+        document.createElement(
+          "div"
         );
 
-      const key =
-        date.toDateString();
+      el.className =
+        "historyItem" +
+        (
+          item.id ===
+          conversationId
+            ? " active"
+            : ""
+        );
 
-      if (!groups[key]) {
-        groups[key] = [];
-      }
 
-      groups[key].push(
-        item
+      const title =
+        document.createElement(
+          "div"
+        );
+
+      title.className =
+        "historyTitle";
+
+      title.textContent =
+        item.title;
+
+
+      const time =
+        document.createElement(
+          "div"
+        );
+
+      time.className =
+        "historyTime";
+
+      time.textContent =
+        formatTime(
+          item.updatedAt
+        );
+
+
+      const more =
+        document.createElement(
+          "button"
+        );
+
+      more.className =
+        "historyMore";
+
+      more.type =
+        "button";
+
+      more.textContent =
+        "•••";
+
+
+      el.append(
+        title,
+        time,
+        more
+      );
+
+
+      el.addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target.closest(
+              ".historyMore"
+            )
+          ) {
+            return;
+          }
+
+          openConversation(
+            item.id
+          );
+
+        }
+      );
+
+
+      more.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+          showContext(
+            item.id,
+            more
+          );
+
+        }
+      );
+
+
+      chatList.appendChild(
+        el
       );
 
     }
   );
 
-
-  Object.entries(groups)
-    .forEach(
-      ([key,items]) => {
-
-        const group =
-          document.createElement(
-            "div"
-          );
-
-        group.className =
-          "historyGroup";
-
-
-        const dateTitle =
-          document.createElement(
-            "div"
-          );
-
-        dateTitle.className =
-          "historyDate";
-
-        dateTitle.textContent =
-          getDateLabel(key);
-
-        group.appendChild(
-          dateTitle
-        );
-
-
-        items.forEach(
-          item => {
-
-            const element =
-              document.createElement(
-                "div"
-              );
-
-            element.className =
-              "historyItem" +
-              (
-                item.id ===
-                conversationId
-                  ? " active"
-                  : ""
-              );
-
-
-            const title =
-              document.createElement(
-                "div"
-              );
-
-            title.className =
-              "historyTitle";
-
-            title.textContent =
-              item.title;
-
-
-            const time =
-              document.createElement(
-                "div"
-              );
-
-            time.className =
-              "historyTime";
-
-            time.textContent =
-              formatTime(
-                item.updatedAt
-              );
-
-
-            const more =
-              document.createElement(
-                "button"
-              );
-
-            more.className =
-              "historyMore";
-
-            more.type =
-              "button";
-
-            more.textContent =
-              "•••";
-
-
-            element.appendChild(
-              title
-            );
-
-            element.appendChild(
-              time
-            );
-
-            element.appendChild(
-              more
-            );
-
-
-            element.addEventListener(
-              "click",
-              event => {
-
-                if (
-                  event.target.closest(
-                    ".historyMore"
-                  )
-                ) {
-                  return;
-                }
-
-                openConversation(
-                  item.id
-                );
-
-              }
-            );
-
-
-            more.addEventListener(
-              "click",
-              event => {
-
-                event.stopPropagation();
-
-                showContextMenu(
-                  item.id,
-                  more
-                );
-
-              }
-            );
-
-
-            group.appendChild(
-              element
-            );
-
-          }
-        );
-
-
-        chatList.appendChild(
-          group
-        );
-
-      }
-    );
-
 }
 
 
-/* =========================================================
-   DATE
-========================================================= */
-
-function getDateLabel(
-  dateString
-) {
-
-  const today =
-    new Date();
-
-  const date =
-    new Date(dateString);
-
-  const yesterday =
-    new Date();
-
-  yesterday.setDate(
-    yesterday.getDate() - 1
-  );
-
-
-  if (
-    date.toDateString() ===
-    today.toDateString()
-  ) {
-    return "BUGÜN";
-  }
-
-
-  if (
-    date.toDateString() ===
-    yesterday.toDateString()
-  ) {
-    return "DÜN";
-  }
-
-
-  return date
-    .toLocaleDateString(
-      "tr-TR",
-      {
-        day: "numeric",
-        month: "long"
-      }
-    )
-    .toUpperCase();
-
-}
-
-
-function formatTime(
-  timestamp
-) {
+function formatTime(timestamp) {
 
   if (!timestamp) {
     return "";
@@ -3537,388 +2355,60 @@ function formatTime(
   ).toLocaleTimeString(
     "tr-TR",
     {
-      hour: "2-digit",
-      minute: "2-digit"
+      hour:"2-digit",
+      minute:"2-digit"
     }
   );
 
 }
-
-
-/* =========================================================
-   CONTEXT MENU
-========================================================= */
-
-function showContextMenu(
-  id,
-  element
-) {
-
-  contextConversationId =
-    id;
-
-  const rect =
-    element.getBoundingClientRect();
-
-
-  contextMenu.style.left =
-    Math.max(
-      10,
-      rect.left - 175
-    ) + "px";
-
-
-  contextMenu.style.top =
-    Math.min(
-      window.innerHeight - 120,
-      rect.bottom + 6
-    ) + "px";
-
-
-  contextMenu.classList.add(
-    "open"
-  );
-
-}
-
-
-function closeContextMenu() {
-
-  contextMenu.classList.remove(
-    "open"
-  );
-
-  contextConversationId =
-    null;
-
-}
-
-
-document.addEventListener(
-  "click",
-  event => {
-
-    if (
-      !contextMenu.contains(
-        event.target
-      ) &&
-      !event.target.closest(
-        ".historyMore"
-      )
-    ) {
-
-      closeContextMenu();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   RENAME
-========================================================= */
-
-document
-  .getElementById(
-    "renameButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const conversations =
-        loadConversations();
-
-      const item =
-        conversations.find(
-          x =>
-            x.id ===
-            contextConversationId
-        );
-
-      if (!item) {
-        return;
-      }
-
-
-      renameInput.value =
-        item.title;
-
-      renameModal.classList.add(
-        "open"
-      );
-
-      closeContextMenu();
-
-
-      setTimeout(
-        () => {
-
-          renameInput.focus();
-
-          renameInput.select();
-
-        },
-        100
-      );
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "renameCancel"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      renameModal.classList.remove(
-        "open"
-      );
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "renameSave"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const title =
-        renameInput.value.trim();
-
-      if (!title) {
-        return;
-      }
-
-
-      const conversations =
-        loadConversations();
-
-      const item =
-        conversations.find(
-          x =>
-            x.id ===
-            contextConversationId
-        );
-
-
-      if (item) {
-
-        item.title =
-          title;
-
-        item.updatedAt =
-          Date.now();
-
-        saveConversations(
-          conversations
-        );
-
-      }
-
-
-      renameModal.classList.remove(
-        "open"
-      );
-
-      renderChatList();
-
-    }
-  );
-
-
-/* =========================================================
-   DELETE
-========================================================= */
-
-document
-  .getElementById(
-    "deleteButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const conversations =
-        loadConversations();
-
-      const item =
-        conversations.find(
-          x =>
-            x.id ===
-            contextConversationId
-        );
-
-
-      if (!item) {
-        return;
-      }
-
-
-      document
-        .getElementById(
-          "deleteText"
-        )
-        .textContent =
-        `"${item.title}" sohbeti silinecek.`;
-
-
-      deleteModal.classList.add(
-        "open"
-      );
-
-      closeContextMenu();
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "deleteCancel"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      deleteModal.classList.remove(
-        "open"
-      );
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "deleteConfirm"
-  )
-  .addEventListener(
-    "click",
-    async () => {
-
-      const id =
-        contextConversationId;
-
-
-      saveConversations(
-        loadConversations()
-          .filter(
-            x =>
-              x.id !== id
-          )
-      );
-
-
-      deleteModal.classList.remove(
-        "open"
-      );
-
-
-      try {
-
-        await fetch(
-          API_URL,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify({
-                conversationId:
-                  id,
-
-                deleteConversation:
-                  true
-              })
-          }
-        );
-
-      } catch {}
-
-
-      if (
-        id ===
-        conversationId
-      ) {
-
-        createNewConversation();
-
-      }
-
-
-      renderChatList();
-
-    }
-  );
 
 
 /* =========================================================
    NEW CHAT
 ========================================================= */
 
-document
-  .getElementById(
-    "newChatButton"
-  )
+$("newChatButton")
   .addEventListener(
     "click",
-    () => {
-
-      createNewConversation();
-
-      closeSidebar();
-
-    }
+    createNewConversation
   );
 
 
 function createNewConversation() {
 
   conversationId =
-    createConversationId();
+    createId();
 
   messages = [];
 
-  setActiveConversationId(
-    conversationId
-  );
+  selectedFiles = [];
 
-  showEmpty();
+  removePreview();
 
   input.value = "";
 
-  input.focus();
+  showEmpty();
 
   renderChatList();
+
+  closeSidebar();
+
+  input.focus();
 
 }
 
 
 /* =========================================================
-   OPEN CONVERSATION
+   OPEN CHAT
 ========================================================= */
 
-async function openConversation(
-  id
-) {
+async function openConversation(id) {
 
   conversationId =
     id;
 
-  setActiveConversationId(
+  localStorage.setItem(
+    ACTIVE_KEY,
     id
   );
 
@@ -3935,20 +2425,17 @@ async function openConversation(
       await fetch(
         API_URL,
         {
-          method: "POST",
+          method:"POST",
 
-          headers: {
+          headers:{
             "Content-Type":
               "application/json"
           },
 
           body:
             JSON.stringify({
-              conversationId:
-                id,
-
-              getHistory:
-                true
+              conversationId:id,
+              getHistory:true
             })
         }
       );
@@ -3957,11 +2444,12 @@ async function openConversation(
     const data =
       await response.json();
 
+
     removeTyping();
 
 
     if (
-      data.history &&
+      response.ok &&
       Array.isArray(
         data.history
       )
@@ -3988,48 +2476,39 @@ async function openConversation(
 
   }
 
-
-  renderChatList();
-
 }
 
 
 /* =========================================================
-   NORMALIZE HISTORY
+   HISTORY
 ========================================================= */
 
-function normalizeHistory(
-  history
-) {
+function normalizeHistory(history) {
 
-  if (
-    !Array.isArray(history)
-  ) {
+  if (!Array.isArray(history)) {
     return [];
   }
 
 
   return history
     .filter(
-      message =>
-        message &&
+      m =>
+        m &&
         (
-          message.role ===
-            "user" ||
-          message.role ===
-            "assistant"
+          m.role === "user" ||
+          m.role === "assistant"
         )
     )
     .map(
-      message => {
+      m => {
 
         let content =
-          message.content;
+          m.content;
 
 
         if (
-          typeof content ===
-          "object"
+          typeof content !==
+          "string"
         ) {
 
           try {
@@ -4042,9 +2521,7 @@ function normalizeHistory(
           } catch {
 
             content =
-              String(
-                content
-              );
+              String(content);
 
           }
 
@@ -4053,19 +2530,16 @@ function normalizeHistory(
 
         return {
 
-          role:
-            message.role,
+          role:m.role,
 
           content:
-            String(
-              content || ""
-            ),
+            content || "",
 
           attachments:
             Array.isArray(
-              message.attachments
+              m.attachments
             )
-              ? message.attachments
+              ? m.attachments
               : []
 
         };
@@ -4088,7 +2562,7 @@ async function sendMessage() {
 
   if (
     !text &&
-    selectedFiles.length === 0
+    !selectedFiles.length
   ) {
     return;
   }
@@ -4096,38 +2570,34 @@ async function sendMessage() {
 
   input.value = "";
 
-  sendButton.disabled = true;
+  sendButton.disabled =
+    true;
 
 
   const attachments =
-    await prepareAttachments();
+    await prepareFiles();
 
 
-  const titleText =
+  const title =
     text ||
     attachments[0]?.name ||
     "Görsel";
 
 
   ensureConversation(
-    titleText
+    title
   );
 
 
-  const userMessage = {
+  messages.push({
 
-    role: "user",
+    role:"user",
 
-    content: text,
+    content:text,
 
     attachments
 
-  };
-
-
-  messages.push(
-    userMessage
-  );
+  });
 
 
   renderMessages();
@@ -4137,26 +2607,26 @@ async function sendMessage() {
 
   try {
 
-    const apiMessages = [
-      {
-        role: "user",
+    /*
+      Şimdilik mevcut /api/chat
+      yapına uyumlu şekilde
+      metin gönderiyoruz.
+    */
 
-        content:
-          buildApiContent(
-            text,
-            attachments
-          )
-      }
-    ];
+    const apiText =
+      buildApiText(
+        text,
+        attachments
+      );
 
 
     const response =
       await fetch(
         API_URL,
         {
-          method: "POST",
+          method:"POST",
 
-          headers: {
+          headers:{
             "Content-Type":
               "application/json"
           },
@@ -4166,8 +2636,12 @@ async function sendMessage() {
 
               conversationId,
 
-              messages:
-                apiMessages
+              messages:[
+                {
+                  role:"user",
+                  content:apiText
+                }
+              ]
 
             })
         }
@@ -4183,7 +2657,7 @@ async function sendMessage() {
 
     if (
       !response.ok ||
-      !data.success
+      data.success === false
     ) {
 
       throw new Error(
@@ -4196,29 +2670,21 @@ async function sendMessage() {
 
     let answer =
       data.answer ||
+      data.output ||
       "Şu anda cevap oluşturamadım.";
 
 
-    if (
-      typeof answer ===
-      "object"
-    ) {
-
-      answer =
-        safeObjectText(
-          answer
-        );
-
-    }
+    answer =
+      objectToText(
+        answer
+      );
 
 
     messages.push({
 
-      role:
-        "assistant",
+      role:"assistant",
 
-      content:
-        String(answer)
+      content:answer
 
     });
 
@@ -4235,22 +2701,11 @@ async function sendMessage() {
         );
 
 
-      /*
-        API geçmişinde görsel
-        attachment bilgisi yoksa
-        yerel kullanıcı mesajını
-        kaybetmiyoruz.
-      */
-
       const localImages =
         messages.filter(
           m =>
-            m.role ===
-              "user" &&
-            Array.isArray(
-              m.attachments
-            ) &&
-            m.attachments.length
+            m.role === "user" &&
+            m.attachments?.length
         );
 
 
@@ -4258,37 +2713,34 @@ async function sendMessage() {
         history;
 
 
-      for (
-        const localMessage
-        of localImages
-      ) {
+      localImages.forEach(
+        local => {
 
-        const matching =
-          messages.find(
-            m =>
-              m.role ===
-                "user" &&
-              m.content ===
-                localMessage.content
-          );
+          const match =
+            messages.find(
+              m =>
+                m.role === "user" &&
+                m.content ===
+                  local.content
+            );
 
 
-        if (
-          matching &&
-          !matching.attachments.length
-        ) {
+          if (match) {
 
-          matching.attachments =
-            localMessage.attachments;
+            match.attachments =
+              local.attachments;
+
+          }
 
         }
-
-      }
+      );
 
     }
 
 
     selectedFiles = [];
+
+    removePreview();
 
     ensureConversation();
 
@@ -4296,23 +2748,23 @@ async function sendMessage() {
 
     renderChatList();
 
-  } catch (error) {
+  } catch(error) {
 
     removeTyping();
 
 
     messages.push({
 
-      role:
-        "assistant",
+      role:"assistant",
 
       content:
-        "Bir bağlantı sorunu oluştu. Birazdan tekrar deneyelim."
+        "Bağlantıda bir sorun oluştu. Birazdan tekrar deneyelim."
 
     });
 
 
     renderMessages();
+
 
     console.error(
       "ASA CHAT:",
@@ -4331,20 +2783,51 @@ async function sendMessage() {
 
 
 /* =========================================================
-   SAFE OBJECT TEXT
+   API TEXT
 ========================================================= */
 
-function safeObjectText(
-  value
+function buildApiText(
+  text,
+  attachments
 ) {
+
+  const parts = [];
+
+
+  if (text) {
+    parts.push(text);
+  }
+
+
+  attachments.forEach(
+    file => {
+
+      parts.push(
+        `Eklenen dosya: ${file.name}`
+      );
+
+    }
+  );
+
+
+  return parts.join(
+    "\n\n"
+  );
+
+}
+
+
+/* =========================================================
+   OBJECT TEXT
+========================================================= */
+
+function objectToText(value) {
 
   if (
     value === null ||
     value === undefined
   ) {
-
     return "";
-
   }
 
 
@@ -4352,17 +2835,15 @@ function safeObjectText(
     typeof value ===
     "string"
   ) {
-
     return value;
-
   }
 
 
   if (
     typeof value ===
-    "number" ||
+      "number" ||
     typeof value ===
-    "boolean"
+      "boolean"
   ) {
 
     return String(value);
@@ -4418,215 +2899,115 @@ function safeObjectText(
 
 
 /* =========================================================
-   API CONTENT
-========================================================= */
-
-function buildApiContent(
-  text,
-  attachments
-) {
-
-  const parts = [];
-
-
-  if (text) {
-
-    parts.push(
-      text
-    );
-
-  }
-
-
-  if (
-    attachments &&
-    attachments.length
-  ) {
-
-    attachments.forEach(
-      file => {
-
-        parts.push(
-          `Eklenen dosya: ${file.name}`
-        );
-
-      }
-    );
-
-  }
-
-
-  return parts.join(
-    "\n\n"
-  );
-
-}
-
-
-/* =========================================================
    ATTACHMENTS
 ========================================================= */
 
-function openSheet() {
-
-  sheetOverlay.classList.add(
-    "open"
-  );
-
-}
-
-
-function closeSheet() {
-
-  sheetOverlay.classList.remove(
-    "open"
-  );
-
-}
-
-
-plusButton.addEventListener(
-  "click",
-  openSheet
-);
-
-
-document
-  .getElementById(
-    "sheetCancel"
-  )
-  .addEventListener(
-    "click",
-    closeSheet
-  );
-
-
-sheetOverlay.addEventListener(
-  "click",
-  event => {
-
-    if (
-      event.target ===
-      sheetOverlay
-    ) {
-
-      closeSheet();
-
-    }
-
-  }
-);
-
-
-/* PHOTOS */
-
-document
-  .getElementById(
-    "photosButton"
-  )
+$("plusButton")
   .addEventListener(
     "click",
     () => {
 
-      closeSheet();
-
-      photoInput.click();
+      $("attachmentModal")
+        .classList.add(
+          "open"
+        );
 
     }
   );
 
 
-/* CAMERA */
-
-document
-  .getElementById(
-    "cameraButton"
-  )
+$("attachmentCancel")
   .addEventListener(
     "click",
     () => {
 
-      closeSheet();
-
-      cameraInput.click();
+      $("attachmentModal")
+        .classList.remove(
+          "open"
+        );
 
     }
   );
 
 
-/* FILES */
-
-document
-  .getElementById(
-    "filesButton"
-  )
+$("photosButton")
   .addEventListener(
     "click",
     () => {
 
-      closeSheet();
+      $("attachmentModal")
+        .classList.remove(
+          "open"
+        );
 
-      fileInput.click();
+      $("photoInput").click();
 
     }
   );
 
 
-fileInput.addEventListener(
-  "change",
-  event => {
+$("cameraButton")
+  .addEventListener(
+    "click",
+    () => {
 
-    handleFiles(
-      [
-        ...event.target.files
-      ]
-    );
+      $("attachmentModal")
+        .classList.remove(
+          "open"
+        );
 
-    event.target.value = "";
+      $("cameraInput").click();
+
+    }
+  );
+
+
+$("filesButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("attachmentModal")
+        .classList.remove(
+          "open"
+        );
+
+      $("fileInput").click();
+
+    }
+  );
+
+
+[
+  "photoInput",
+  "cameraInput",
+  "fileInput"
+].forEach(
+  id => {
+
+    $(id)
+      .addEventListener(
+        "change",
+        event => {
+
+          addFiles(
+            [
+              ...event.target.files
+            ]
+          );
+
+          event.target.value = "";
+
+        }
+      );
 
   }
 );
 
 
-photoInput.addEventListener(
-  "change",
-  event => {
+function addFiles(files) {
 
-    handleFiles(
-      [
-        ...event.target.files
-      ]
-    );
-
-    event.target.value = "";
-
-  }
-);
-
-
-cameraInput.addEventListener(
-  "change",
-  event => {
-
-    handleFiles(
-      [
-        ...event.target.files
-      ]
-    );
-
-    event.target.value = "";
-
-  }
-);
-
-
-function handleFiles(
-  files
-) {
-
-  if (
-    !files.length
-  ) {
+  if (!files.length) {
     return;
   }
 
@@ -4636,37 +3017,19 @@ function handleFiles(
   );
 
 
-  /*
-    Fotoğraf seçildiği anda
-    sohbette önizleme göster.
-  */
-
-  showSelectedPreview();
+  renderPreview();
 
   input.focus();
 
 }
 
 
-/* =========================================================
-   SELECTED PREVIEW
-========================================================= */
+function renderPreview() {
 
-function showSelectedPreview() {
-
-  const existing =
-    document.getElementById(
-      "selectedPreview"
-    );
-
-  if (existing) {
-    existing.remove();
-  }
+  removePreview();
 
 
-  if (
-    !selectedFiles.length
-  ) {
+  if (!selectedFiles.length) {
     return;
   }
 
@@ -4679,65 +3042,106 @@ function showSelectedPreview() {
   preview.id =
     "selectedPreview";
 
-  preview.style.cssText = `
-    position:absolute;
-    left:18px;
-    right:18px;
-    bottom:88px;
-    z-index:39;
-    display:flex;
-    gap:8px;
-    padding:8px;
-    overflow-x:auto;
-    border-radius:18px;
-    background:rgba(16,15,25,.96);
-    border:1px solid rgba(255,255,255,.09);
-    backdrop-filter:blur(18px);
-  `;
+  preview.className =
+    "selectedPreview";
 
 
   selectedFiles.forEach(
-    file => {
+    (file,index) => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "previewItem";
+
 
       if (
-        !file.type.startsWith(
+        file.type.startsWith(
           "image/"
         )
       ) {
-        return;
+
+        const img =
+          document.createElement(
+            "img"
+          );
+
+        img.src =
+          URL.createObjectURL(
+            file
+          );
+
+        item.appendChild(
+          img
+        );
+
+      } else {
+
+        item.innerHTML = `
+          <div style="
+            width:58px;
+            height:58px;
+            border-radius:13px;
+            background:#20212a;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:11px;
+            padding:5px;
+            text-align:center;
+          ">
+            ${escapeHtml(
+              file.name
+            )}
+          </div>
+        `;
+
       }
 
 
-      const image =
+      const remove =
         document.createElement(
-          "img"
+          "button"
         );
 
-      image.style.cssText = `
-        width:58px;
-        height:58px;
-        object-fit:cover;
-        border-radius:13px;
-        flex-shrink:0;
-      `;
+      remove.className =
+        "previewRemove";
 
-      image.src =
-        URL.createObjectURL(
-          file
-        );
+      remove.textContent =
+        "×";
+
+
+      remove.addEventListener(
+        "click",
+        () => {
+
+          selectedFiles.splice(
+            index,
+            1
+          );
+
+          renderPreview();
+
+        }
+      );
+
+
+      item.appendChild(
+        remove
+      );
 
       preview.appendChild(
-        image
+        item
       );
 
     }
   );
 
 
-  document
-    .querySelector(
-      ".inputArea"
-    )
+  $("inputBox")
     .appendChild(
       preview
     );
@@ -4745,27 +3149,19 @@ function showSelectedPreview() {
 }
 
 
-function removeSelectedPreview() {
+function removePreview() {
 
-  const preview =
-    document.getElementById(
-      "selectedPreview"
-    );
+  const old =
+    $("selectedPreview");
 
-  if (preview) {
-    preview.remove();
+  if (old) {
+    old.remove();
   }
 
 }
 
 
-/* =========================================================
-   FILE → DATA URL
-========================================================= */
-
-function fileToDataURL(
-  file
-) {
+function fileToDataURL(file) {
 
   return new Promise(
     resolve => {
@@ -4773,17 +3169,18 @@ function fileToDataURL(
       const reader =
         new FileReader();
 
+
       reader.onload =
         () =>
           resolve(
             reader.result
           );
 
+
       reader.onerror =
         () =>
-          resolve(
-            null
-          );
+          resolve(null);
+
 
       reader.readAsDataURL(
         file
@@ -4795,7 +3192,7 @@ function fileToDataURL(
 }
 
 
-async function prepareAttachments() {
+async function prepareFiles() {
 
   const result = [];
 
@@ -4804,12 +3201,6 @@ async function prepareAttachments() {
     const file of
     selectedFiles
   ) {
-
-    const dataUrl =
-      await fileToDataURL(
-        file
-      );
-
 
     result.push({
 
@@ -4822,7 +3213,10 @@ async function prepareAttachments() {
       size:
         file.size,
 
-      dataUrl
+      dataUrl:
+        await fileToDataURL(
+          file
+        )
 
     });
 
@@ -4835,7 +3229,7 @@ async function prepareAttachments() {
 
 
 /* =========================================================
-   RENDER
+   RENDER MESSAGES
 ========================================================= */
 
 function renderMessages() {
@@ -4843,9 +3237,7 @@ function renderMessages() {
   chat.innerHTML = "";
 
 
-  if (
-    !messages.length
-  ) {
+  if (!messages.length) {
 
     showEmpty();
 
@@ -4862,7 +3254,6 @@ function renderMessages() {
           "div"
         );
 
-
       row.className =
         "message " +
         (
@@ -4878,7 +3269,6 @@ function renderMessages() {
           "div"
         );
 
-
       bubble.className =
         "bubble";
 
@@ -4889,19 +3279,17 @@ function renderMessages() {
       ) {
 
         bubble.innerHTML = `
-
           <span class="assistantLabel">
             ASA
           </span>
 
           <div class="assistantText">
             ${formatAnswer(
-              safeObjectText(
+              objectToText(
                 message.content
               )
             )}
           </div>
-
         `;
 
       } else {
@@ -4912,43 +3300,39 @@ function renderMessages() {
           )
         ) {
 
-          message.attachments
-            .forEach(
-              attachment => {
+          message.attachments.forEach(
+            attachment => {
 
-                if (
-                  attachment &&
-                  attachment.dataUrl &&
-                  attachment.type &&
-                  attachment.type
-                    .startsWith(
-                      "image/"
-                    )
-                ) {
+              if (
+                attachment?.dataUrl &&
+                attachment.type?.startsWith(
+                  "image/"
+                )
+              ) {
 
-                  const image =
-                    document.createElement(
-                      "img"
-                    );
-
-                  image.className =
-                    "messageImage";
-
-                  image.src =
-                    attachment.dataUrl;
-
-                  image.alt =
-                    attachment.name ||
-                    "Görsel";
-
-                  bubble.appendChild(
-                    image
+                const img =
+                  document.createElement(
+                    "img"
                   );
 
-                }
+                img.className =
+                  "messageImage";
+
+                img.src =
+                  attachment.dataUrl;
+
+                img.alt =
+                  attachment.name ||
+                  "Görsel";
+
+                bubble.appendChild(
+                  img
+                );
 
               }
-            );
+
+            }
+          );
 
         }
 
@@ -4963,7 +3347,7 @@ function renderMessages() {
             );
 
           text.textContent =
-            safeObjectText(
+            objectToText(
               message.content
             );
 
@@ -4988,54 +3372,48 @@ function renderMessages() {
   );
 
 
-  scrollToBottom();
+  scrollBottom();
 
 }
 
 
-/* =========================================================
-   ANSWER FORMAT
-========================================================= */
+function showEmpty() {
 
-function escapeHtml(
-  text
-) {
+  chat.innerHTML = `
 
-  return String(
-    text || ""
-  )
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
+    <div class="empty">
+
+      <div class="emptyOrb"></div>
+
+      <h1>Merhaba Alperen</h1>
+
+      <p>
+        ASA burada. Ne yapmak istersin?
+      </p>
+
+    </div>
+
+  `;
 
 }
 
 
-function formatAnswer(
-  text
-) {
+function escapeHtml(text) {
+
+  return String(text || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function formatAnswer(text) {
 
   let result =
-    escapeHtml(
-      text
-    );
+    escapeHtml(text);
 
 
   result =
@@ -5065,33 +3443,6 @@ function formatAnswer(
 
 
 /* =========================================================
-   EMPTY
-========================================================= */
-
-function showEmpty() {
-
-  chat.innerHTML = `
-
-    <div class="empty">
-
-      <div class="emptyOrb"></div>
-
-      <h1>
-        Merhaba Alperen
-      </h1>
-
-      <p>
-        ASA burada. Ne yapmak istersin?
-      </p>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
    TYPING
 ========================================================= */
 
@@ -5105,11 +3456,11 @@ function addTyping() {
       "div"
     );
 
-  row.className =
-    "message assistant";
-
   row.id =
     "typingMessage";
+
+  row.className =
+    "message assistant";
 
 
   row.innerHTML = `
@@ -5121,11 +3472,9 @@ function addTyping() {
       </span>
 
       <div class="typing">
-
         <span></span>
         <span></span>
         <span></span>
-
       </div>
 
     </div>
@@ -5137,30 +3486,24 @@ function addTyping() {
     row
   );
 
-  scrollToBottom();
+  scrollBottom();
 
 }
 
 
 function removeTyping() {
 
-  const typing =
-    document.getElementById(
-      "typingMessage"
-    );
+  const element =
+    $("typingMessage");
 
-  if (typing) {
-    typing.remove();
+  if (element) {
+    element.remove();
   }
 
 }
 
 
-/* =========================================================
-   SCROLL
-========================================================= */
-
-function scrollToBottom() {
+function scrollBottom() {
 
   requestAnimationFrame(
     () => {
@@ -5175,13 +3518,14 @@ function scrollToBottom() {
 
 
 /* =========================================================
-   NORMAL SEND EVENTS
+   SEND EVENTS
 ========================================================= */
 
-sendButton.addEventListener(
-  "click",
-  sendMessage
-);
+$("sendButton")
+  .addEventListener(
+    "click",
+    sendMessage
+  );
 
 
 input.addEventListener(
@@ -5189,8 +3533,7 @@ input.addEventListener(
   event => {
 
     if (
-      event.key ===
-      "Enter" &&
+      event.key === "Enter" &&
       !event.shiftKey
     ) {
 
@@ -5205,218 +3548,450 @@ input.addEventListener(
 
 
 /* =========================================================
-   SETTINGS UI
+   CONTEXT MENU
 ========================================================= */
 
-document
-  .getElementById(
-    "settingsMenuButton"
-  )
+function showContext(
+  id,
+  button
+) {
+
+  contextConversationId =
+    id;
+
+
+  const rect =
+    button.getBoundingClientRect();
+
+
+  contextMenu.style.left =
+    Math.max(
+      10,
+      rect.left - 160
+    ) + "px";
+
+
+  contextMenu.style.top =
+    Math.min(
+      window.innerHeight - 120,
+      rect.bottom + 5
+    ) + "px";
+
+
+  contextMenu.classList.add(
+    "open"
+  );
+
+}
+
+
+function closeContext() {
+
+  contextMenu.classList.remove(
+    "open"
+  );
+
+  contextConversationId =
+    null;
+
+}
+
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !contextMenu.contains(
+        event.target
+      ) &&
+      !event.target.closest(
+        ".historyMore"
+      )
+    ) {
+
+      closeContext();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   RENAME
+========================================================= */
+
+$("renameButton")
   .addEventListener(
     "click",
     () => {
 
-      closeSidebar();
+      const conversations =
+        getConversations();
 
-      settingsModal.classList.add(
-        "open"
+
+      const item =
+        conversations.find(
+          x =>
+            x.id ===
+            contextConversationId
+        );
+
+
+      if (!item) {
+        return;
+      }
+
+
+      $("renameInput").value =
+        item.title;
+
+
+      $("renameModal")
+        .classList.add(
+          "open"
+        );
+
+
+      closeContext();
+
+      setTimeout(
+        () => {
+
+          $("renameInput").focus();
+
+          $("renameInput").select();
+
+        },
+        100
       );
 
     }
   );
 
 
-document
-  .getElementById(
-    "settingsClose"
-  )
+$("renameCancel")
   .addEventListener(
     "click",
     () => {
 
-      settingsModal.classList.remove(
-        "open"
-      );
+      $("renameModal")
+        .classList.remove(
+          "open"
+        );
 
     }
   );
 
 
-document
-  .getElementById(
-    "voiceSettingsButton"
-  )
+$("renameSave")
   .addEventListener(
     "click",
     () => {
 
-      settingsModal.classList.remove(
-        "open"
-      );
-
-      renderVoiceOptions();
-
-      voiceSettingsModal.classList.add(
-        "open"
-      );
-
-    }
-  );
+      const title =
+        $("renameInput")
+          .value
+          .trim();
 
 
-document
-  .getElementById(
-    "themeSettingsButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      settingsModal.classList.remove(
-        "open"
-      );
-
-      renderThemeOptions();
-
-      themeSettingsModal.classList.add(
-        "open"
-      );
-
-    }
-  );
+      if (!title) {
+        return;
+      }
 
 
-document
-  .getElementById(
-    "voiceSettingsClose"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      voiceSettingsModal.classList.remove(
-        "open"
-      );
-
-      settingsModal.classList.add(
-        "open"
-      );
-
-    }
-  );
+      const conversations =
+        getConversations();
 
 
-document
-  .getElementById(
-    "themeSettingsClose"
-  )
-  .addEventListener(
-    "click",
-    () => {
+      const item =
+        conversations.find(
+          x =>
+            x.id ===
+            contextConversationId
+        );
 
-      themeSettingsModal.classList.remove(
-        "open"
-      );
 
-      settingsModal.classList.add(
-        "open"
-      );
+      if (item) {
+
+        item.title =
+          title;
+
+        item.updatedAt =
+          Date.now();
+
+        saveConversations(
+          conversations
+        );
+
+      }
+
+
+      $("renameModal")
+        .classList.remove(
+          "open"
+        );
+
+
+      renderChatList();
 
     }
   );
 
 
 /* =========================================================
-   VOICE OPTIONS
+   DELETE
 ========================================================= */
 
-const VOICES = [
+$("deleteButton")
+  .addEventListener(
+    "click",
+    () => {
 
-  {
-    id: "marin",
-    name: "Marin",
-    description: "Doğal ve dengeli"
-  },
+      const item =
+        getConversations()
+          .find(
+            x =>
+              x.id ===
+              contextConversationId
+          );
 
-  {
-    id: "cedar",
-    name: "Cedar",
-    description: "Sakin ve güçlü"
-  },
 
-  {
-    id: "coral",
-    name: "Coral",
-    description: "Sıcak ve samimi"
-  },
+      if (!item) {
+        return;
+      }
 
-  {
-    id: "sage",
-    name: "Sage",
-    description: "Yumuşak ve sakin"
-  },
 
-  {
-    id: "ash",
-    name: "Ash",
-    description: "Net ve doğal"
-  },
+      $("deleteText")
+        .textContent =
+        `"${item.title}" sohbeti silinecek.`;
 
-  {
-    id: "verse",
-    name: "Verse",
-    description: "Canlı ve enerjik"
-  }
 
-];
+      $("deleteModal")
+        .classList.add(
+          "open"
+        );
+
+
+      closeContext();
+
+    }
+  );
+
+
+$("deleteCancel")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("deleteModal")
+        .classList.remove(
+          "open"
+        );
+
+    }
+  );
+
+
+$("deleteConfirm")
+  .addEventListener(
+    "click",
+    () => {
+
+      const id =
+        contextConversationId;
+
+
+      saveConversations(
+        getConversations()
+          .filter(
+            x =>
+              x.id !== id
+          )
+      );
+
+
+      $("deleteModal")
+        .classList.remove(
+          "open"
+        );
+
+
+      if (
+        id ===
+        conversationId
+      ) {
+
+        createNewConversation();
+
+      }
+
+
+      renderChatList();
+
+    }
+  );
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+$("settingsButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSidebar();
+
+      $("settingsModal")
+        .classList.add(
+          "open"
+        );
+
+    }
+  );
+
+
+$("settingsClose")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("settingsModal")
+        .classList.remove(
+          "open"
+        );
+
+    }
+  );
+
+
+$("voiceSettings")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("settingsModal")
+        .classList.remove(
+          "open"
+        );
+
+      renderVoiceOptions();
+
+      $("voiceSettingsModal")
+        .classList.add(
+          "open"
+        );
+
+    }
+  );
+
+
+$("themeSettings")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("settingsModal")
+        .classList.remove(
+          "open"
+        );
+
+      renderThemeOptions();
+
+      $("themeSettingsModal")
+        .classList.add(
+          "open"
+        );
+
+    }
+  );
+
+
+$("voiceBack")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("voiceSettingsModal")
+        .classList.remove(
+          "open"
+        );
+
+      $("settingsModal")
+        .classList.add(
+          "open"
+        );
+
+    }
+  );
+
+
+$("themeBack")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("themeSettingsModal")
+        .classList.remove(
+          "open"
+        );
+
+      $("settingsModal")
+        .classList.add(
+          "open"
+        );
+
+    }
+  );
 
 
 function renderVoiceOptions() {
 
-  voiceOptions.innerHTML = "";
+  const container =
+    $("voiceOptions");
+
+  container.innerHTML = "";
 
 
   VOICES.forEach(
-    voice => {
+    ([id,name,description]) => {
 
       const button =
         document.createElement(
           "button"
         );
 
-      button.type =
-        "button";
-
       button.className =
         "settingOption" +
         (
-          SETTINGS.voice ===
-          voice.id
+          settings.voice === id
             ? " active"
             : ""
         );
 
 
+      button.type =
+        "button";
+
+
       button.innerHTML = `
 
         <span>
-          ${voice.name}
+          ${name}
+
           <small
-            style="
-              display:block;
-              color:#777483;
-              font-size:12px;
-              margin-top:3px;
-            "
+            class="settingDescription"
           >
-            ${voice.description}
+            ${description}
           </small>
         </span>
 
-        <span class="settingCheck">
+        <span class="check">
           ${
-            SETTINGS.voice ===
-            voice.id
+            settings.voice === id
               ? "✓"
               : ""
           }
@@ -5429,27 +4004,18 @@ function renderVoiceOptions() {
         "click",
         () => {
 
-          SETTINGS.voice =
-            voice.id;
-
-          realtimeVoice =
-            voice.id;
+          settings.voice =
+            id;
 
           saveSettings();
 
           renderVoiceOptions();
 
-          /*
-            Ses değişikliği yeni
-            Realtime oturumunda
-            uygulanır.
-          */
-
         }
       );
 
 
-      voiceOptions.appendChild(
+      container.appendChild(
         button
       );
 
@@ -5459,13 +4025,12 @@ function renderVoiceOptions() {
 }
 
 
-/* =========================================================
-   THEME OPTIONS
-========================================================= */
-
 function renderThemeOptions() {
 
-  themeOptions.innerHTML = "";
+  const container =
+    $("themeOptions");
+
+  container.innerHTML = "";
 
 
   Object.entries(
@@ -5478,17 +4043,17 @@ function renderThemeOptions() {
           "button"
         );
 
-      button.type =
-        "button";
-
       button.className =
         "settingOption" +
         (
-          SETTINGS.theme ===
-          id
+          settings.theme === id
             ? " active"
             : ""
         );
+
+
+      button.type =
+        "button";
 
 
       button.innerHTML = `
@@ -5497,10 +4062,9 @@ function renderThemeOptions() {
           ${theme.name}
         </span>
 
-        <span class="settingCheck">
+        <span class="check">
           ${
-            SETTINGS.theme ===
-            id
+            settings.theme === id
               ? "✓"
               : ""
           }
@@ -5513,15 +4077,10 @@ function renderThemeOptions() {
         "click",
         () => {
 
-          SETTINGS.theme =
+          settings.theme =
             id;
 
-          currentTheme =
-            id;
-
-          applyTheme(
-            id
-          );
+          applyTheme();
 
           renderThemeOptions();
 
@@ -5529,7 +4088,7 @@ function renderThemeOptions() {
       );
 
 
-      themeOptions.appendChild(
+      container.appendChild(
         button
       );
 
@@ -5543,10 +4102,7 @@ function renderThemeOptions() {
    MEMORY
 ========================================================= */
 
-document
-  .getElementById(
-    "memoryMenuButton"
-  )
+$("memoryButton")
   .addEventListener(
     "click",
     () => {
@@ -5554,7 +4110,7 @@ document
       closeSidebar();
 
       alert(
-        "ASA'nın kalıcı hafızası Redis üzerinden çalışıyor."
+        "ASA'nın kalıcı hafıza sistemi backend tarafında çalışıyor."
       );
 
     }
@@ -5562,69 +4118,61 @@ document
 
 
 /* =========================================================
-   SHOW CHATS
+   VOICE MODE
 ========================================================= */
 
-document
-  .getElementById(
-    "showChatsButton"
-  )
+$("voiceButton")
   .addEventListener(
     "click",
-    () => {
+    openVoiceMode
+  );
 
-      renderChatList();
+
+$("voiceClose")
+  .addEventListener(
+    "click",
+    closeVoiceMode
+  );
+
+
+$("voiceControl")
+  .addEventListener(
+    "click",
+    async () => {
+
+      if (
+        realtime.connected
+      ) {
+
+        setVoiceStatus(
+          "Dinliyorum..."
+        );
+
+        return;
+
+      }
+
+
+      await startRealtime();
 
     }
   );
 
 
-/* =========================================================
-   REALTIME VOICE
-========================================================= */
-
-voiceButton.addEventListener(
-  "click",
-  openVoiceMode
-);
-
-
-voiceClose.addEventListener(
-  "click",
-  closeVoiceMode
-);
-
-
-voiceControl.addEventListener(
-  "click",
-  toggleRealtime
-);
-
-
 async function openVoiceMode() {
 
-  voiceMode.classList.add(
-    "open"
-  );
+  $("voiceMode")
+    .classList.add(
+      "open"
+    );
 
-  voiceMode.setAttribute(
-    "aria-hidden",
-    "false"
-  );
 
-  updateVoiceStatus(
+  setVoiceStatus(
     "ASA hazırlanıyor..."
   );
 
 
-  if (
-    !realtime.connected &&
-    !realtime.starting
-  ) {
-
-    await startRealtime();
-
-  }
+  await startRealtime();
 
 }
 
@@ -5633,62 +4181,36 @@ async function closeVoiceMode() {
 
   await stopRealtime();
 
-  voiceMode.classList.remove(
-    "open"
-  );
 
-  voiceMode.classList.remove(
-    "listening",
-    "speaking"
-  );
+  $("voiceMode")
+    .classList.remove(
+      "open"
+    );
 
-  voiceMode.setAttribute(
-    "aria-hidden",
-    "true"
-  );
 
-  updateVoiceStatus(
+  $("voiceMode")
+    .classList.remove(
+      "listening",
+      "speaking"
+    );
+
+
+  setVoiceStatus(
     "Hazırım"
   );
 
 }
 
 
-function toggleRealtime() {
-
-  if (
-    realtime.connected
-  ) {
-
-    sendRealtimeEvent({
-
-      type:
-        "input_audio_buffer.clear"
-
-    });
-
-    updateVoiceStatus(
-      "Bağlantı açık"
-    );
-
-    return;
-
-  }
-
-
-  startRealtime();
-
-}
-
-
 /* =========================================================
-   START REALTIME
+   REALTIME
 ========================================================= */
 
 async function startRealtime() {
 
   if (
-    realtime.starting
+    realtime.starting ||
+    realtime.connected
   ) {
     return;
   }
@@ -5698,21 +4220,20 @@ async function startRealtime() {
     true;
 
 
-  updateVoiceStatus(
-    "Mikrofon hazırlanıyor..."
-  );
-
-
   try {
+
+    setVoiceStatus(
+      "Mikrofon hazırlanıyor..."
+    );
+
 
     if (
       !navigator.mediaDevices ||
-      !navigator.mediaDevices
-        .getUserMedia
+      !navigator.mediaDevices.getUserMedia
     ) {
 
       throw new Error(
-        "Tarayıcı mikrofon erişimini desteklemiyor."
+        "Bu tarayıcı mikrofon erişimini desteklemiyor."
       );
 
     }
@@ -5722,7 +4243,7 @@ async function startRealtime() {
       await navigator
         .mediaDevices
         .getUserMedia({
-          audio: true
+          audio:true
         });
 
 
@@ -5733,6 +4254,7 @@ async function startRealtime() {
     const pc =
       new RTCPeerConnection();
 
+
     realtime.pc =
       pc;
 
@@ -5740,21 +4262,24 @@ async function startRealtime() {
     pc.ontrack =
       event => {
 
-        if (
-          event.streams &&
-          event.streams[0]
-        ) {
+        const stream =
+          event.streams?.[0];
 
-          remoteAudio.srcObject =
-            event.streams[0];
 
-          remoteAudio
-            .play()
-            .catch(
-              () => {}
-            );
-
+        if (!stream) {
+          return;
         }
+
+
+        remoteAudio.srcObject =
+          stream;
+
+
+        remoteAudio
+          .play()
+          .catch(
+            () => {}
+          );
 
       };
 
@@ -5768,13 +4293,16 @@ async function startRealtime() {
 
         if (
           state ===
-            "connected"
+          "connected"
         ) {
 
           realtime.connected =
             true;
 
-          updateVoiceStatus(
+          realtime.starting =
+            false;
+
+          setVoiceStatus(
             "Dinliyorum..."
           );
 
@@ -5782,17 +4310,16 @@ async function startRealtime() {
 
 
         if (
-          state ===
-            "failed" ||
-          state ===
-            "disconnected"
+          state === "failed" ||
+          state === "disconnected" ||
+          state === "closed"
         ) {
 
           realtime.connected =
             false;
 
-          updateVoiceStatus(
-            "Sesli bağlantı kesildi."
+          setVoiceStatus(
+            "Ses bağlantısı kesildi."
           );
 
         }
@@ -5819,6 +4346,7 @@ async function startRealtime() {
         "oai-events"
       );
 
+
     realtime.dc =
       dc;
 
@@ -5829,85 +4357,12 @@ async function startRealtime() {
         realtime.connected =
           true;
 
-        updateVoiceStatus(
+        realtime.starting =
+          false;
+
+        setVoiceStatus(
           "Dinliyorum..."
         );
-
-
-        sendRealtimeEvent({
-
-          type:
-            "session.update",
-
-          session: {
-
-            type:
-              "realtime",
-
-            model:
-              "gpt-realtime",
-
-            instructions:
-              `
-Sen ASA'sın.
-Kullanıcının adı Alperen.
-Türkçe konuş.
-Samimi, doğal ve zeki ol.
-Kısa konuşmalarda kısa cevap ver.
-Kullanıcıyla gerçek bir sesli sohbet yapıyormuş gibi davran.
-Robotik ve gereksiz uzun konuşma.
-              `.trim(),
-
-            audio: {
-
-              input: {
-
-                turn_detection: {
-
-                  type:
-                    "server_vad",
-
-                  threshold:
-                    0.5,
-
-                  prefix_padding_ms:
-                    300,
-
-                  silence_duration_ms:
-                    500,
-
-                  create_response:
-                    true,
-
-                  interrupt_response:
-                    true
-
-                },
-
-                transcription: {
-
-                  model:
-                    "gpt-4o-mini-transcribe",
-
-                  language:
-                    "tr"
-
-                }
-
-              },
-
-              output: {
-
-                voice:
-                  SETTINGS.voice
-
-              }
-
-            }
-
-          }
-
-        });
 
       };
 
@@ -5926,11 +4381,11 @@ Robotik ve gereksiz uzun konuşma.
       error => {
 
         console.error(
-          "Realtime DataChannel:",
+          "ASA realtime data channel:",
           error
         );
 
-        updateVoiceStatus(
+        setVoiceStatus(
           "Ses bağlantısında hata oluştu."
         );
 
@@ -5946,36 +4401,35 @@ Robotik ve gereksiz uzun konuşma.
     );
 
 
-    updateVoiceStatus(
+    setVoiceStatus(
       "ASA'ya bağlanıyorum..."
     );
 
 
     /*
-      /api/realtime endpoint'i
-      OpenAI için kısa ömürlü
-      client secret döndürür.
+      Backend sadece kısa ömürlü
+      client secret üretir.
+
+      OPENAI_API_KEY hiçbir zaman
+      tarayıcıya gönderilmez.
     */
 
     const tokenResponse =
       await fetch(
         REALTIME_URL,
         {
-          method: "POST",
+          method:"POST",
 
-          headers: {
+          headers:{
             "Content-Type":
               "application/json"
           },
 
           body:
             JSON.stringify({
-
               voice:
-                SETTINGS.voice
-
+                settings.voice
             })
-
         }
       );
 
@@ -5996,57 +4450,46 @@ Robotik ve gereksiz uzun konuşma.
     }
 
 
-    const ephemeralKey =
-      extractRealtimeKey(
-        tokenData
-      );
+    const clientSecret =
+      tokenData.clientSecret ||
+      tokenData.client_secret?.value ||
+      tokenData.value;
 
 
-    if (
-      !ephemeralKey
-    ) {
+    if (!clientSecret) {
 
       throw new Error(
-        "Realtime endpoint geçerli bir client secret döndürmedi."
+        "Backend client secret döndürmedi."
       );
 
     }
 
 
     /*
-      WebRTC SDP teklifini
-      OpenAI Realtime çağrısına
-      gönderiyoruz.
+      WebRTC SDP bağlantısı.
     */
 
     const sdpResponse =
       await fetch(
         "https://api.openai.com/v1/realtime/calls",
         {
+          method:"POST",
 
-          method:
-            "POST",
-
-          headers: {
-
+          headers:{
             Authorization:
-              `Bearer ${ephemeralKey}`,
+              `Bearer ${clientSecret}`,
 
             "Content-Type":
               "application/sdp"
-
           },
 
           body:
             offer.sdp
-
         }
       );
 
 
-    if (
-      !sdpResponse.ok
-    ) {
+    if (!sdpResponse.ok) {
 
       const errorText =
         await sdpResponse.text();
@@ -6059,31 +4502,20 @@ Robotik ve gereksiz uzun konuşma.
     }
 
 
-    const answerSdp =
+    const answer =
       await sdpResponse.text();
 
 
     await pc.setRemoteDescription({
 
-      type:
-        "answer",
+      type:"answer",
 
-      sdp:
-        answerSdp
+      sdp:answer
 
     });
 
 
-    realtime.starting =
-      false;
-
-
-    updateVoiceStatus(
-      "Dinliyorum..."
-    );
-
-
-  } catch (error) {
+  } catch(error) {
 
     console.error(
       "ASA REALTIME:",
@@ -6094,48 +4526,11 @@ Robotik ve gereksiz uzun konuşma.
     await stopRealtime();
 
 
-    updateVoiceStatus(
-      "<strong>Sesli bağlantı kurulamadı.</strong>"
+    setVoiceStatus(
+      "Sesli bağlantı kurulamadı."
     );
 
-
   }
-
-}
-
-
-/* =========================================================
-   REALTIME KEY
-========================================================= */
-
-function extractRealtimeKey(
-  data
-) {
-
-  if (
-    !data
-  ) {
-    return null;
-  }
-
-
-  if (
-    typeof data ===
-    "string"
-  ) {
-    return data;
-  }
-
-
-  return (
-    data.client_secret?.value ||
-    data.client_secret ||
-    data.value ||
-    data.token ||
-    data.key ||
-    data.secret ||
-    null
-  );
 
 }
 
@@ -6144,36 +4539,7 @@ function extractRealtimeKey(
    REALTIME EVENTS
 ========================================================= */
 
-function sendRealtimeEvent(
-  event
-) {
-
-  if (
-    !realtime.dc ||
-    realtime.dc.readyState !==
-      "open"
-  ) {
-
-    return false;
-
-  }
-
-
-  realtime.dc.send(
-    JSON.stringify(
-      event
-    )
-  );
-
-
-  return true;
-
-}
-
-
-function handleRealtimeEvent(
-  raw
-) {
+function handleRealtimeEvent(raw) {
 
   let event;
 
@@ -6181,9 +4547,7 @@ function handleRealtimeEvent(
   try {
 
     event =
-      JSON.parse(
-        raw
-      );
+      JSON.parse(raw);
 
   } catch {
 
@@ -6192,7 +4556,7 @@ function handleRealtimeEvent(
   }
 
 
-  switch (
+  switch(
     event.type
   ) {
 
@@ -6200,15 +4564,17 @@ function handleRealtimeEvent(
     case
       "input_audio_buffer.speech_started":
 
-      voiceMode.classList.add(
-        "listening"
-      );
+      $("voiceMode")
+        .classList.add(
+          "listening"
+        );
 
-      voiceMode.classList.remove(
-        "speaking"
-      );
+      $("voiceMode")
+        .classList.remove(
+          "speaking"
+        );
 
-      updateVoiceStatus(
+      setVoiceStatus(
         "Dinliyorum..."
       );
 
@@ -6218,11 +4584,12 @@ function handleRealtimeEvent(
     case
       "input_audio_buffer.speech_stopped":
 
-      voiceMode.classList.remove(
-        "listening"
-      );
+      $("voiceMode")
+        .classList.remove(
+          "listening"
+        );
 
-      updateVoiceStatus(
+      setVoiceStatus(
         "ASA düşünüyor..."
       );
 
@@ -6232,15 +4599,17 @@ function handleRealtimeEvent(
     case
       "response.created":
 
-      voiceMode.classList.remove(
-        "listening"
-      );
+      $("voiceMode")
+        .classList.remove(
+          "listening"
+        );
 
-      voiceMode.classList.add(
-        "speaking"
-      );
+      $("voiceMode")
+        .classList.add(
+          "speaking"
+        );
 
-      updateVoiceStatus(
+      setVoiceStatus(
         "ASA konuşuyor..."
       );
 
@@ -6250,19 +4619,10 @@ function handleRealtimeEvent(
     case
       "response.audio.delta":
 
-      voiceMode.classList.add(
-        "speaking"
-      );
-
-      break;
-
-
-    case
-      "response.audio_transcript.delta":
-
-      voiceMode.classList.add(
-        "speaking"
-      );
+      $("voiceMode")
+        .classList.add(
+          "speaking"
+        );
 
       break;
 
@@ -6270,11 +4630,12 @@ function handleRealtimeEvent(
     case
       "response.audio.done":
 
-      voiceMode.classList.remove(
-        "speaking"
-      );
+      $("voiceMode")
+        .classList.remove(
+          "speaking"
+        );
 
-      updateVoiceStatus(
+      setVoiceStatus(
         "Dinliyorum..."
       );
 
@@ -6284,37 +4645,40 @@ function handleRealtimeEvent(
     case
       "response.done":
 
-      voiceMode.classList.remove(
-        "speaking"
-      );
+      $("voiceMode")
+        .classList.remove(
+          "speaking"
+        );
 
-      updateVoiceStatus(
+      setVoiceStatus(
         "Dinliyorum..."
       );
 
       break;
 
 
-    case
-      "error":
+    case "error":
 
       console.error(
-        "Realtime server error:",
+        "OpenAI Realtime:",
         event
       );
 
-      updateVoiceStatus(
-        "<strong>ASA'nın ses bağlantısında bir hata oluştu.</strong>"
+      setVoiceStatus(
+        "ASA'nın ses bağlantısında bir hata oluştu."
       );
-
-      break;
-
-
-    default:
 
       break;
 
   }
+
+}
+
+
+function setVoiceStatus(text) {
+
+  voiceStatus.textContent =
+    text;
 
 }
 
@@ -6332,35 +4696,25 @@ async function stopRealtime() {
     false;
 
 
-  if (
-    realtime.dc
-  ) {
+  if (realtime.dc) {
 
     try {
-
       realtime.dc.close();
-
     } catch {}
 
   }
 
 
-  if (
-    realtime.pc
-  ) {
+  if (realtime.pc) {
 
     try {
-
       realtime.pc.close();
-
     } catch {}
 
   }
 
 
-  if (
-    realtime.stream
-  ) {
+  if (realtime.stream) {
 
     realtime.stream
       .getTracks()
@@ -6368,9 +4722,7 @@ async function stopRealtime() {
         track => {
 
           try {
-
             track.stop();
-
           } catch {}
 
         }
@@ -6389,10 +4741,11 @@ async function stopRealtime() {
     null;
 
 
-  voiceMode.classList.remove(
-    "listening",
-    "speaking"
-  );
+  $("voiceMode")
+    .classList.remove(
+      "listening",
+      "speaking"
+    );
 
 
   try {
@@ -6408,98 +4761,73 @@ async function stopRealtime() {
 
 
 /* =========================================================
-   CLOSE MODALS BY BACKDROP
+   MODAL BACKDROPS
 ========================================================= */
 
-[
-  renameModal,
-  deleteModal,
-  settingsModal,
-  voiceSettingsModal,
-  themeSettingsModal
-].forEach(
-  modal => {
+document
+  .querySelectorAll(
+    ".modalOverlay"
+  )
+  .forEach(
+    modal => {
 
-    modal.addEventListener(
-      "click",
-      event => {
+      modal.addEventListener(
+        "click",
+        event => {
 
-        if (
-          event.target ===
-          modal
-        ) {
+          if (
+            event.target ===
+            modal
+          ) {
 
-          modal.classList.remove(
-            "open"
-          );
+            modal.classList.remove(
+              "open"
+            );
+
+          }
 
         }
+      );
 
-      }
-    );
-
-  }
-);
+    }
+  );
 
 
 /* =========================================================
-   INITIAL LOAD
+   INITIAL
 ========================================================= */
 
 showEmpty();
 
 renderChatList();
 
-loadActiveConversation();
+renderVoiceOptions();
+
+renderThemeOptions();
 
 
-async function loadActiveConversation() {
-
-  const id =
-    getActiveConversationId();
-
-
-  conversationId =
-    id;
-
-
-  const conversations =
-    loadConversations();
-
-
-  const exists =
-    conversations.some(
+const existingConversation =
+  getConversations()
+    .some(
       x =>
-        x.id === id
+        x.id ===
+        conversationId
     );
 
 
-  if (!exists) {
+if (
+  existingConversation
+) {
 
-    showEmpty();
-
-    return;
-
-  }
-
-
-  await openConversation(
-    id
+  openConversation(
+    conversationId
   );
 
 }
 
 
 /* =========================================================
-   VOICE OPTION INITIAL RENDER
-========================================================= */
-
-renderVoiceOptions();
-renderThemeOptions();
-
-
-/* =========================================================
-   PAGE CLEANUP
+   CLEANUP
 ========================================================= */
 
 window.addEventListener(
@@ -6510,7 +4838,6 @@ window.addEventListener(
 
   }
 );
-
 </script>
 
 </body>
