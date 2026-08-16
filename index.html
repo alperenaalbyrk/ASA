@@ -81,10 +81,8 @@ button{
 
 .app{
   position:relative;
-
   width:100%;
   height:100dvh;
-
   overflow:hidden;
 
   background:
@@ -107,7 +105,6 @@ button{
 
 .header{
   position:absolute;
-
   top:0;
   left:0;
   right:0;
@@ -121,7 +118,6 @@ button{
 
   display:flex;
   align-items:center;
-
   gap:14px;
 
   z-index:30;
@@ -143,7 +139,6 @@ button{
 .menuButton{
   width:56px;
   height:56px;
-
   flex-shrink:0;
 
   border-radius:18px;
@@ -170,18 +165,14 @@ button{
 .menuLines span{
   width:25px;
   height:2px;
-
   border-radius:2px;
-
   background:#f5f2f8;
 }
 
 .brandText{
   font-size:29px;
   line-height:1;
-
   font-weight:700;
-
   letter-spacing:.29em;
 }
 
@@ -206,7 +197,6 @@ button{
     170px;
 
   overscroll-behavior:contain;
-
   scroll-behavior:smooth;
 }
 
@@ -280,9 +270,7 @@ button{
 
 .message{
   width:100%;
-
   display:flex;
-
   margin-bottom:28px;
 }
 
@@ -434,7 +422,6 @@ button{
 
   display:flex;
   align-items:center;
-
   gap:3px;
 
   padding:6px;
@@ -508,7 +495,6 @@ button{
 .voiceButton{
   width:48px;
   height:50px;
-
   color:#f2eef8;
 }
 
@@ -595,7 +581,6 @@ button{
   bottom:76px;
 
   display:flex;
-
   gap:8px;
 
   padding:8px;
@@ -722,7 +707,7 @@ button{
   display:flex;
   align-items:center;
 
-  margin-bottom:42px;
+  margin-bottom:30px;
 }
 
 .sidebarBrand{
@@ -752,7 +737,7 @@ button{
 .menuSectionTitle{
   margin:
     0 8px
-    14px;
+    12px;
 
   color:#777484;
 
@@ -801,7 +786,7 @@ button{
 .menuDivider{
   height:1px;
 
-  margin:20px 8px;
+  margin:16px 8px;
 
   background:
     rgba(255,255,255,.075);
@@ -816,7 +801,7 @@ button{
 }
 
 .historyGroup{
-  margin-bottom:23px;
+  margin-bottom:20px;
 }
 
 .historyDate{
@@ -834,15 +819,15 @@ button{
   position:relative;
 
   width:100%;
-  min-height:70px;
+  min-height:68px;
 
   padding:
-    13px
+    12px
     52px
-    13px
+    12px
     15px;
 
-  margin-bottom:8px;
+  margin-bottom:7px;
 
   border-radius:17px;
 
@@ -995,6 +980,7 @@ button{
     rgba(0,0,0,.72);
 
   backdrop-filter:blur(11px);
+  -webkit-backdrop-filter:blur(11px);
 }
 
 .modalOverlay.open{
@@ -1004,11 +990,16 @@ button{
 .modal{
   width:min(470px,100%);
 
-  padding:27px;
+  padding:26px;
 
-  border-radius:27px;
+  border-radius:28px;
 
-  background:#12111d;
+  background:
+    linear-gradient(
+      180deg,
+      #171622,
+      #11101a
+    );
 
   border:
     1px solid rgba(255,255,255,.11);
@@ -1081,49 +1072,320 @@ button{
 }
 
 /* =========================================================
-   SETTINGS
+   SETTINGS — iOS STYLE
 ========================================================= */
 
-.settingsList{
+.settingsModalBox{
+  width:min(520px,100%);
+
+  max-height:
+    calc(100dvh - 44px);
+
+  overflow:hidden;
+
   display:flex;
   flex-direction:column;
 
-  gap:9px;
+  border-radius:30px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #15141f,
+      #0e0d16
+    );
+
+  border:
+    1px solid rgba(255,255,255,.1);
+
+  box-shadow:
+    0 40px 110px rgba(0,0,0,.7);
 }
 
-.settingOption{
-  width:100%;
-  min-height:64px;
+.settingsHeader{
+  height:76px;
 
-  padding:0 15px;
+  padding:0 18px;
 
   display:flex;
   align-items:center;
-  justify-content:space-between;
 
-  border-radius:17px;
+  border-bottom:
+    1px solid rgba(255,255,255,.07);
+}
+
+.settingsBack{
+  min-width:76px;
+  height:46px;
+
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+
+  background:transparent;
+
+  color:var(--accent2);
+
+  font-size:16px;
+}
+
+.settingsTitle{
+  flex:1;
+
+  text-align:center;
+
+  font-size:20px;
+  font-weight:700;
+}
+
+.settingsHeaderSpacer{
+  min-width:76px;
+}
+
+.settingsBody{
+  overflow-y:auto;
+
+  padding:18px;
+}
+
+.settingsGroup{
+  margin-bottom:22px;
+}
+
+.settingsGroupTitle{
+  padding:
+    0 10px
+    9px;
+
+  color:#777483;
+
+  font-size:11px;
+  font-weight:800;
+
+  letter-spacing:.28em;
+}
+
+.settingsCard{
+  overflow:hidden;
+
+  border-radius:20px;
 
   background:
     rgba(255,255,255,.035);
 
   border:
-    1px solid rgba(255,255,255,.06);
+    1px solid rgba(255,255,255,.055);
+}
+
+.settingsRow{
+  width:100%;
+  min-height:68px;
+
+  padding:
+    0 17px;
+
+  display:flex;
+  align-items:center;
+  gap:13px;
+
+  background:transparent;
 
   text-align:left;
 }
 
-.settingOption.active{
-  border-color:
-    rgba(169,51,255,.55);
+.settingsRow + .settingsRow{
+  border-top:
+    1px solid rgba(255,255,255,.055);
+}
+
+.settingsRow:active{
+  background:
+    rgba(255,255,255,.05);
+}
+
+.settingsRowIcon{
+  width:38px;
+  height:38px;
+
+  flex-shrink:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:12px;
 
   background:
-    rgba(148,44,245,.13);
+    rgba(163,49,255,.13);
+
+  color:var(--accent2);
+
+  font-size:19px;
+}
+
+.settingsRowContent{
+  flex:1;
+  min-width:0;
+}
+
+.settingsRowTitle{
+  font-size:16px;
+  font-weight:600;
+}
+
+.settingsRowValue{
+  margin-top:3px;
+
+  color:#777483;
+
+  font-size:12px;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.settingsChevron{
+  color:#666270;
+  font-size:24px;
+}
+
+.settingsFooter{
+  padding:4px 10px 15px;
+
+  color:#555260;
+
+  text-align:center;
+
+  font-size:11px;
+}
+
+/* =========================================================
+   SETTINGS OPTIONS
+========================================================= */
+
+.optionsModalBox{
+  width:min(500px,100%);
+
+  max-height:
+    calc(100dvh - 44px);
+
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
+
+  border-radius:30px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #15141f,
+      #0e0d16
+    );
+
+  border:
+    1px solid rgba(255,255,255,.1);
+
+  box-shadow:
+    0 40px 110px rgba(0,0,0,.7);
+}
+
+.optionHeader{
+  height:76px;
+
+  padding:0 18px;
+
+  display:flex;
+  align-items:center;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.07);
+}
+
+.optionBack{
+  min-width:76px;
+  height:46px;
+
+  background:transparent;
+
+  color:var(--accent2);
+
+  text-align:left;
+
+  font-size:16px;
+}
+
+.optionTitle{
+  flex:1;
+
+  text-align:center;
+
+  font-size:20px;
+  font-weight:700;
+}
+
+.optionSpacer{
+  min-width:76px;
+}
+
+.optionBody{
+  overflow-y:auto;
+  padding:18px;
+}
+
+.optionCard{
+  overflow:hidden;
+
+  border-radius:20px;
+
+  background:
+    rgba(255,255,255,.035);
+
+  border:
+    1px solid rgba(255,255,255,.055);
+}
+
+.settingOption{
+  width:100%;
+  min-height:68px;
+
+  padding:
+    0 17px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  background:transparent;
+
+  text-align:left;
+}
+
+.settingOption + .settingOption{
+  border-top:
+    1px solid rgba(255,255,255,.055);
+}
+
+.settingOption:active{
+  background:
+    rgba(255,255,255,.05);
+}
+
+.settingOption.active{
+  background:
+    rgba(148,44,245,.11);
+}
+
+.settingName{
+  font-size:16px;
+  font-weight:600;
 }
 
 .settingDescription{
   display:block;
 
-  margin-top:3px;
+  margin-top:4px;
 
   color:#777483;
 
@@ -1131,11 +1393,31 @@ button{
 }
 
 .settingCheck{
-  color:var(--accent2);
+  width:28px;
+  height:28px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  color:transparent;
+}
+
+.settingOption.active .settingCheck{
+  color:white;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent2)
+    );
 }
 
 /* =========================================================
-   ATTACHMENT SHEET
+   ATTACHMENT SHEET — APPLE STYLE
 ========================================================= */
 
 .sheetOverlay{
@@ -1148,12 +1430,16 @@ button{
   display:flex;
   align-items:flex-end;
 
-  padding:14px;
+  padding:
+    12px
+    12px
+    calc(12px + var(--safe-bottom));
 
   background:
     rgba(0,0,0,.62);
 
-  backdrop-filter:blur(8px);
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
 
   opacity:0;
   pointer-events:none;
@@ -1169,18 +1455,21 @@ button{
 .attachmentSheet{
   width:100%;
 
-  padding:10px;
+  padding:8px;
 
-  border-radius:27px;
+  border-radius:26px;
 
-  background:#14131e;
+  background:
+    rgba(22,21,31,.98);
 
   border:
     1px solid rgba(255,255,255,.1);
 
   transform:translateY(20px);
 
-  transition:.25s;
+  transition:
+    transform .25s
+    cubic-bezier(.22,.8,.25,1);
 }
 
 .sheetOverlay.open .attachmentSheet{
@@ -1188,7 +1477,10 @@ button{
 }
 
 .sheetTitle{
-  padding:13px 12px 10px;
+  padding:
+    13px
+    12px
+    10px;
 
   color:#777483;
 
@@ -1200,12 +1492,13 @@ button{
 
 .sheetItem{
   width:100%;
-  min-height:57px;
+  min-height:58px;
 
   padding:0 14px;
 
   display:flex;
   align-items:center;
+  gap:13px;
 
   background:transparent;
 
@@ -1218,19 +1511,37 @@ button{
 
 .sheetItem:active{
   background:
+    rgba(255,255,255,.07);
+}
+
+.sheetIcon{
+  width:34px;
+  height:34px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:10px;
+
+  background:
     rgba(255,255,255,.06);
+
+  color:var(--accent2);
+
+  font-size:17px;
 }
 
 .sheetCancel{
   width:100%;
-  height:53px;
+  height:54px;
 
   margin-top:7px;
 
   border-radius:17px;
 
   background:
-    rgba(255,255,255,.06);
+    rgba(255,255,255,.07);
 
   color:#aaa7b5;
 
@@ -1500,6 +1811,18 @@ button{
     font-size:16px;
   }
 
+  .modalOverlay{
+    padding:12px;
+  }
+
+  .settingsModalBox,
+  .optionsModalBox{
+    max-height:
+      calc(100dvh - 24px);
+
+    border-radius:27px;
+  }
+
 }
 
 </style>
@@ -1510,97 +1833,95 @@ button{
 
 <div class="app">
 
-<!-- =======================================================
-     HEADER
-======================================================= -->
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
 
-<header class="header">
+  <header class="header">
 
-  <button
-    class="menuButton"
-    id="menuButton"
-    type="button"
-    aria-label="Menü"
-  >
+    <button
+      class="menuButton"
+      id="menuButton"
+      type="button"
+      aria-label="Menü"
+    >
+      <span class="menuLines">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
 
-    <span class="menuLines">
-      <span></span>
-      <span></span>
-      <span></span>
-    </span>
+    <div class="brandText">
+      ASA
+    </div>
 
-  </button>
+  </header>
 
-  <div class="brandText">
-    ASA
+
+  <!-- =====================================================
+       CHAT
+  ====================================================== -->
+
+  <main
+    class="chat"
+    id="chat"
+  ></main>
+
+
+  <!-- =====================================================
+       INPUT
+  ====================================================== -->
+
+  <div class="inputArea">
+
+    <div
+      class="selectedPreview"
+      id="selectedPreview"
+      hidden
+    ></div>
+
+    <div class="inputBox">
+
+      <button
+        class="plusButton"
+        id="plusButton"
+        type="button"
+        aria-label="Ekle"
+      >
+        +
+      </button>
+
+      <input
+        class="input"
+        id="messageInput"
+        type="text"
+        autocomplete="off"
+        enterkeyhint="send"
+        placeholder="ASA'ya bir şey sor..."
+      >
+
+      <button
+        class="voiceButton"
+        id="voiceButton"
+        type="button"
+        aria-label="Sesli sohbet"
+      >
+        <span class="voiceIcon"></span>
+      </button>
+
+      <button
+        class="sendButton"
+        id="sendButton"
+        type="button"
+        aria-label="Gönder"
+      >
+        →
+      </button>
+
+    </div>
+
   </div>
-
-</header>
-
-
-<!-- =======================================================
-     CHAT
-======================================================= -->
-
-<main
-  class="chat"
-  id="chat"
-></main>
-
-
-<!-- =======================================================
-     INPUT
-======================================================= -->
-
-<div class="inputArea">
-
-  <div
-    class="selectedPreview"
-    id="selectedPreview"
-    hidden
-  ></div>
-
-  <div class="inputBox">
-
-    <button
-      class="plusButton"
-      id="plusButton"
-      type="button"
-      aria-label="Ekle"
-    >
-      +
-    </button>
-
-    <input
-      class="input"
-      id="messageInput"
-      type="text"
-      autocomplete="off"
-      enterkeyhint="send"
-      placeholder="ASA'ya bir şey sor..."
-    >
-
-    <button
-      class="voiceButton"
-      id="voiceButton"
-      type="button"
-      aria-label="Sesli sohbet"
-    >
-      <span class="voiceIcon"></span>
-    </button>
-
-    <button
-      class="sendButton"
-      id="sendButton"
-      type="button"
-      aria-label="Gönder"
-    >
-      →
-    </button>
-
-  </div>
-
-</div>
 
 </div>
 
@@ -1662,92 +1983,75 @@ button{
       class="closeButton"
       id="closeMenu"
       type="button"
+      aria-label="Kapat"
     >
       ×
     </button>
 
   </div>
 
+
   <div class="menuSectionTitle">
     SOHBET
   </div>
+
 
   <button
     class="menuItem"
     id="newChatButton"
     type="button"
   >
-
-    <span class="menuIcon">
-      +
-    </span>
-
-    <span>
-      Yeni Sohbet
-    </span>
-
+    <span class="menuIcon">+</span>
+    <span>Yeni Sohbet</span>
   </button>
+
 
   <button
     class="menuItem"
     id="showChatsButton"
     type="button"
   >
-
-    <span class="menuIcon">
-      ≡
-    </span>
-
-    <span>
-      Sohbetler
-    </span>
-
+    <span class="menuIcon">≡</span>
+    <span>Sohbetler</span>
   </button>
 
+
   <div class="menuDivider"></div>
+
 
   <div class="menuSectionTitle">
     ASA
   </div>
+
 
   <button
     class="menuItem"
     id="memoryMenuButton"
     type="button"
   >
-
-    <span class="menuIcon">
-      ◉
-    </span>
-
-    <span>
-      Hafızam
-    </span>
-
+    <span class="menuIcon">◉</span>
+    <span>Hafızam</span>
   </button>
+
 
   <button
     class="menuItem"
     id="settingsMenuButton"
     type="button"
   >
-
-    <span class="menuIcon">
-      ⚙
-    </span>
-
-    <span>
-      Ayarlar
-    </span>
-
+    <span class="menuIcon">⚙</span>
+    <span>Ayarlar</span>
   </button>
 
+
   <div class="menuDivider"></div>
+
 
   <div
     class="chatList"
     id="chatList"
   ></div>
+
 
   <div class="sidebarFooter">
     ASA · Alperen'in kişisel yapay zeka asistanı
@@ -1785,7 +2089,7 @@ button{
 
 
 <!-- =======================================================
-     ATTACHMENT SHEET
+     APPLE STYLE ATTACHMENT SHEET
 ======================================================= -->
 
 <div
@@ -1799,29 +2103,36 @@ button{
       EKLE
     </div>
 
+
     <button
       class="sheetItem"
       id="photosButton"
       type="button"
     >
-      Fotoğraflar
+      <span class="sheetIcon">▣</span>
+      <span>Fotoğraflar</span>
     </button>
+
 
     <button
       class="sheetItem"
       id="cameraButton"
       type="button"
     >
-      Kamera
+      <span class="sheetIcon">◉</span>
+      <span>Kamera</span>
     </button>
+
 
     <button
       class="sheetItem"
       id="filesButton"
       type="button"
     >
-      Dosyalar
+      <span class="sheetIcon">□</span>
+      <span>Dosyalar</span>
     </button>
+
 
     <button
       class="sheetCancel"
@@ -1837,7 +2148,7 @@ button{
 
 
 <!-- =======================================================
-     RENAME MODAL
+     RENAME
 ======================================================= -->
 
 <div
@@ -1884,7 +2195,7 @@ button{
 
 
 <!-- =======================================================
-     DELETE MODAL
+     DELETE
 ======================================================= -->
 
 <div
@@ -1939,69 +2250,178 @@ button{
   id="settingsModal"
 >
 
-  <div class="modal">
+  <div class="settingsModalBox">
 
-    <h2>
-      Ayarlar
-    </h2>
-
-    <div class="settingsList">
+    <div class="settingsHeader">
 
       <button
-        class="settingOption"
-        id="voiceSettingsButton"
-        type="button"
-      >
-
-        <span>
-
-          Ses
-
-          <small class="settingDescription">
-            ASA'nın konuşma sesi
-          </small>
-
-        </span>
-
-        <span>
-          ›
-        </span>
-
-      </button>
-
-      <button
-        class="settingOption"
-        id="themeSettingsButton"
-        type="button"
-      >
-
-        <span>
-
-          Tema
-
-          <small class="settingDescription">
-            Görünüm ve renk
-          </small>
-
-        </span>
-
-        <span>
-          ›
-        </span>
-
-      </button>
-
-    </div>
-
-    <div class="modalButtons">
-
-      <button
-        class="modalButton"
+        class="settingsBack"
         id="settingsClose"
         type="button"
       >
         Kapat
       </button>
+
+      <div class="settingsTitle">
+        Ayarlar
+      </div>
+
+      <div class="settingsHeaderSpacer"></div>
+
+    </div>
+
+
+    <div class="settingsBody">
+
+      <div class="settingsGroup">
+
+        <div class="settingsGroupTitle">
+          ASA
+        </div>
+
+        <div class="settingsCard">
+
+          <button
+            class="settingsRow"
+            id="voiceSettingsButton"
+            type="button"
+          >
+
+            <span class="settingsRowIcon">
+              ♫
+            </span>
+
+            <span class="settingsRowContent">
+
+              <span class="settingsRowTitle">
+                Ses
+              </span>
+
+              <span
+                class="settingsRowValue"
+                id="currentVoiceValue"
+              >
+                Marin
+              </span>
+
+            </span>
+
+            <span class="settingsChevron">
+              ›
+            </span>
+
+          </button>
+
+
+          <button
+            class="settingsRow"
+            id="themeSettingsButton"
+            type="button"
+          >
+
+            <span class="settingsRowIcon">
+              ◐
+            </span>
+
+            <span class="settingsRowContent">
+
+              <span class="settingsRowTitle">
+                Tema
+              </span>
+
+              <span
+                class="settingsRowValue"
+                id="currentThemeValue"
+              >
+                Siyah · Mor
+              </span>
+
+            </span>
+
+            <span class="settingsChevron">
+              ›
+            </span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="settingsGroup">
+
+        <div class="settingsGroupTitle">
+          UYGULAMA
+        </div>
+
+        <div class="settingsCard">
+
+          <button
+            class="settingsRow"
+            id="memorySettingsButton"
+            type="button"
+          >
+
+            <span class="settingsRowIcon">
+              ◉
+            </span>
+
+            <span class="settingsRowContent">
+
+              <span class="settingsRowTitle">
+                Hafıza
+              </span>
+
+              <span class="settingsRowValue">
+                ASA'nın kalıcı hafızası
+              </span>
+
+            </span>
+
+            <span class="settingsChevron">
+              ›
+            </span>
+
+          </button>
+
+
+          <button
+            class="settingsRow"
+            id="chatsSettingsButton"
+            type="button"
+          >
+
+            <span class="settingsRowIcon">
+              ≡
+            </span>
+
+            <span class="settingsRowContent">
+
+              <span class="settingsRowTitle">
+                Sohbetler
+              </span>
+
+              <span class="settingsRowValue">
+                Kayıtlı konuşmalar
+              </span>
+
+            </span>
+
+            <span class="settingsChevron">
+              ›
+            </span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="settingsFooter">
+        ASA · Alperen'in kişisel yapay zeka asistanı
+      </div>
 
     </div>
 
@@ -2019,26 +2439,33 @@ button{
   id="voiceSettingsModal"
 >
 
-  <div class="modal">
+  <div class="optionsModalBox">
 
-    <h2>
-      ASA'nın Sesi
-    </h2>
-
-    <div
-      class="settingsList"
-      id="voiceOptions"
-    ></div>
-
-    <div class="modalButtons">
+    <div class="optionHeader">
 
       <button
-        class="modalButton"
+        class="optionBack"
         id="voiceSettingsClose"
         type="button"
       >
-        Geri
+        ‹ Ayarlar
       </button>
+
+      <div class="optionTitle">
+        Ses
+      </div>
+
+      <div class="optionSpacer"></div>
+
+    </div>
+
+
+    <div class="optionBody">
+
+      <div
+        class="optionCard"
+        id="voiceOptions"
+      ></div>
 
     </div>
 
@@ -2056,26 +2483,33 @@ button{
   id="themeSettingsModal"
 >
 
-  <div class="modal">
+  <div class="optionsModalBox">
 
-    <h2>
-      ASA Teması
-    </h2>
-
-    <div
-      class="settingsList"
-      id="themeOptions"
-    ></div>
-
-    <div class="modalButtons">
+    <div class="optionHeader">
 
       <button
-        class="modalButton"
+        class="optionBack"
         id="themeSettingsClose"
         type="button"
       >
-        Geri
+        ‹ Ayarlar
       </button>
+
+      <div class="optionTitle">
+        Tema
+      </div>
+
+      <div class="optionSpacer"></div>
+
+    </div>
+
+
+    <div class="optionBody">
+
+      <div
+        class="optionCard"
+        id="themeOptions"
+      ></div>
 
     </div>
 
@@ -2103,11 +2537,13 @@ button{
       class="voiceClose"
       id="voiceClose"
       type="button"
+      aria-label="Sesli sohbeti kapat"
     >
       ×
     </button>
 
   </div>
+
 
   <div class="voiceCenter">
 
@@ -2125,6 +2561,7 @@ button{
 
   </div>
 
+
   <div class="voiceBottom">
 
     <button
@@ -2133,9 +2570,7 @@ button{
       type="button"
       aria-label="Mikrofon"
     >
-
       <span class="voiceIcon"></span>
-
     </button>
 
   </div>
@@ -2152,11 +2587,13 @@ button{
 
 <script>
 
+"use strict";
+
 /* =========================================================
    ASA FRONTEND
+   Realtime kodu burada YOK.
+   Realtime ayrı /realtime.js dosyasından çalışacak.
 ========================================================= */
-
-"use strict";
 
 
 /* =========================================================
@@ -2164,8 +2601,6 @@ button{
 ========================================================= */
 
 const API_URL = "/api/chat";
-
-const REALTIME_API_URL = "/api/realtime";
 
 const STORAGE_KEY =
   "asa_conversations_v5";
@@ -2202,6 +2637,12 @@ let settings = {
       "asa_theme_v5"
     ) || "purple"
 };
+
+
+/*
+  realtime.js bunu kullanacak.
+*/
+window.settings = settings;
 
 
 /* =========================================================
@@ -2360,34 +2801,14 @@ const themeOptions =
     "themeOptions"
   );
 
-const voiceMode =
+const currentVoiceValue =
   document.getElementById(
-    "voiceMode"
+    "currentVoiceValue"
   );
 
-const voiceStatus =
+const currentThemeValue =
   document.getElementById(
-    "voiceStatus"
-  );
-
-const voiceButton =
-  document.getElementById(
-    "voiceButton"
-  );
-
-const voiceClose =
-  document.getElementById(
-    "voiceClose"
-  );
-
-const voiceControl =
-  document.getElementById(
-    "voiceControl"
-  );
-
-const remoteAudio =
-  document.getElementById(
-    "remoteAudio"
+    "currentThemeValue"
   );
 
 
@@ -2425,6 +2846,8 @@ function saveSettings(){
     "asa_theme_v5",
     settings.theme
   );
+
+  window.settings = settings;
 
 }
 
@@ -2577,6 +3000,9 @@ function applyTheme(){
       "--accent2",
       theme.accent2
     );
+
+  currentThemeValue.textContent =
+    theme.name;
 
   saveSettings();
 
@@ -3613,14 +4039,9 @@ sheetOverlay.addEventListener(
 );
 
 
-/*
-  ÖNEMLİ:
-
-  iPhone'da input.click() kullanıcı
-  tıklamasının hemen içinde yapılmalı.
-
-  setTimeout kullanmıyoruz.
-*/
+/* =========================================================
+   FILE PICKERS
+========================================================= */
 
 document
   .getElementById(
@@ -4224,21 +4645,38 @@ function scrollBottom(){
    SETTINGS
 ========================================================= */
 
+function openSettings(){
+
+  closeMenu();
+
+  currentVoiceValue.textContent =
+    VOICES.find(
+      voice =>
+        voice[0] ===
+        settings.voice
+    )?.[1] ||
+    settings.voice;
+
+  currentThemeValue.textContent =
+    THEMES[
+      settings.theme
+    ]?.name ||
+    "Siyah · Mor";
+
+  settingsModal.classList.add(
+    "open"
+  );
+
+}
+
+
 document
   .getElementById(
     "settingsMenuButton"
   )
   .addEventListener(
     "click",
-    () => {
-
-      closeMenu();
-
-      settingsModal.classList.add(
-        "open"
-      );
-
-    }
+    openSettings
   );
 
 
@@ -4314,9 +4752,7 @@ document
         "open"
       );
 
-      settingsModal.classList.add(
-        "open"
-      );
+      openSettings();
 
     }
   );
@@ -4334,9 +4770,7 @@ document
         "open"
       );
 
-      settingsModal.classList.add(
-        "open"
-      );
+      openSettings();
 
     }
   );
@@ -4372,7 +4806,9 @@ function renderVoiceOptions(){
 
         <span>
 
-          ${name}
+          <span class="settingName">
+            ${name}
+          </span>
 
           <small class="settingDescription">
             ${description}
@@ -4381,11 +4817,7 @@ function renderVoiceOptions(){
         </span>
 
         <span class="settingCheck">
-          ${
-            settings.voice === id
-              ? "✓"
-              : ""
-          }
+          ✓
         </span>
 
       `;
@@ -4399,6 +4831,9 @@ function renderVoiceOptions(){
             id;
 
           saveSettings();
+
+          currentVoiceValue.textContent =
+            name;
 
           renderVoiceOptions();
 
@@ -4446,17 +4881,15 @@ function renderThemeOptions(){
         button.innerHTML = `
 
           <span>
-            ${theme.name}
+
+            <span class="settingName">
+              ${theme.name}
+            </span>
+
           </span>
 
           <span class="settingCheck">
-
-            ${
-              settings.theme === id
-                ? "✓"
-                : ""
-            }
-
+            ✓
           </span>
 
         `;
@@ -4470,6 +4903,9 @@ function renderThemeOptions(){
               id;
 
             applyTheme();
+
+            currentThemeValue.textContent =
+              theme.name;
 
             renderThemeOptions();
 
@@ -4488,7 +4924,7 @@ function renderThemeOptions(){
 
 
 /* =========================================================
-   MEMORY
+   MEMORY / CHAT SETTINGS
 ========================================================= */
 
 document
@@ -4509,9 +4945,25 @@ document
   );
 
 
-/* =========================================================
-   SHOW CHATS
-========================================================= */
+document
+  .getElementById(
+    "memorySettingsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      settingsModal.classList.remove(
+        "open"
+      );
+
+      alert(
+        "ASA'nın kalıcı hafızası Redis üzerinde çalışıyor."
+      );
+
+    }
+  );
+
 
 document
   .getElementById(
@@ -4522,6 +4974,24 @@ document
     () => {
 
       renderChatList();
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "chatsSettingsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      settingsModal.classList.remove(
+        "open"
+      );
+
+      openMenu();
 
     }
   );
@@ -4563,895 +5033,6 @@ document
 
 
 /* =========================================================
-   REALTIME VOICE
-========================================================= */
-
-let realtimePeer = null;
-
-let realtimeStream = null;
-
-let realtimeDataChannel = null;
-
-let realtimeConnected = false;
-
-let realtimeConnecting = false;
-
-
-/* ---------------------------------------------------------
-   STATUS
---------------------------------------------------------- */
-
-function setVoiceStatus(text){
-
-  voiceStatus.textContent =
-    text;
-
-}
-
-
-/* ---------------------------------------------------------
-   STATE
---------------------------------------------------------- */
-
-function setVoiceState(state){
-
-  voiceMode.classList.remove(
-    "listening",
-    "speaking"
-  );
-
-  if(state){
-
-    voiceMode.classList.add(
-      state
-    );
-
-  }
-
-}
-
-
-/* ---------------------------------------------------------
-   CLIENT SECRET
---------------------------------------------------------- */
-
-async function getRealtimeClientSecret(){
-
-  const response =
-    await fetch(
-      REALTIME_API_URL,
-      {
-        method:"POST",
-
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify({
-            voice:
-              settings.voice ||
-              "marin"
-          })
-      }
-    );
-
-
-  const data =
-    await response.json();
-
-
-  if(
-    !response.ok ||
-    !data.success ||
-    !data.clientSecret
-  ){
-
-    throw new Error(
-      data.error ||
-      "Realtime client secret alınamadı."
-    );
-
-  }
-
-
-  return data.clientSecret;
-
-}
-
-
-/* ---------------------------------------------------------
-   ICE
---------------------------------------------------------- */
-
-function waitForIceGathering(peer){
-
-  return new Promise(
-    resolve => {
-
-      if(
-        peer.iceGatheringState ===
-        "complete"
-      ){
-
-        resolve();
-
-        return;
-
-      }
-
-
-      const check = () => {
-
-        if(
-          peer.iceGatheringState ===
-          "complete"
-        ){
-
-          peer.removeEventListener(
-            "icegatheringstatechange",
-            check
-          );
-
-          resolve();
-
-        }
-
-      };
-
-
-      peer.addEventListener(
-        "icegatheringstatechange",
-        check
-      );
-
-
-      setTimeout(
-        resolve,
-        5000
-      );
-
-    }
-  );
-
-}
-
-
-/* ---------------------------------------------------------
-   REALTIME EVENT
---------------------------------------------------------- */
-
-function handleRealtimeEvent(event){
-
-  if(!event){
-    return;
-  }
-
-
-  console.log(
-    "ASA REALTIME:",
-    event
-  );
-
-
-  switch(event.type){
-
-    case "session.created":
-
-      setVoiceStatus(
-        "Seni dinliyorum..."
-      );
-
-      setVoiceState(
-        "listening"
-      );
-
-      break;
-
-
-    case "input_audio_buffer.speech_started":
-
-      setVoiceStatus(
-        "Dinliyorum..."
-      );
-
-      setVoiceState(
-        "listening"
-      );
-
-      break;
-
-
-    case "input_audio_buffer.speech_stopped":
-
-      setVoiceStatus(
-        "ASA düşünüyor..."
-      );
-
-      setVoiceState(
-        null
-      );
-
-      break;
-
-
-    case "response.created":
-
-      setVoiceStatus(
-        "ASA düşünüyor..."
-      );
-
-      break;
-
-
-    case "response.output_audio.delta":
-
-    case "response.audio.delta":
-
-      setVoiceStatus(
-        "ASA konuşuyor..."
-      );
-
-      setVoiceState(
-        "speaking"
-      );
-
-      break;
-
-
-    case "response.done":
-
-      setVoiceStatus(
-        "Seni dinliyorum..."
-      );
-
-      setVoiceState(
-        "listening"
-      );
-
-      break;
-
-
-    case "error":
-
-      console.error(
-        "ASA REALTIME ERROR:",
-        event
-      );
-
-      setVoiceStatus(
-        event.error?.message ||
-        "Ses bağlantısında hata oluştu."
-      );
-
-      setVoiceState(
-        null
-      );
-
-      break;
-
-  }
-
-}
-
-
-/* ---------------------------------------------------------
-   CONNECT
---------------------------------------------------------- */
-
-async function connectRealtime(){
-
-  if(
-    realtimeConnected ||
-    realtimeConnecting
-  ){
-
-    return;
-
-  }
-
-
-  realtimeConnecting =
-    true;
-
-
-  setVoiceStatus(
-    "ASA bağlanıyor..."
-  );
-
-
-  try{
-
-    if(
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
-    ){
-
-      throw new Error(
-        "Bu tarayıcı mikrofon erişimini desteklemiyor."
-      );
-
-    }
-
-
-    /*
-      1.
-      Backend'den kısa ömürlü
-      client secret alıyoruz.
-    */
-
-    const clientSecret =
-      await getRealtimeClientSecret();
-
-
-    /*
-      2.
-      Peer oluştur.
-    */
-
-    realtimePeer =
-      new RTCPeerConnection();
-
-
-    /*
-      3.
-      ASA'nın sesini al.
-    */
-
-    realtimePeer.ontrack =
-      event => {
-
-        if(
-          event.streams &&
-          event.streams[0]
-        ){
-
-          remoteAudio.srcObject =
-            event.streams[0];
-
-
-          remoteAudio
-            .play()
-            .catch(
-              error => {
-
-                console.warn(
-                  "ASA audio play:",
-                  error
-                );
-
-              }
-            );
-
-        }
-
-      };
-
-
-    /*
-      4.
-      Mikrofon.
-    */
-
-    realtimeStream =
-      await navigator
-        .mediaDevices
-        .getUserMedia({
-
-          audio:{
-            echoCancellation:true,
-            noiseSuppression:true,
-            autoGainControl:true
-          },
-
-          video:false
-
-        });
-
-
-    realtimeStream
-      .getTracks()
-      .forEach(
-        track => {
-
-          realtimePeer.addTrack(
-            track,
-            realtimeStream
-          );
-
-        }
-      );
-
-
-    /*
-      5.
-      Data channel.
-    */
-
-    realtimeDataChannel =
-      realtimePeer.createDataChannel(
-        "oai-events"
-      );
-
-
-    realtimeDataChannel.onopen =
-      () => {
-
-        console.log(
-          "ASA REALTIME DATA CHANNEL OPEN"
-        );
-
-        realtimeConnected =
-          true;
-
-        realtimeConnecting =
-          false;
-
-        setVoiceStatus(
-          "Seni dinliyorum..."
-        );
-
-        setVoiceState(
-          "listening"
-        );
-
-      };
-
-
-    realtimeDataChannel.onmessage =
-      event => {
-
-        try{
-
-          const data =
-            JSON.parse(
-              event.data
-            );
-
-          handleRealtimeEvent(
-            data
-          );
-
-        }catch(error){
-
-          console.error(
-            "Realtime parse:",
-            error
-          );
-
-        }
-
-      };
-
-
-    realtimeDataChannel.onerror =
-      error => {
-
-        console.error(
-          "Realtime channel error:",
-          error
-        );
-
-      };
-
-
-    realtimeDataChannel.onclose =
-      () => {
-
-        console.log(
-          "ASA DATA CHANNEL CLOSED"
-        );
-
-      };
-
-
-    /*
-      6.
-      Offer.
-    */
-
-    const offer =
-      await realtimePeer
-        .createOffer({
-          offerToReceiveAudio:true
-        });
-
-
-    await realtimePeer
-      .setLocalDescription(
-        offer
-      );
-
-
-    /*
-      7.
-      ICE.
-    */
-
-    await waitForIceGathering(
-      realtimePeer
-    );
-
-
-    /*
-      8.
-      OpenAI Calls endpoint.
-    */
-
-    const response =
-      await fetch(
-        "https://api.openai.com/v1/realtime/calls",
-        {
-
-          method:"POST",
-
-          headers:{
-            Authorization:
-              `Bearer ${clientSecret}`
-          },
-
-          body:
-            (() => {
-
-              const form =
-                new FormData();
-
-              form.append(
-                "sdp",
-                new Blob(
-                  [
-                    realtimePeer
-                      .localDescription
-                      .sdp
-                  ],
-                  {
-                    type:
-                      "application/sdp"
-                  }
-                )
-              );
-
-              return form;
-
-            })()
-
-        }
-      );
-
-
-    const answer =
-      await response.text();
-
-
-    if(!response.ok){
-
-      throw new Error(
-        answer ||
-        `Realtime HTTP ${response.status}`
-      );
-
-    }
-
-
-    /*
-      9.
-      SDP answer.
-    */
-
-    await realtimePeer
-      .setRemoteDescription({
-
-        type:"answer",
-
-        sdp:answer
-
-      });
-
-
-    /*
-      10.
-      Connection state.
-    */
-
-    realtimePeer
-      .addEventListener(
-        "connectionstatechange",
-        () => {
-
-          console.log(
-            "ASA CONNECTION:",
-            realtimePeer
-              ?.connectionState
-          );
-
-
-          switch(
-            realtimePeer
-              ?.connectionState
-          ){
-
-            case "connected":
-
-              realtimeConnected =
-                true;
-
-              realtimeConnecting =
-                false;
-
-              setVoiceStatus(
-                "Seni dinliyorum..."
-              );
-
-              setVoiceState(
-                "listening"
-              );
-
-              break;
-
-
-            case "disconnected":
-
-              setVoiceStatus(
-                "Bağlantı kesildi."
-              );
-
-              break;
-
-
-            case "failed":
-
-              setVoiceStatus(
-                "Ses bağlantısı kurulamadı."
-              );
-
-              break;
-
-
-            case "closed":
-
-              setVoiceStatus(
-                "Bağlantı kapandı."
-              );
-
-              break;
-
-          }
-
-        }
-      );
-
-
-  }catch(error){
-
-    console.error(
-      "ASA REALTIME CONNECT:",
-      error
-    );
-
-
-    realtimeConnected =
-      false;
-
-    realtimeConnecting =
-      false;
-
-
-    setVoiceState(
-      null
-    );
-
-
-    setVoiceStatus(
-      error?.message ||
-      "Ses bağlantısı kurulamadı."
-    );
-
-
-    await disconnectRealtime();
-
-  }
-
-}
-
-
-/* ---------------------------------------------------------
-   DISCONNECT
---------------------------------------------------------- */
-
-async function disconnectRealtime(){
-
-  realtimeConnected =
-    false;
-
-  realtimeConnecting =
-    false;
-
-
-  if(realtimeDataChannel){
-
-    try{
-
-      realtimeDataChannel.close();
-
-    }catch{}
-
-    realtimeDataChannel =
-      null;
-
-  }
-
-
-  if(realtimeStream){
-
-    realtimeStream
-      .getTracks()
-      .forEach(
-        track => {
-
-          try{
-            track.stop();
-          }catch{}
-
-        }
-      );
-
-    realtimeStream =
-      null;
-
-  }
-
-
-  if(realtimePeer){
-
-    try{
-
-      realtimePeer.close();
-
-    }catch{}
-
-    realtimePeer =
-      null;
-
-  }
-
-
-  remoteAudio.srcObject =
-    null;
-
-}
-
-
-/* ---------------------------------------------------------
-   OPEN VOICE
---------------------------------------------------------- */
-
-async function openVoiceMode(){
-
-  voiceMode.classList.add(
-    "open"
-  );
-
-  setVoiceStatus(
-    "ASA bağlanıyor..."
-  );
-
-
-  await connectRealtime();
-
-}
-
-
-/* ---------------------------------------------------------
-   CLOSE VOICE
---------------------------------------------------------- */
-
-async function closeVoiceMode(){
-
-  await disconnectRealtime();
-
-  voiceMode.classList.remove(
-    "open"
-  );
-
-  setVoiceState(
-    null
-  );
-
-  setVoiceStatus(
-    "Hazırım"
-  );
-
-}
-
-
-/* ---------------------------------------------------------
-   TOGGLE MICROPHONE
---------------------------------------------------------- */
-
-async function toggleRealtime(){
-
-  if(
-    realtimeConnected
-  ){
-
-    await disconnectRealtime();
-
-    voiceControl.classList.add(
-      "off"
-    );
-
-    setVoiceStatus(
-      "Mikrofon kapalı"
-    );
-
-    setVoiceState(
-      null
-    );
-
-    return;
-
-  }
-
-
-  voiceControl.classList.remove(
-    "off"
-  );
-
-  await connectRealtime();
-
-}
-
-
-/* =========================================================
-   VOICE BUTTONS
-========================================================= */
-
-voiceButton.addEventListener(
-  "click",
-  async () => {
-
-    await openVoiceMode();
-
-  }
-);
-
-
-voiceClose.addEventListener(
-  "click",
-  async () => {
-
-    await closeVoiceMode();
-
-  }
-);
-
-
-voiceControl.addEventListener(
-  "click",
-  async () => {
-
-    await toggleRealtime();
-
-  }
-);
-
-
-/* =========================================================
-   PAGE CLEANUP
-========================================================= */
-
-window.addEventListener(
-  "pagehide",
-  () => {
-
-    disconnectRealtime();
-
-  }
-);
-
-
-/* =========================================================
    INITIALIZATION
 ========================================================= */
 
@@ -5483,6 +5064,16 @@ if(existingChat){
 }
 
 </script>
+
+
+<!-- =======================================================
+     REALTIME
+     TEK REALTIME DOSYASI
+======================================================= -->
+
+<script
+  src="/realtime.js"
+></script>
 
 </body>
 </html>
