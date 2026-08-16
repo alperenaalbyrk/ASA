@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -8,9 +9,12 @@
   content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
 >
 
+<meta name="theme-color" content="#05040a">
+
 <title>ASA</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   margin:0;
@@ -32,8 +36,8 @@
   --border:rgba(255,255,255,.09);
   --border2:rgba(255,255,255,.14);
 
-  --safe-bottom:env(safe-area-inset-bottom,0px);
   --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 
 html,
@@ -41,8 +45,10 @@ body{
   width:100%;
   height:100%;
   overflow:hidden;
+
   background:#05040a;
   color:var(--text);
+
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -50,7 +56,12 @@ body{
     "SF Pro Text",
     "Segoe UI",
     sans-serif;
+
   -webkit-font-smoothing:antialiased;
+}
+
+body{
+  overscroll-behavior:none;
 }
 
 button,
@@ -61,18 +72,19 @@ input{
 button{
   border:0;
   color:inherit;
+  cursor:pointer;
 }
 
-body{
-  overscroll-behavior:none;
-}
-
-/* APP */
+/* =========================================================
+   APP
+========================================================= */
 
 .app{
   position:relative;
+
   width:100%;
   height:100dvh;
+
   overflow:hidden;
 
   background:
@@ -89,10 +101,13 @@ body{
     #05040a;
 }
 
-/* HEADER */
+/* =========================================================
+   HEADER
+========================================================= */
 
 .header{
   position:absolute;
+
   top:0;
   left:0;
   right:0;
@@ -106,6 +121,7 @@ body{
 
   display:flex;
   align-items:center;
+
   gap:14px;
 
   z-index:30;
@@ -117,7 +133,8 @@ body{
       rgba(5,4,10,.88)
     );
 
-  border-bottom:1px solid rgba(255,255,255,.06);
+  border-bottom:
+    1px solid rgba(255,255,255,.06);
 
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
@@ -126,6 +143,7 @@ body{
 .menuButton{
   width:56px;
   height:56px;
+
   flex-shrink:0;
 
   border-radius:18px;
@@ -135,7 +153,9 @@ body{
   justify-content:center;
 
   background:rgba(20,19,30,.82);
-  border:1px solid var(--border);
+
+  border:
+    1px solid var(--border);
 }
 
 .menuLines{
@@ -150,23 +170,24 @@ body{
 .menuLines span{
   width:25px;
   height:2px;
-  border-radius:2px;
-  background:#f5f2f8;
-}
 
-.brand{
-  display:flex;
-  align-items:center;
+  border-radius:2px;
+
+  background:#f5f2f8;
 }
 
 .brandText{
   font-size:29px;
   line-height:1;
+
   font-weight:700;
+
   letter-spacing:.29em;
 }
 
-/* CHAT */
+/* =========================================================
+   CHAT
+========================================================= */
 
 .chat{
   position:absolute;
@@ -182,9 +203,10 @@ body{
   padding:
     30px
     18px
-    160px;
+    170px;
 
   overscroll-behavior:contain;
+
   scroll-behavior:smooth;
 }
 
@@ -193,28 +215,36 @@ body{
 }
 
 .chat::-webkit-scrollbar-thumb{
-  background:rgba(180,50,255,.35);
+  background:
+    rgba(180,50,255,.35);
+
   border-radius:10px;
 }
 
-/* EMPTY */
+/* =========================================================
+   EMPTY
+========================================================= */
 
 .empty{
   min-height:100%;
 
   display:flex;
   flex-direction:column;
+
   align-items:center;
   justify-content:center;
 
   text-align:center;
+
   padding:30px;
 }
 
 .emptyOrb{
   width:76px;
   height:76px;
+
   border-radius:50%;
+
   margin-bottom:25px;
 
   background:
@@ -244,11 +274,15 @@ body{
   font-size:17px;
 }
 
-/* MESSAGES */
+/* =========================================================
+   MESSAGES
+========================================================= */
 
 .message{
   width:100%;
+
   display:flex;
+
   margin-bottom:28px;
 }
 
@@ -284,7 +318,8 @@ body{
   line-height:1.5;
 
   box-shadow:
-    0 12px 35px rgba(126,37,235,.15);
+    0 12px 35px
+    rgba(126,37,235,.15);
 }
 
 .assistant .bubble{
@@ -307,6 +342,7 @@ body{
 
   font-size:11px;
   font-weight:800;
+
   letter-spacing:.48em;
 }
 
@@ -327,13 +363,16 @@ body{
 
   border-radius:20px;
 
-  border:1px solid rgba(255,255,255,.12);
+  border:
+    1px solid rgba(255,255,255,.12);
 
   box-shadow:
     0 15px 50px rgba(0,0,0,.3);
 }
 
-/* TYPING */
+/* =========================================================
+   TYPING
+========================================================= */
 
 .typing{
   display:flex;
@@ -361,6 +400,7 @@ body{
 }
 
 @keyframes typing{
+
   0%,60%,100%{
     opacity:.25;
     transform:translateY(0);
@@ -370,9 +410,12 @@ body{
     opacity:1;
     transform:translateY(-4px);
   }
+
 }
 
-/* INPUT */
+/* =========================================================
+   INPUT
+========================================================= */
 
 .inputArea{
   position:absolute;
@@ -398,9 +441,11 @@ body{
 
   border-radius:24px;
 
-  background:rgba(16,15,25,.96);
+  background:
+    rgba(16,15,25,.96);
 
-  border:1px solid rgba(255,255,255,.11);
+  border:
+    1px solid rgba(255,255,255,.11);
 
   box-shadow:
     0 18px 55px rgba(0,0,0,.42),
@@ -450,8 +495,11 @@ body{
 
   border-radius:17px;
 
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(255,255,255,.08);
+  background:
+    rgba(255,255,255,.035);
+
+  border:
+    1px solid rgba(255,255,255,.08);
 
   font-size:29px;
   font-weight:300;
@@ -460,6 +508,12 @@ body{
 .voiceButton{
   width:48px;
   height:50px;
+
+  color:#f2eef8;
+}
+
+.voiceButton:active{
+  transform:scale(.92);
 }
 
 .sendButton{
@@ -476,13 +530,19 @@ body{
   opacity:.3;
 }
 
+/* =========================================================
+   MICROPHONE ICON
+========================================================= */
+
 .voiceIcon{
   position:relative;
 
   width:20px;
   height:26px;
 
-  border:2px solid currentColor;
+  border:
+    2px solid currentColor;
+
   border-radius:12px;
 }
 
@@ -499,8 +559,11 @@ body{
 
   transform:translateX(-50%);
 
-  border-bottom:2px solid currentColor;
-  border-radius:0 0 10px 10px;
+  border-bottom:
+    2px solid currentColor;
+
+  border-radius:
+    0 0 10px 10px;
 }
 
 .voiceIcon::after{
@@ -519,7 +582,9 @@ body{
   background:currentColor;
 }
 
-/* PREVIEW */
+/* =========================================================
+   PREVIEW
+========================================================= */
 
 .selectedPreview{
   position:absolute;
@@ -530,6 +595,7 @@ body{
   bottom:76px;
 
   display:flex;
+
   gap:8px;
 
   padding:8px;
@@ -538,8 +604,11 @@ body{
 
   border-radius:18px;
 
-  background:rgba(16,15,25,.97);
-  border:1px solid rgba(255,255,255,.09);
+  background:
+    rgba(16,15,25,.97);
+
+  border:
+    1px solid rgba(255,255,255,.09);
 
   backdrop-filter:blur(18px);
 }
@@ -574,19 +643,25 @@ body{
   border-radius:50%;
 
   background:#111;
-  border:1px solid rgba(255,255,255,.2);
+
+  border:
+    1px solid rgba(255,255,255,.2);
 
   color:white;
 }
 
-/* OVERLAY */
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .overlay{
   position:fixed;
   inset:0;
+
   z-index:90;
 
-  background:rgba(0,0,0,.6);
+  background:
+    rgba(0,0,0,.6);
 
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
@@ -601,8 +676,6 @@ body{
   opacity:1;
   pointer-events:auto;
 }
-
-/* SIDEBAR */
 
 .sidebar{
   position:fixed;
@@ -627,9 +700,11 @@ body{
       #080710
     );
 
-  border-right:1px solid rgba(255,255,255,.09);
+  border-right:
+    1px solid rgba(255,255,255,.09);
 
-  transform:translateX(-105%);
+  transform:
+    translateX(-105%);
 
   transition:
     transform .3s
@@ -646,6 +721,7 @@ body{
 .sidebarHeader{
   display:flex;
   align-items:center;
+
   margin-bottom:42px;
 }
 
@@ -664,8 +740,11 @@ body{
 
   border-radius:18px;
 
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.07);
+  background:
+    rgba(255,255,255,.045);
+
+  border:
+    1px solid rgba(255,255,255,.07);
 
   font-size:30px;
 }
@@ -704,7 +783,8 @@ body{
 }
 
 .menuItem:active{
-  background:rgba(255,255,255,.06);
+  background:
+    rgba(255,255,255,.06);
 }
 
 .menuIcon{
@@ -723,7 +803,8 @@ body{
 
   margin:20px 8px;
 
-  background:rgba(255,255,255,.075);
+  background:
+    rgba(255,255,255,.075);
 }
 
 .chatList{
@@ -765,9 +846,11 @@ body{
 
   border-radius:17px;
 
-  background:rgba(255,255,255,.025);
+  background:
+    rgba(255,255,255,.025);
 
-  border:1px solid rgba(255,255,255,.055);
+  border:
+    1px solid rgba(255,255,255,.055);
 }
 
 .historyItem.active{
@@ -778,7 +861,8 @@ body{
       rgba(81,21,130,.12)
     );
 
-  border-color:rgba(169,51,255,.45);
+  border-color:
+    rgba(169,51,255,.45);
 }
 
 .historyTitle{
@@ -813,7 +897,8 @@ body{
 
   border-radius:13px;
 
-  background:rgba(255,255,255,.045);
+  background:
+    rgba(255,255,255,.045);
 
   color:#aaa7b4;
 
@@ -840,7 +925,9 @@ body{
   font-size:11px;
 }
 
-/* CONTEXT */
+/* =========================================================
+   CONTEXT MENU
+========================================================= */
 
 .contextMenu{
   position:fixed;
@@ -855,9 +942,11 @@ body{
 
   background:#161520;
 
-  border:1px solid rgba(255,255,255,.1);
+  border:
+    1px solid rgba(255,255,255,.1);
 
-  box-shadow:0 25px 70px rgba(0,0,0,.55);
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.55);
 
   display:none;
 }
@@ -884,7 +973,9 @@ body{
   color:#ff7183;
 }
 
-/* MODALS */
+/* =========================================================
+   MODALS
+========================================================= */
 
 .modalOverlay{
   position:fixed;
@@ -900,7 +991,8 @@ body{
 
   padding:22px;
 
-  background:rgba(0,0,0,.72);
+  background:
+    rgba(0,0,0,.72);
 
   backdrop-filter:blur(11px);
 }
@@ -918,9 +1010,11 @@ body{
 
   background:#12111d;
 
-  border:1px solid rgba(255,255,255,.11);
+  border:
+    1px solid rgba(255,255,255,.11);
 
-  box-shadow:0 35px 100px rgba(0,0,0,.65);
+  box-shadow:
+    0 35px 100px rgba(0,0,0,.65);
 }
 
 .modal h2{
@@ -945,7 +1039,8 @@ body{
 
   background:#090811;
 
-  border:1px solid rgba(255,255,255,.09);
+  border:
+    1px solid rgba(255,255,255,.09);
 
   outline:0;
 
@@ -968,7 +1063,8 @@ body{
 
   border-radius:16px;
 
-  background:rgba(255,255,255,.055);
+  background:
+    rgba(255,255,255,.055);
 }
 
 .modalButton.primary{
@@ -984,11 +1080,14 @@ body{
   background:#a72b45;
 }
 
-/* SETTINGS */
+/* =========================================================
+   SETTINGS
+========================================================= */
 
 .settingsList{
   display:flex;
   flex-direction:column;
+
   gap:9px;
 }
 
@@ -1004,16 +1103,21 @@ body{
 
   border-radius:17px;
 
-  background:rgba(255,255,255,.035);
+  background:
+    rgba(255,255,255,.035);
 
-  border:1px solid rgba(255,255,255,.06);
+  border:
+    1px solid rgba(255,255,255,.06);
 
   text-align:left;
 }
 
 .settingOption.active{
-  border-color:rgba(169,51,255,.55);
-  background:rgba(148,44,245,.13);
+  border-color:
+    rgba(169,51,255,.55);
+
+  background:
+    rgba(148,44,245,.13);
 }
 
 .settingDescription{
@@ -1030,10 +1134,13 @@ body{
   color:var(--accent2);
 }
 
-/* ATTACHMENT SHEET */
+/* =========================================================
+   ATTACHMENT SHEET
+========================================================= */
 
 .sheetOverlay{
   position:fixed;
+
   inset:0;
 
   z-index:180;
@@ -1043,7 +1150,8 @@ body{
 
   padding:14px;
 
-  background:rgba(0,0,0,.62);
+  background:
+    rgba(0,0,0,.62);
 
   backdrop-filter:blur(8px);
 
@@ -1067,7 +1175,8 @@ body{
 
   background:#14131e;
 
-  border:1px solid rgba(255,255,255,.1);
+  border:
+    1px solid rgba(255,255,255,.1);
 
   transform:translateY(20px);
 
@@ -1108,7 +1217,8 @@ body{
 }
 
 .sheetItem:active{
-  background:rgba(255,255,255,.06);
+  background:
+    rgba(255,255,255,.06);
 }
 
 .sheetCancel{
@@ -1119,815 +1229,250 @@ body{
 
   border-radius:17px;
 
-  background:rgba(255,255,255,.06);
+  background:
+    rgba(255,255,255,.06);
 
   color:#aaa7b5;
 
   font-size:16px;
 }
 
-/* VOICE */
-
 /* =========================================================
-   ASA REALTIME VOICE
+   VOICE MODE
 ========================================================= */
 
-let realtimePeer = null;
-let realtimeStream = null;
-let realtimeDataChannel = null;
-let realtimeConnected = false;
-let realtimeConnecting = false;
+.voiceMode{
+  position:fixed;
 
-const realtimeAudio =
-  document.getElementById("remoteAudio");
+  inset:0;
 
-function setVoiceStatus(text) {
+  z-index:500;
 
-  if (voiceStatus) {
-    voiceStatus.textContent = text;
-  }
+  display:flex;
+  flex-direction:column;
 
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(160,45,255,.18),
+      transparent 35%
+    ),
+    #05040a;
+
+  opacity:0;
+  pointer-events:none;
+
+  transform:scale(.98);
+
+  transition:
+    opacity .25s,
+    transform .25s;
 }
 
-function setVoiceState(state) {
-
-  voiceMode.classList.remove(
-    "listening",
-    "speaking"
-  );
-
-  if (state) {
-    voiceMode.classList.add(state);
-  }
-
+.voiceMode.open{
+  opacity:1;
+  pointer-events:auto;
+  transform:scale(1);
 }
 
-async function getRealtimeClientSecret() {
+.voiceTop{
+  height:
+    calc(100px + var(--safe-top));
 
-  const response =
-    await fetch(
-      "/api/realtime",
-      {
-        method: "POST",
+  padding:
+    calc(20px + var(--safe-top))
+    22px
+    20px;
 
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 
-        body: JSON.stringify({
+.voiceTopTitle{
+  font-size:30px;
+  font-weight:700;
 
-          voice:
-            settings.voice ||
-            "marin",
+  letter-spacing:.35em;
+}
 
-        }),
+.voiceClose{
+  width:56px;
+  height:56px;
 
-      }
+  border-radius:19px;
+
+  background:
+    rgba(255,255,255,.05);
+
+  border:
+    1px solid rgba(255,255,255,.09);
+
+  font-size:32px;
+}
+
+.voiceCenter{
+  flex:1;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+}
+
+.asaOrb{
+  position:relative;
+
+  width:180px;
+  height:180px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #fff,
+      rgba(255,255,255,.25) 7%,
+      transparent 15%
+    ),
+    radial-gradient(
+      circle,
+      #c33dff 0%,
+      #7b1bb8 55%,
+      #20072e 100%
     );
 
-  const data =
-    await response.json();
+  box-shadow:
+    0 0 60px rgba(163,48,255,.32),
+    0 0 130px rgba(163,48,255,.12);
 
-  if (
-    !response.ok ||
-    !data.success ||
-    !data.clientSecret
-  ) {
+  transition:
+    transform .25s,
+    box-shadow .25s;
+}
 
-    throw new Error(
-      data.error ||
-      "Realtime client secret alınamadı."
+.asaOrb::before{
+  content:"";
+
+  position:absolute;
+  inset:-20px;
+
+  border-radius:50%;
+
+  border:
+    1px solid rgba(193,60,255,.18);
+
+  animation:
+    orbPulse 2.5s infinite ease-in-out;
+}
+
+.voiceMode.listening .asaOrb{
+  animation:
+    listenPulse 1.8s infinite ease-in-out;
+}
+
+.voiceMode.speaking .asaOrb{
+  animation:
+    speakPulse .7s infinite ease-in-out;
+}
+
+@keyframes orbPulse{
+
+  0%,100%{
+    transform:scale(1);
+    opacity:.5;
+  }
+
+  50%{
+    transform:scale(1.06);
+    opacity:1;
+  }
+
+}
+
+@keyframes listenPulse{
+
+  0%,100%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.035);
+  }
+
+}
+
+@keyframes speakPulse{
+
+  0%,100%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.09);
+  }
+
+}
+
+.voiceStatus{
+  margin-top:42px;
+
+  color:#bcb8c5;
+
+  font-size:17px;
+
+  text-align:center;
+}
+
+.voiceBottom{
+  height:
+    calc(140px + var(--safe-bottom));
+
+  padding:
+    20px
+    20px
+    calc(35px + var(--safe-bottom));
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.voiceControl{
+  width:78px;
+  height:78px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent2)
     );
 
-  }
-
-  return data.clientSecret;
-
+  box-shadow:
+    0 15px 45px
+    rgba(163,48,255,.25);
 }
 
-
-function waitForIceGathering(
-  peer
-) {
-
-  return new Promise(
-    resolve => {
-
-      if (
-        peer.iceGatheringState ===
-        "complete"
-      ) {
-
-        resolve();
-
-        return;
-
-      }
-
-      const check = () => {
-
-        if (
-          peer.iceGatheringState ===
-          "complete"
-        ) {
-
-          peer.removeEventListener(
-            "icegatheringstatechange",
-            check
-          );
-
-          resolve();
-
-        }
-
-      };
-
-      peer.addEventListener(
-        "icegatheringstatechange",
-        check
-      );
-
-    }
-  );
-
+.voiceControl:active{
+  transform:scale(.93);
 }
 
-
-function sendRealtimeEvent(
-  event
-) {
-
-  if (
-    !realtimeDataChannel ||
-    realtimeDataChannel.readyState !==
-      "open"
-  ) {
-
-    return;
-
-  }
-
-  realtimeDataChannel.send(
-    JSON.stringify(event)
-  );
-
+.voiceControl.off{
+  background:
+    rgba(255,255,255,.08);
 }
 
-
-function handleRealtimeEvent(
-  event
-) {
-
-  if (!event) {
-    return;
-  }
-
-  console.log(
-    "ASA REALTIME EVENT:",
-    event
-  );
-
-  switch (event.type) {
-
-    case "session.created":
-
-      setVoiceStatus(
-        "Seni dinliyorum..."
-      );
-
-      setVoiceState(
-        "listening"
-      );
-
-      break;
-
-
-    case "input_audio_buffer.speech_started":
-
-      setVoiceStatus(
-        "Dinliyorum..."
-      );
-
-      setVoiceState(
-        "listening"
-      );
-
-      break;
-
-
-    case "input_audio_buffer.speech_stopped":
-
-      setVoiceStatus(
-        "Düşünüyorum..."
-      );
-
-      break;
-
-
-    case "response.created":
-
-      setVoiceStatus(
-        "ASA düşünüyor..."
-      );
-
-      break;
-
-
-    case "response.output_audio.delta":
-
-      setVoiceStatus(
-        "ASA konuşuyor..."
-      );
-
-      setVoiceState(
-        "speaking"
-      );
-
-      break;
-
-
-    case "response.audio.delta":
-
-      setVoiceStatus(
-        "ASA konuşuyor..."
-      );
-
-      setVoiceState(
-        "speaking"
-      );
-
-      break;
-
-
-    case "response.done":
-
-      setVoiceStatus(
-        "Seni dinliyorum..."
-      );
-
-      setVoiceState(
-        "listening"
-      );
-
-      break;
-
-
-    case "error":
-
-      console.error(
-        "ASA REALTIME SERVER ERROR:",
-        event
-      );
-
-      setVoiceStatus(
-        "Ses bağlantısında bir hata oluştu."
-      );
-
-      break;
-
-  }
-
-}
-
-
-async function connectRealtime() {
-
-  if (
-    realtimeConnected ||
-    realtimeConnecting
-  ) {
-
-    return;
-
-  }
-
-  realtimeConnecting = true;
-
-  setVoiceStatus(
-    "ASA bağlanıyor..."
-  );
-
-  setVoiceState(
-    "listening"
-  );
-
-  try {
-
-    /*
-      1.
-      Backend'den kısa ömürlü
-      Realtime client secret al.
-    */
-
-    const clientSecret =
-      await getRealtimeClientSecret();
-
-
-    /*
-      2.
-      WebRTC peer oluştur.
-    */
-
-    realtimePeer =
-      new RTCPeerConnection();
-
-
-    /*
-      3.
-      ASA'nın sesini hoparlöre gönder.
-    */
-
-    realtimePeer.ontrack =
-      event => {
-
-        if (
-          event.streams &&
-          event.streams[0]
-        ) {
-
-          realtimeAudio.srcObject =
-            event.streams[0];
-
-          realtimeAudio
-            .play()
-            .catch(
-              error => {
-
-                console.warn(
-                  "Audio autoplay:",
-                  error
-                );
-
-              }
-            );
-
-        }
-
-      };
-
-
-    /*
-      4.
-      Mikrofonu al.
-    */
-
-    realtimeStream =
-      await navigator.mediaDevices
-        .getUserMedia({
-
-          audio: {
-
-            echoCancellation: true,
-
-            noiseSuppression: true,
-
-            autoGainControl: true,
-
-          },
-
-          video: false,
-
-        });
-
-
-    realtimeStream
-      .getTracks()
-      .forEach(
-        track => {
-
-          realtimePeer.addTrack(
-            track,
-            realtimeStream
-          );
-
-        }
-      );
-
-
-    /*
-      5.
-      Realtime data channel.
-    */
-
-    realtimeDataChannel =
-      realtimePeer.createDataChannel(
-        "oai-events"
-      );
-
-
-    realtimeDataChannel.onopen =
-      () => {
-
-        console.log(
-          "ASA REALTIME DATA CHANNEL AÇILDI"
-        );
-
-        realtimeConnected =
-          true;
-
-        realtimeConnecting =
-          false;
-
-        setVoiceStatus(
-          "Seni dinliyorum..."
-        );
-
-        setVoiceState(
-          "listening"
-        );
-
-      };
-
-
-    realtimeDataChannel.onmessage =
-      event => {
-
-        try {
-
-          const data =
-            JSON.parse(
-              event.data
-            );
-
-          handleRealtimeEvent(
-            data
-          );
-
-        } catch(error) {
-
-          console.error(
-            "Realtime event parse:",
-            error
-          );
-
-        }
-
-      };
-
-
-    realtimeDataChannel.onerror =
-      error => {
-
-        console.error(
-          "Realtime DataChannel:",
-          error
-        );
-
-      };
-
-
-    realtimeDataChannel.onclose =
-      () => {
-
-        console.log(
-          "ASA REALTIME DATA CHANNEL KAPANDI"
-        );
-
-      };
-
-
-    /*
-      6.
-      WebRTC offer oluştur.
-    */
-
-    const offer =
-      await realtimePeer
-        .createOffer({
-
-          offerToReceiveAudio: true,
-
-        });
-
-
-    await realtimePeer
-      .setLocalDescription(
-        offer
-      );
-
-
-    /*
-      7.
-      ICE tamamlanmasını bekle.
-    */
-
-    await waitForIceGathering(
-      realtimePeer
-    );
-
-
-    /*
-      8.
-      SDP'yi OpenAI Realtime
-      Calls endpointine gönder.
-    */
-
-    const formData =
-      new FormData();
-
-    formData.append(
-      "sdp",
-      new Blob(
-        [
-          realtimePeer
-            .localDescription
-            .sdp
-        ],
-        {
-          type:
-            "application/sdp",
-        }
-      )
-    );
-
-
-    const response =
-      await fetch(
-        "https://api.openai.com/v1/realtime/calls",
-        {
-
-          method: "POST",
-
-          headers: {
-
-            Authorization:
-              `Bearer ${clientSecret}`,
-
-          },
-
-          body: formData,
-
-        }
-      );
-
-
-    const answer =
-      await response.text();
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        answer ||
-        `Realtime HTTP ${response.status}`
-      );
-
-    }
-
-
-    /*
-      9.
-      OpenAI SDP cevabını
-      WebRTC'ye ver.
-    */
-
-    await realtimePeer
-      .setRemoteDescription({
-
-        type: "answer",
-
-        sdp: answer,
-
-      });
-
-
-    /*
-      10.
-      Bağlantı state'lerini izle.
-    */
-
-    realtimePeer.onconnectionstatechange =
-      () => {
-
-        console.log(
-          "ASA CONNECTION:",
-          realtimePeer
-            .connectionState
-        );
-
-        switch (
-          realtimePeer
-            .connectionState
-        ) {
-
-          case "connected":
-
-            realtimeConnected =
-              true;
-
-            realtimeConnecting =
-              false;
-
-            setVoiceStatus(
-              "Seni dinliyorum..."
-            );
-
-            break;
-
-
-          case "disconnected":
-
-            setVoiceStatus(
-              "Bağlantı kesildi."
-            );
-
-            break;
-
-
-          case "failed":
-
-            setVoiceStatus(
-              "Ses bağlantısı kurulamadı."
-            );
-
-            break;
-
-
-          case "closed":
-
-            setVoiceStatus(
-              "Bağlantı kapandı."
-            );
-
-            break;
-
-        }
-
-      };
-
-
-    console.log(
-      "ASA REALTIME BAĞLANTI KURULDU"
-    );
-
-  } catch(error) {
-
-    console.error(
-      "ASA REALTIME CONNECT ERROR:",
-      error
-    );
-
-    realtimeConnecting =
-      false;
-
-    realtimeConnected =
-      false;
-
-    setVoiceState(null);
-
-    setVoiceStatus(
-      "Ses bağlantısı kurulamadı."
-    );
-
-    await disconnectRealtime();
-
-  }
-
-}
-
-
-async function disconnectRealtime() {
-
-  realtimeConnected =
-    false;
-
-  realtimeConnecting =
-    false;
-
-
-  if (realtimeDataChannel) {
-
-    try {
-      realtimeDataChannel.close();
-    } catch {}
-
-    realtimeDataChannel =
-      null;
-
-  }
-
-
-  if (realtimeStream) {
-
-    realtimeStream
-      .getTracks()
-      .forEach(
-        track => {
-
-          try {
-            track.stop();
-          } catch {}
-
-        }
-      );
-
-    realtimeStream =
-      null;
-
-  }
-
-
-  if (realtimePeer) {
-
-    try {
-      realtimePeer.close();
-    } catch {}
-
-    realtimePeer =
-      null;
-
-  }
-
-
-  if (realtimeAudio) {
-
-    realtimeAudio.srcObject =
-      null;
-
-  }
-
-}
-
-
-async function openVoiceMode() {
-
-  voiceMode.classList.add(
-    "open"
-  );
-
-  setVoiceStatus(
-    "ASA bağlanıyor..."
-  );
-
-  await connectRealtime();
-
-}
-
-
-async function closeVoiceMode() {
-
-  await disconnectRealtime();
-
-  voiceMode.classList.remove(
-    "open"
-  );
-
-  setVoiceState(null);
-
-  setVoiceStatus(
-    "Hazırım"
-  );
-
-}
-
-
-async function toggleRealtime() {
-
-  if (realtimeConnected) {
-
-    await disconnectRealtime();
-
-    setVoiceStatus(
-      "Mikrofon kapalı"
-    );
-
-    setVoiceState(null);
-
-    return;
-
-  }
-
-  await connectRealtime();
-
-}
-
-
-voiceButton.onclick =
-  openVoiceMode;
-
-
-voiceClose.onclick =
-  closeVoiceMode;
-
-
-voiceControl.onclick =
-  toggleRealtime;
-
-
-/*
-  Sayfa kapanırken mikrofonu bırak.
-*/
-
-window.addEventListener(
-  "pagehide",
-  () => {
-
-    disconnectRealtime();
-
-  }
-);
-/* HIDDEN */
+/* =========================================================
+   HIDDEN FILE INPUT
+========================================================= */
 
 .hiddenInput{
   position:fixed;
@@ -1940,7 +1485,9 @@ window.addEventListener(
   pointer-events:none;
 }
 
-/* RESPONSIVE */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:600px){
 
@@ -1952,39 +1499,58 @@ window.addEventListener(
   .voiceStatus{
     font-size:16px;
   }
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <div class="app">
 
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
 <header class="header">
 
-<button
-  class="menuButton"
-  id="menuButton"
-  type="button"
-  aria-label="Menü"
->
-  <span class="menuLines">
-    <span></span>
-    <span></span>
-    <span></span>
-  </span>
-</button>
+  <button
+    class="menuButton"
+    id="menuButton"
+    type="button"
+    aria-label="Menü"
+  >
 
-<div class="brand">
-  <span class="brandText">ASA</span>
-</div>
+    <span class="menuLines">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+
+  </button>
+
+  <div class="brandText">
+    ASA
+  </div>
 
 </header>
+
+
+<!-- =======================================================
+     CHAT
+======================================================= -->
 
 <main
   class="chat"
   id="chat"
 ></main>
+
+
+<!-- =======================================================
+     INPUT
+======================================================= -->
 
 <div class="inputArea">
 
@@ -2038,7 +1604,10 @@ window.addEventListener(
 
 </div>
 
-<!-- FILE INPUTS -->
+
+<!-- =======================================================
+     FILE INPUTS
+======================================================= -->
 
 <input
   class="hiddenInput"
@@ -2063,416 +1632,516 @@ window.addEventListener(
   multiple
 >
 
-<!-- SIDEBAR OVERLAY -->
+
+<!-- =======================================================
+     OVERLAY
+======================================================= -->
 
 <div
   class="overlay"
   id="overlay"
 ></div>
 
-<!-- SIDEBAR -->
+
+<!-- =======================================================
+     SIDEBAR
+======================================================= -->
 
 <aside
   class="sidebar"
   id="sidebar"
 >
 
-<div class="sidebarHeader">
+  <div class="sidebarHeader">
 
-  <div class="sidebarBrand">
+    <div class="sidebarBrand">
+      ASA
+    </div>
+
+    <button
+      class="closeButton"
+      id="closeMenu"
+      type="button"
+    >
+      ×
+    </button>
+
+  </div>
+
+  <div class="menuSectionTitle">
+    SOHBET
+  </div>
+
+  <button
+    class="menuItem"
+    id="newChatButton"
+    type="button"
+  >
+
+    <span class="menuIcon">
+      +
+    </span>
+
+    <span>
+      Yeni Sohbet
+    </span>
+
+  </button>
+
+  <button
+    class="menuItem"
+    id="showChatsButton"
+    type="button"
+  >
+
+    <span class="menuIcon">
+      ≡
+    </span>
+
+    <span>
+      Sohbetler
+    </span>
+
+  </button>
+
+  <div class="menuDivider"></div>
+
+  <div class="menuSectionTitle">
     ASA
   </div>
 
   <button
-    class="closeButton"
-    id="closeMenu"
+    class="menuItem"
+    id="memoryMenuButton"
     type="button"
   >
-    ×
+
+    <span class="menuIcon">
+      ◉
+    </span>
+
+    <span>
+      Hafızam
+    </span>
+
   </button>
 
-</div>
+  <button
+    class="menuItem"
+    id="settingsMenuButton"
+    type="button"
+  >
 
-<div class="menuSectionTitle">
-  SOHBET
-</div>
+    <span class="menuIcon">
+      ⚙
+    </span>
 
-<button
-  class="menuItem"
-  id="newChatButton"
-  type="button"
->
-  <span class="menuIcon">+</span>
-  <span>Yeni Sohbet</span>
-</button>
+    <span>
+      Ayarlar
+    </span>
 
-<button
-  class="menuItem"
-  id="showChatsButton"
-  type="button"
->
-  <span class="menuIcon">≡</span>
-  <span>Sohbetler</span>
-</button>
+  </button>
 
-<div class="menuDivider"></div>
+  <div class="menuDivider"></div>
 
-<div class="menuSectionTitle">
-  ASA
-</div>
+  <div
+    class="chatList"
+    id="chatList"
+  ></div>
 
-<button
-  class="menuItem"
-  id="memoryMenuButton"
-  type="button"
->
-  <span class="menuIcon">◉</span>
-  <span>Hafızam</span>
-</button>
-
-<button
-  class="menuItem"
-  id="settingsMenuButton"
-  type="button"
->
-  <span class="menuIcon">⚙</span>
-  <span>Ayarlar</span>
-</button>
-
-<div class="menuDivider"></div>
-
-<div
-  class="chatList"
-  id="chatList"
-></div>
-
-<div class="sidebarFooter">
-  ASA · Alperen'in kişisel yapay zeka asistanı
-</div>
+  <div class="sidebarFooter">
+    ASA · Alperen'in kişisel yapay zeka asistanı
+  </div>
 
 </aside>
 
-<!-- CONTEXT -->
+
+<!-- =======================================================
+     CONTEXT MENU
+======================================================= -->
 
 <div
   class="contextMenu"
   id="contextMenu"
 >
 
-<button
-  class="contextItem"
-  id="renameButton"
-  type="button"
->
-  Başlığı değiştir
-</button>
+  <button
+    class="contextItem"
+    id="renameButton"
+    type="button"
+  >
+    Başlığı değiştir
+  </button>
 
-<button
-  class="contextItem delete"
-  id="deleteButton"
-  type="button"
->
-  Sohbeti sil
-</button>
+  <button
+    class="contextItem delete"
+    id="deleteButton"
+    type="button"
+  >
+    Sohbeti sil
+  </button>
 
 </div>
 
-<!-- ATTACHMENT SHEET -->
+
+<!-- =======================================================
+     ATTACHMENT SHEET
+======================================================= -->
 
 <div
   class="sheetOverlay"
   id="sheetOverlay"
 >
 
-<div class="attachmentSheet">
+  <div class="attachmentSheet">
 
-<div class="sheetTitle">
-  EKLE
+    <div class="sheetTitle">
+      EKLE
+    </div>
+
+    <button
+      class="sheetItem"
+      id="photosButton"
+      type="button"
+    >
+      Fotoğraflar
+    </button>
+
+    <button
+      class="sheetItem"
+      id="cameraButton"
+      type="button"
+    >
+      Kamera
+    </button>
+
+    <button
+      class="sheetItem"
+      id="filesButton"
+      type="button"
+    >
+      Dosyalar
+    </button>
+
+    <button
+      class="sheetCancel"
+      id="sheetCancel"
+      type="button"
+    >
+      Vazgeç
+    </button>
+
+  </div>
+
 </div>
 
-<button
-  class="sheetItem"
-  id="photosButton"
-  type="button"
->
-  Fotoğraflar
-</button>
 
-<button
-  class="sheetItem"
-  id="cameraButton"
-  type="button"
->
-  Kamera
-</button>
-
-<button
-  class="sheetItem"
-  id="filesButton"
-  type="button"
->
-  Dosyalar
-</button>
-
-<button
-  class="sheetCancel"
-  id="sheetCancel"
-  type="button"
->
-  Vazgeç
-</button>
-
-</div>
-</div>
-
-<!-- RENAME -->
+<!-- =======================================================
+     RENAME MODAL
+======================================================= -->
 
 <div
   class="modalOverlay"
   id="renameModal"
 >
 
-<div class="modal">
+  <div class="modal">
 
-<h2>
-  Sohbet başlığını değiştir
-</h2>
+    <h2>
+      Sohbet başlığını değiştir
+    </h2>
 
-<input
-  class="modalInput"
-  id="renameInput"
-  maxlength="80"
-  placeholder="Sohbet adı"
->
+    <input
+      class="modalInput"
+      id="renameInput"
+      maxlength="80"
+      placeholder="Sohbet adı"
+    >
 
-<div class="modalButtons">
+    <div class="modalButtons">
 
-<button
-  class="modalButton"
-  id="renameCancel"
->
-  İptal
-</button>
+      <button
+        class="modalButton"
+        id="renameCancel"
+        type="button"
+      >
+        İptal
+      </button>
 
-<button
-  class="modalButton primary"
-  id="renameSave"
->
-  Kaydet
-</button>
+      <button
+        class="modalButton primary"
+        id="renameSave"
+        type="button"
+      >
+        Kaydet
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
-</div>
-</div>
 
-<!-- DELETE -->
+<!-- =======================================================
+     DELETE MODAL
+======================================================= -->
 
 <div
   class="modalOverlay"
   id="deleteModal"
 >
 
-<div class="modal">
+  <div class="modal">
 
-<h2>
-  Sohbet silinsin mi?
-</h2>
+    <h2>
+      Sohbet silinsin mi?
+    </h2>
 
-<p
-  class="modalText"
-  id="deleteText"
->
-  Bu sohbet silinecek.
-</p>
+    <p
+      class="modalText"
+      id="deleteText"
+    >
+      Bu sohbet silinecek.
+    </p>
 
-<div class="modalButtons">
+    <div class="modalButtons">
 
-<button
-  class="modalButton"
-  id="deleteCancel"
->
-  İptal
-</button>
+      <button
+        class="modalButton"
+        id="deleteCancel"
+        type="button"
+      >
+        İptal
+      </button>
 
-<button
-  class="modalButton danger"
-  id="deleteConfirm"
->
-  Sil
-</button>
+      <button
+        class="modalButton danger"
+        id="deleteConfirm"
+        type="button"
+      >
+        Sil
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
-</div>
-</div>
 
-<!-- SETTINGS -->
+<!-- =======================================================
+     SETTINGS
+======================================================= -->
 
 <div
   class="modalOverlay"
   id="settingsModal"
 >
 
-<div class="modal">
+  <div class="modal">
 
-<h2>Ayarlar</h2>
+    <h2>
+      Ayarlar
+    </h2>
 
-<div class="settingsList">
+    <div class="settingsList">
 
-<button
-  class="settingOption"
-  id="voiceSettingsButton"
->
-  <span>
-    Ses
-    <small class="settingDescription">
-      ASA'nın konuşma sesi
-    </small>
-  </span>
-  <span>›</span>
-</button>
+      <button
+        class="settingOption"
+        id="voiceSettingsButton"
+        type="button"
+      >
 
-<button
-  class="settingOption"
-  id="themeSettingsButton"
->
-  <span>
-    Tema
-    <small class="settingDescription">
-      Görünüm ve renk
-    </small>
-  </span>
-  <span>›</span>
-</button>
+        <span>
+
+          Ses
+
+          <small class="settingDescription">
+            ASA'nın konuşma sesi
+          </small>
+
+        </span>
+
+        <span>
+          ›
+        </span>
+
+      </button>
+
+      <button
+        class="settingOption"
+        id="themeSettingsButton"
+        type="button"
+      >
+
+        <span>
+
+          Tema
+
+          <small class="settingDescription">
+            Görünüm ve renk
+          </small>
+
+        </span>
+
+        <span>
+          ›
+        </span>
+
+      </button>
+
+    </div>
+
+    <div class="modalButtons">
+
+      <button
+        class="modalButton"
+        id="settingsClose"
+        type="button"
+      >
+        Kapat
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
-<div class="modalButtons">
 
-<button
-  class="modalButton"
-  id="settingsClose"
->
-  Kapat
-</button>
-
-</div>
-
-</div>
-</div>
-
-<!-- VOICE SETTINGS -->
+<!-- =======================================================
+     VOICE SETTINGS
+======================================================= -->
 
 <div
   class="modalOverlay"
   id="voiceSettingsModal"
 >
 
-<div class="modal">
+  <div class="modal">
 
-<h2>ASA'nın Sesi</h2>
+    <h2>
+      ASA'nın Sesi
+    </h2>
 
-<div
-  class="settingsList"
-  id="voiceOptions"
-></div>
+    <div
+      class="settingsList"
+      id="voiceOptions"
+    ></div>
 
-<div class="modalButtons">
+    <div class="modalButtons">
 
-<button
-  class="modalButton"
-  id="voiceSettingsClose"
->
-  Geri
-</button>
+      <button
+        class="modalButton"
+        id="voiceSettingsClose"
+        type="button"
+      >
+        Geri
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
-</div>
-</div>
 
-<!-- THEME SETTINGS -->
+<!-- =======================================================
+     THEME SETTINGS
+======================================================= -->
 
 <div
   class="modalOverlay"
   id="themeSettingsModal"
 >
 
-<div class="modal">
+  <div class="modal">
 
-<h2>ASA Teması</h2>
+    <h2>
+      ASA Teması
+    </h2>
 
-<div
-  class="settingsList"
-  id="themeOptions"
-></div>
+    <div
+      class="settingsList"
+      id="themeOptions"
+    ></div>
 
-<div class="modalButtons">
+    <div class="modalButtons">
 
-<button
-  class="modalButton"
-  id="themeSettingsClose"
->
-  Geri
-</button>
+      <button
+        class="modalButton"
+        id="themeSettingsClose"
+        type="button"
+      >
+        Geri
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
-</div>
-</div>
 
-<!-- VOICE MODE -->
+<!-- =======================================================
+     VOICE MODE
+======================================================= -->
 
 <section
   class="voiceMode"
   id="voiceMode"
 >
 
-<div class="voiceTop">
+  <div class="voiceTop">
 
-<div class="voiceTopTitle">
-  ASA
-</div>
+    <div class="voiceTopTitle">
+      ASA
+    </div>
 
-<button
-  class="voiceClose"
-  id="voiceClose"
->
-  ×
-</button>
+    <button
+      class="voiceClose"
+      id="voiceClose"
+      type="button"
+    >
+      ×
+    </button>
 
-</div>
+  </div>
 
-<div class="voiceCenter">
+  <div class="voiceCenter">
 
-<div class="asaOrb">
+    <div
+      class="asaOrb"
+      id="asaOrb"
+    ></div>
 
-<div class="orbCore"></div>
+    <div
+      class="voiceStatus"
+      id="voiceStatus"
+    >
+      Hazırım
+    </div>
 
-</div>
+  </div>
 
-<div
-  class="voiceStatus"
-  id="voiceStatus"
->
-  Hazırım
-</div>
+  <div class="voiceBottom">
 
-</div>
+    <button
+      class="voiceControl"
+      id="voiceControl"
+      type="button"
+      aria-label="Mikrofon"
+    >
 
-<div class="voiceBottom">
+      <span class="voiceIcon"></span>
 
-<button
-  class="voiceControl"
-  id="voiceControl"
->
-  <span class="voiceIcon"></span>
-</button>
+    </button>
 
-</div>
+  </div>
 
 </section>
+
 
 <audio
   id="remoteAudio"
@@ -2480,39 +2149,66 @@ window.addEventListener(
   playsinline
 ></audio>
 
+
 <script>
 
 /* =========================================================
    ASA FRONTEND
 ========================================================= */
 
-const API_URL="/api/chat";
+"use strict";
 
-const STORAGE_KEY="asa_conversations_v4";
-const ACTIVE_KEY="asa_active_v4";
-const SETTINGS_KEY="asa_settings_v4";
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const API_URL = "/api/chat";
+
+const REALTIME_API_URL = "/api/realtime";
+
+const STORAGE_KEY =
+  "asa_conversations_v5";
+
+const ACTIVE_KEY =
+  "asa_active_v5";
+
+const SETTINGS_KEY =
+  "asa_settings_v5";
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let conversationId =
   localStorage.getItem(ACTIVE_KEY) ||
   createId();
 
-let messages=[];
+let messages = [];
 
-let selectedFiles=[];
+let selectedFiles = [];
 
-let selectedConversationId=null;
+let selectedConversationId = null;
 
-let settings={
+let settings = {
   voice:
-    localStorage.getItem("asa_voice_v4") ||
-    "marin",
+    localStorage.getItem(
+      "asa_voice_v5"
+    ) || "marin",
 
   theme:
-    localStorage.getItem("asa_theme_v4") ||
-    "purple"
+    localStorage.getItem(
+      "asa_theme_v5"
+    ) || "purple"
 };
 
-const THEMES={
+
+/* =========================================================
+   THEMES
+========================================================= */
+
+const THEMES = {
 
   purple:{
     name:"Siyah · Mor",
@@ -2546,85 +2242,154 @@ const THEMES={
 
 };
 
-const VOICES=[
-  ["marin","Marin","Doğal ve dengeli"],
-  ["cedar","Cedar","Sakin ve güçlü"],
-  ["coral","Coral","Sıcak ve samimi"],
-  ["sage","Sage","Yumuşak ve sakin"],
-  ["ash","Ash","Net ve doğal"],
-  ["verse","Verse","Canlı ve enerjik"]
+
+/* =========================================================
+   VOICES
+========================================================= */
+
+const VOICES = [
+
+  [
+    "marin",
+    "Marin",
+    "Doğal ve dengeli"
+  ],
+
+  [
+    "cedar",
+    "Cedar",
+    "Sakin ve güçlü"
+  ],
+
+  [
+    "coral",
+    "Coral",
+    "Sıcak ve samimi"
+  ],
+
+  [
+    "sage",
+    "Sage",
+    "Yumuşak ve sakin"
+  ],
+
+  [
+    "ash",
+    "Ash",
+    "Net ve doğal"
+  ],
+
+  [
+    "verse",
+    "Verse",
+    "Canlı ve enerjik"
+  ]
+
 ];
 
-/* ELEMENTS */
 
-const chat=
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const chat =
   document.getElementById("chat");
 
-const input=
+const input =
   document.getElementById("messageInput");
 
-const sendButton=
+const sendButton =
   document.getElementById("sendButton");
 
-const sidebar=
+const sidebar =
   document.getElementById("sidebar");
 
-const overlay=
+const overlay =
   document.getElementById("overlay");
 
-const chatList=
+const chatList =
   document.getElementById("chatList");
 
-const contextMenu=
+const contextMenu =
   document.getElementById("contextMenu");
 
-const renameModal=
+const renameModal =
   document.getElementById("renameModal");
 
-const renameInput=
+const renameInput =
   document.getElementById("renameInput");
 
-const deleteModal=
+const deleteModal =
   document.getElementById("deleteModal");
 
-const sheetOverlay=
+const sheetOverlay =
   document.getElementById("sheetOverlay");
 
-const selectedPreview=
+const selectedPreview =
   document.getElementById("selectedPreview");
 
-const photoInput=
+const photoInput =
   document.getElementById("photoInput");
 
-const cameraInput=
+const cameraInput =
   document.getElementById("cameraInput");
 
-const fileInput=
+const fileInput =
   document.getElementById("fileInput");
 
-const settingsModal=
+const settingsModal =
   document.getElementById("settingsModal");
 
-const voiceSettingsModal=
-  document.getElementById("voiceSettingsModal");
+const voiceSettingsModal =
+  document.getElementById(
+    "voiceSettingsModal"
+  );
 
-const themeSettingsModal=
-  document.getElementById("themeSettingsModal");
+const themeSettingsModal =
+  document.getElementById(
+    "themeSettingsModal"
+  );
 
-const voiceOptions=
-  document.getElementById("voiceOptions");
+const voiceOptions =
+  document.getElementById(
+    "voiceOptions"
+  );
 
-const themeOptions=
-  document.getElementById("themeOptions");
+const themeOptions =
+  document.getElementById(
+    "themeOptions"
+  );
 
-const voiceMode=
-  document.getElementById("voiceMode");
+const voiceMode =
+  document.getElementById(
+    "voiceMode"
+  );
 
-const voiceStatus=
-  document.getElementById("voiceStatus");
+const voiceStatus =
+  document.getElementById(
+    "voiceStatus"
+  );
 
-const remoteAudio=
-  document.getElementById("remoteAudio");
+const voiceButton =
+  document.getElementById(
+    "voiceButton"
+  );
+
+const voiceClose =
+  document.getElementById(
+    "voiceClose"
+  );
+
+const voiceControl =
+  document.getElementById(
+    "voiceControl"
+  );
+
+const remoteAudio =
+  document.getElementById(
+    "remoteAudio"
+  );
+
 
 /* =========================================================
    HELPERS
@@ -2632,11 +2397,17 @@ const remoteAudio=
 
 function createId(){
 
-  return "asa-"+Date.now()+"-"+Math.random()
-    .toString(36)
-    .slice(2,9);
+  return (
+    "asa-" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2,9)
+  );
 
 }
+
 
 function saveSettings(){
 
@@ -2646,22 +2417,23 @@ function saveSettings(){
   );
 
   localStorage.setItem(
-    "asa_voice_v4",
+    "asa_voice_v5",
     settings.voice
   );
 
   localStorage.setItem(
-    "asa_theme_v4",
+    "asa_theme_v5",
     settings.theme
   );
 
 }
 
+
 function loadChats(){
 
   try{
 
-    const value=
+    const value =
       JSON.parse(
         localStorage.getItem(
           STORAGE_KEY
@@ -2680,6 +2452,7 @@ function loadChats(){
 
 }
 
+
 function saveChats(chats){
 
   localStorage.setItem(
@@ -2688,6 +2461,7 @@ function saveChats(chats){
   );
 
 }
+
 
 function formatTime(timestamp){
 
@@ -2702,46 +2476,57 @@ function formatTime(timestamp){
 
 }
 
+
 function dateLabel(timestamp){
 
-  const date=new Date(timestamp);
+  const date =
+    new Date(timestamp);
 
-  const today=new Date();
+  const today =
+    new Date();
 
-  const yesterday=new Date();
+  const yesterday =
+    new Date();
 
   yesterday.setDate(
-    yesterday.getDate()-1
+    yesterday.getDate() - 1
   );
 
   if(
-    date.toDateString()===
+    date.toDateString() ===
     today.toDateString()
   ){
+
     return "BUGÜN";
+
   }
 
   if(
-    date.toDateString()===
+    date.toDateString() ===
     yesterday.toDateString()
   ){
+
     return "DÜN";
+
   }
 
-  return date.toLocaleDateString(
-    "tr-TR",
-    {
-      day:"numeric",
-      month:"long"
-    }
-  ).toUpperCase();
+  return date
+    .toLocaleDateString(
+      "tr-TR",
+      {
+        day:"numeric",
+        month:"long"
+      }
+    )
+    .toUpperCase();
 
 }
 
+
 function generateTitle(text){
 
-  let title=
-    String(text||"")
+  let title =
+    String(text || "")
       .replace(/\s+/g," ")
       .trim();
 
@@ -2749,18 +2534,25 @@ function generateTitle(text){
     return "Yeni Sohbet";
   }
 
-  title=
+  title =
     title.replace(/[?!.]+$/,"");
 
-  if(title.length>38){
-    title=
-      title.slice(0,38).trim()+"…";
+  if(title.length > 38){
+
+    title =
+      title
+        .slice(0,38)
+        .trim() + "…";
+
   }
 
-  return title.charAt(0).toUpperCase()+
-    title.slice(1);
+  return (
+    title.charAt(0).toUpperCase() +
+    title.slice(1)
+  );
 
 }
+
 
 /* =========================================================
    THEME
@@ -2768,17 +2560,19 @@ function generateTitle(text){
 
 function applyTheme(){
 
-  const theme=
-    THEMES[settings.theme]||
+  const theme =
+    THEMES[settings.theme] ||
     THEMES.purple;
 
-  document.documentElement.style
+  document.documentElement
+    .style
     .setProperty(
       "--accent",
       theme.accent
     );
 
-  document.documentElement.style
+  document.documentElement
+    .style
     .setProperty(
       "--accent2",
       theme.accent2
@@ -2788,43 +2582,57 @@ function applyTheme(){
 
 }
 
+
 /* =========================================================
    CHAT STORAGE
 ========================================================= */
 
 function ensureChat(title){
 
-  const chats=loadChats();
+  const chats =
+    loadChats();
 
-  let chatItem=
+  let item =
     chats.find(
-      item=>
-        item.id===conversationId
+      x =>
+        x.id ===
+        conversationId
     );
 
-  if(!chatItem){
+  if(!item){
 
-    chatItem={
-      id:conversationId,
+    item = {
+
+      id:
+        conversationId,
+
       title:
-        title||
-        "Yeni Sohbet",
-      createdAt:Date.now(),
-      updatedAt:Date.now()
+        title
+          ? generateTitle(title)
+          : "Yeni Sohbet",
+
+      createdAt:
+        Date.now(),
+
+      updatedAt:
+        Date.now()
+
     };
 
-    chats.unshift(chatItem);
+    chats.unshift(item);
 
   }else{
 
-    chatItem.updatedAt=Date.now();
+    item.updatedAt =
+      Date.now();
 
     if(
       title &&
-      chatItem.title==="Yeni Sohbet"
+      item.title ===
+        "Yeni Sohbet"
     ){
 
-      chatItem.title=
+      item.title =
         generateTitle(title);
 
     }
@@ -2833,165 +2641,216 @@ function ensureChat(title){
 
   saveChats(chats);
 
-  return chatItem;
+  return item;
 
 }
 
+
 /* =========================================================
-   RENDER CHAT LIST
+   CHAT LIST
 ========================================================= */
 
 function renderChatList(){
 
-  const chats=
+  const chats =
     loadChats()
       .sort(
-        (a,b)=>
-          b.updatedAt-a.updatedAt
+        (a,b) =>
+          b.updatedAt -
+          a.updatedAt
       );
 
-  chatList.innerHTML="";
+  chatList.innerHTML = "";
 
   if(!chats.length){
 
-    chatList.innerHTML=
-      `<div class="noHistory">
+    chatList.innerHTML = `
+      <div class="noHistory">
         Henüz kayıtlı sohbet yok.
-      </div>`;
+      </div>
+    `;
 
     return;
 
   }
 
-  const groups={};
+  const groups = {};
 
-  chats.forEach(item=>{
+  chats.forEach(item => {
 
-    const key=
-      new Date(item.updatedAt)
-        .toDateString();
+    const key =
+      new Date(
+        item.updatedAt
+      ).toDateString();
 
     if(!groups[key]){
-      groups[key]=[];
+      groups[key] = [];
     }
 
     groups[key].push(item);
 
   });
 
+
   Object.entries(groups)
-    .forEach(([key,items])=>{
+    .forEach(
+      ([key,items]) => {
 
-      const group=
-        document.createElement("div");
-
-      group.className="historyGroup";
-
-      const date=
-        document.createElement("div");
-
-      date.className="historyDate";
-      date.textContent=
-        dateLabel(
-          items[0].updatedAt
-        );
-
-      group.appendChild(date);
-
-      items.forEach(item=>{
-
-        const row=
-          document.createElement("div");
-
-        row.className=
-          "historyItem"+
-          (
-            item.id===conversationId
-              ? " active"
-              : ""
+        const group =
+          document.createElement(
+            "div"
           );
 
-        const title=
-          document.createElement("div");
+        group.className =
+          "historyGroup";
 
-        title.className="historyTitle";
-        title.textContent=item.title;
 
-        const time=
-          document.createElement("div");
-
-        time.className="historyTime";
-        time.textContent=
-          formatTime(
-            item.updatedAt
+        const date =
+          document.createElement(
+            "div"
           );
 
-        const more=
-          document.createElement("button");
+        date.className =
+          "historyDate";
 
-        more.className="historyMore";
-        more.type="button";
-        more.textContent="•••";
+        date.textContent =
+          dateLabel(
+            items[0].updatedAt
+          );
 
-        row.appendChild(title);
-        row.appendChild(time);
-        row.appendChild(more);
+        group.appendChild(date);
 
-        row.addEventListener(
-          "click",
-          event=>{
 
-            if(
-              event.target.closest(
-                ".historyMore"
-              )
-            ){
-              return;
+        items.forEach(item => {
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+          row.className =
+            "historyItem" +
+            (
+              item.id ===
+              conversationId
+                ? " active"
+                : ""
+            );
+
+
+          const title =
+            document.createElement(
+              "div"
+            );
+
+          title.className =
+            "historyTitle";
+
+          title.textContent =
+            item.title;
+
+
+          const time =
+            document.createElement(
+              "div"
+            );
+
+          time.className =
+            "historyTime";
+
+          time.textContent =
+            formatTime(
+              item.updatedAt
+            );
+
+
+          const more =
+            document.createElement(
+              "button"
+            );
+
+          more.className =
+            "historyMore";
+
+          more.type =
+            "button";
+
+          more.textContent =
+            "•••";
+
+
+          row.appendChild(title);
+          row.appendChild(time);
+          row.appendChild(more);
+
+
+          row.addEventListener(
+            "click",
+            event => {
+
+              if(
+                event.target.closest(
+                  ".historyMore"
+                )
+              ){
+
+                return;
+
+              }
+
+              openConversation(
+                item.id
+              );
+
             }
+          );
 
-            openConversation(item.id);
 
-          }
-        );
+          more.addEventListener(
+            "click",
+            event => {
 
-        more.addEventListener(
-          "click",
-          event=>{
+              event.stopPropagation();
 
-            event.stopPropagation();
+              selectedConversationId =
+                item.id;
 
-            selectedConversationId=
-              item.id;
+              const rect =
+                more
+                  .getBoundingClientRect();
 
-            const rect=
-              more.getBoundingClientRect();
+              contextMenu.style.left =
+                Math.max(
+                  10,
+                  rect.left - 175
+                ) + "px";
 
-            contextMenu.style.left=
-              Math.max(
-                10,
-                rect.left-175
-              )+"px";
+              contextMenu.style.top =
+                Math.min(
+                  window.innerHeight - 120,
+                  rect.bottom + 6
+                ) + "px";
 
-            contextMenu.style.top=
-              Math.min(
-                window.innerHeight-120,
-                rect.bottom+6
-              )+"px";
+              contextMenu.classList.add(
+                "open"
+              );
 
-            contextMenu.classList.add("open");
+            }
+          );
 
-          }
-        );
 
-        group.appendChild(row);
+          group.appendChild(row);
 
-      });
+        });
 
-      chatList.appendChild(group);
 
-    });
+        chatList.appendChild(group);
+
+      }
+    );
 
 }
+
 
 /* =========================================================
    SIDEBAR
@@ -3001,29 +2860,59 @@ function openMenu(){
 
   renderChatList();
 
-  sidebar.classList.add("open");
-  overlay.classList.add("open");
+  sidebar.classList.add(
+    "open"
+  );
+
+  overlay.classList.add(
+    "open"
+  );
 
 }
+
 
 function closeMenu(){
 
-  sidebar.classList.remove("open");
-  overlay.classList.remove("open");
+  sidebar.classList.remove(
+    "open"
+  );
 
-  contextMenu.classList.remove("open");
+  overlay.classList.remove(
+    "open"
+  );
+
+  contextMenu.classList.remove(
+    "open"
+  );
 
 }
 
-document
-  .getElementById("menuButton")
-  .onclick=openMenu;
 
 document
-  .getElementById("closeMenu")
-  .onclick=closeMenu;
+  .getElementById(
+    "menuButton"
+  )
+  .addEventListener(
+    "click",
+    openMenu
+  );
 
-overlay.onclick=closeMenu;
+
+document
+  .getElementById(
+    "closeMenu"
+  )
+  .addEventListener(
+    "click",
+    closeMenu
+  );
+
+
+overlay.addEventListener(
+  "click",
+  closeMenu
+);
+
 
 /* =========================================================
    NEW CHAT
@@ -3031,36 +2920,43 @@ overlay.onclick=closeMenu;
 
 function newConversation(){
 
-  conversationId=createId();
+  conversationId =
+    createId();
 
   localStorage.setItem(
     ACTIVE_KEY,
     conversationId
   );
 
-  messages=[];
+  messages = [];
 
-  selectedFiles=[];
+  selectedFiles = [];
 
   updatePreview();
+
+  input.value = "";
 
   showEmpty();
 
   renderChatList();
 
-  input.value="";
-  input.focus();
-
 }
 
+
 document
-  .getElementById("newChatButton")
-  .onclick=()=>{
+  .getElementById(
+    "newChatButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    newConversation();
-    closeMenu();
+      newConversation();
+      closeMenu();
 
-  };
+    }
+  );
+
 
 /* =========================================================
    OPEN CHAT
@@ -3068,7 +2964,8 @@ document
 
 async function openConversation(id){
 
-  conversationId=id;
+  conversationId =
+    id;
 
   localStorage.setItem(
     ACTIVE_KEY,
@@ -3077,13 +2974,13 @@ async function openConversation(id){
 
   closeMenu();
 
-  chat.innerHTML="";
+  chat.innerHTML = "";
 
   addTyping();
 
   try{
 
-    const response=
+    const response =
       await fetch(
         API_URL,
         {
@@ -3094,32 +2991,41 @@ async function openConversation(id){
               "application/json"
           },
 
-          body:JSON.stringify({
-            conversationId:id,
-            getHistory:true
-          })
+          body:
+            JSON.stringify({
+              conversationId:id,
+              getHistory:true
+            })
         }
       );
 
-    const data=
+
+    const data =
       await response.json();
 
     removeTyping();
+
 
     if(
       !response.ok ||
       !data.success
     ){
+
       throw new Error(
-        data.error||
+        data.error ||
         "Geçmiş alınamadı."
       );
+
     }
 
-    messages=
-      Array.isArray(data.history)
+
+    messages =
+      Array.isArray(
+        data.history
+      )
         ? data.history
         : [];
+
 
     renderMessages();
 
@@ -3127,7 +3033,7 @@ async function openConversation(id){
 
     removeTyping();
 
-    messages=[];
+    messages = [];
 
     showEmpty();
 
@@ -3142,13 +3048,14 @@ async function openConversation(id){
 
 }
 
+
 /* =========================================================
-   CONTEXT MENU
+   CONTEXT
 ========================================================= */
 
 document.addEventListener(
   "click",
-  event=>{
+  event => {
 
     if(
       !event.target.closest(
@@ -3168,206 +3075,279 @@ document.addEventListener(
   }
 );
 
+
 /* =========================================================
    RENAME
 ========================================================= */
 
 document
-  .getElementById("renameButton")
-  .onclick=()=>{
+  .getElementById(
+    "renameButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    const id=
-      selectedConversationId;
+      const item =
+        loadChats().find(
+          x =>
+            x.id ===
+            selectedConversationId
+        );
 
-    const chats=loadChats();
+      if(!item){
+        return;
+      }
 
-    const item=
-      chats.find(
-        x=>x.id===id
+      renameInput.value =
+        item.title;
+
+      contextMenu.classList.remove(
+        "open"
       );
 
-    if(!item){
-      return;
-    }
-
-    renameInput.value=item.title;
-
-    contextMenu.classList.remove(
-      "open"
-    );
-
-    renameModal.classList.add(
-      "open"
-    );
-
-    setTimeout(
-      ()=>{
-        renameInput.focus();
-        renameInput.select();
-      },
-      100
-    );
-
-  };
-
-document
-  .getElementById("renameCancel")
-  .onclick=()=>{
-
-    renameModal.classList.remove(
-      "open"
-    );
-
-  };
-
-document
-  .getElementById("renameSave")
-  .onclick=()=>{
-
-    const id=
-      selectedConversationId;
-
-    const title=
-      renameInput.value.trim();
-
-    if(!title){
-      return;
-    }
-
-    const chats=loadChats();
-
-    const item=
-      chats.find(
-        x=>x.id===id
+      renameModal.classList.add(
+        "open"
       );
 
-    if(item){
+      setTimeout(
+        () => {
 
-      item.title=title;
-      item.updatedAt=Date.now();
+          renameInput.focus();
+          renameInput.select();
 
-      saveChats(chats);
+        },
+        50
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "renameCancel"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      renameModal.classList.remove(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "renameSave"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      const title =
+        renameInput.value.trim();
+
+      if(!title){
+        return;
+      }
+
+      const chats =
+        loadChats();
+
+      const item =
+        chats.find(
+          x =>
+            x.id ===
+            selectedConversationId
+        );
+
+      if(item){
+
+        item.title =
+          title;
+
+        item.updatedAt =
+          Date.now();
+
+        saveChats(chats);
+
+      }
+
+      renameModal.classList.remove(
+        "open"
+      );
+
+      renderChatList();
+
+    }
+  );
+
+
+renameInput.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      event.preventDefault();
+
+      document
+        .getElementById(
+          "renameSave"
+        )
+        .click();
 
     }
 
-    renameModal.classList.remove(
-      "open"
-    );
+  }
+);
 
-    renderChatList();
-
-  };
 
 /* =========================================================
    DELETE
 ========================================================= */
 
 document
-  .getElementById("deleteButton")
-  .onclick=()=>{
+  .getElementById(
+    "deleteButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    const id=
-      selectedConversationId;
+      const item =
+        loadChats().find(
+          x =>
+            x.id ===
+            selectedConversationId
+        );
 
-    const chats=loadChats();
+      if(!item){
+        return;
+      }
 
-    const item=
-      chats.find(
-        x=>x.id===id
+      document
+        .getElementById(
+          "deleteText"
+        )
+        .textContent =
+        `"${item.title}" sohbeti silinecek.`;
+
+      contextMenu.classList.remove(
+        "open"
       );
 
-    if(!item){
-      return;
-    }
-
-    document
-      .getElementById("deleteText")
-      .textContent=
-      `"${item.title}" sohbeti silinecek.`;
-
-    contextMenu.classList.remove(
-      "open"
-    );
-
-    deleteModal.classList.add(
-      "open"
-    );
-
-  };
-
-document
-  .getElementById("deleteCancel")
-  .onclick=()=>{
-
-    deleteModal.classList.remove(
-      "open"
-    );
-
-  };
-
-document
-  .getElementById("deleteConfirm")
-  .onclick=async()=>{
-
-    const id=
-      selectedConversationId;
-
-    try{
-
-      await fetch(
-        API_URL,
-        {
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:JSON.stringify({
-            conversationId:id,
-            deleteConversation:true
-          })
-        }
-      );
-
-    }catch(error){
-
-      console.error(
-        "DELETE:",
-        error
+      deleteModal.classList.add(
+        "open"
       );
 
     }
+  );
 
-    saveChats(
-      loadChats().filter(
-        item=>item.id!==id
-      )
-    );
 
-    deleteModal.classList.remove(
-      "open"
-    );
+document
+  .getElementById(
+    "deleteCancel"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    if(id===conversationId){
+      deleteModal.classList.remove(
+        "open"
+      );
 
-      conversationId=createId();
+    }
+  );
 
-      localStorage.setItem(
-        ACTIVE_KEY,
+
+document
+  .getElementById(
+    "deleteConfirm"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      const id =
+        selectedConversationId;
+
+
+      try{
+
+        await fetch(
+          API_URL,
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+                conversationId:id,
+                deleteConversation:true
+              })
+          }
+        );
+
+      }catch(error){
+
+        console.error(
+          "DELETE:",
+          error
+        );
+
+      }
+
+
+      saveChats(
+        loadChats().filter(
+          item =>
+            item.id !== id
+        )
+      );
+
+
+      deleteModal.classList.remove(
+        "open"
+      );
+
+
+      if(
+        id ===
         conversationId
-      );
+      ){
 
-      messages=[];
+        conversationId =
+          createId();
 
-      showEmpty();
+        localStorage.setItem(
+          ACTIVE_KEY,
+          conversationId
+        );
+
+        messages = [];
+
+        showEmpty();
+
+      }
+
+
+      renderChatList();
 
     }
+  );
 
-    renderChatList();
-
-  };
 
 /* =========================================================
    SEND
@@ -3375,53 +3355,72 @@ document
 
 async function sendMessage(){
 
-  const text=
+  const text =
     input.value.trim();
+
 
   if(
     !text &&
-    selectedFiles.length===0
+    selectedFiles.length === 0
   ){
+
     return;
+
   }
 
-  sendButton.disabled=true;
 
-  const files=
+  sendButton.disabled =
+    true;
+
+
+  const files =
     await prepareFiles();
 
-  input.value="";
 
-  const title=
-    text||
-    files[0]?.name||
+  input.value = "";
+
+
+  const title =
+    text ||
+    files[0]?.name ||
     "Görsel";
+
 
   ensureChat(title);
 
-  const userMessage={
+
+  const userMessage = {
+
     role:"user",
+
     content:text,
+
     attachments:
       files.map(
-        file=>({
+        file => ({
           name:file.name,
           type:file.type,
           size:file.size,
           dataUrl:file.dataUrl
         })
       )
+
   };
 
-  messages.push(userMessage);
+
+  messages.push(
+    userMessage
+  );
+
 
   renderMessages();
 
   addTyping();
 
+
   try{
 
-    const response=
+    const response =
       await fetch(
         API_URL,
         {
@@ -3432,23 +3431,24 @@ async function sendMessage(){
               "application/json"
           },
 
-          body:JSON.stringify({
+          body:
+            JSON.stringify({
+              conversationId,
 
-            conversationId,
-
-            messages:[
-              userMessage
-            ]
-
-          })
-
+              messages:[
+                userMessage
+              ]
+            })
         }
       );
 
-    const data=
+
+    const data =
       await response.json();
 
+
     removeTyping();
+
 
     if(
       !response.ok ||
@@ -3456,32 +3456,43 @@ async function sendMessage(){
     ){
 
       throw new Error(
-        data.error||
+        data.error ||
         "ASA cevap veremedi."
       );
 
     }
 
-    messages=
-      Array.isArray(data.history)
-        ? data.history
-        : [
-            ...messages,
-            {
-              role:"assistant",
-              content:
-                data.answer||""
-            }
-          ];
 
-    selectedFiles=[];
+    if(
+      Array.isArray(
+        data.history
+      )
+    ){
+
+      messages =
+        data.history;
+
+    }else{
+
+      messages.push({
+        role:"assistant",
+        content:
+          data.answer || ""
+      });
+
+    }
+
+
+    selectedFiles = [];
 
     updatePreview();
 
     ensureChat();
 
     renderMessages();
+
     renderChatList();
+
 
   }catch(error){
 
@@ -3492,6 +3503,7 @@ async function sendMessage(){
       error
     );
 
+
     messages.push({
 
       role:"assistant",
@@ -3501,11 +3513,13 @@ async function sendMessage(){
 
     });
 
+
     renderMessages();
 
   }finally{
 
-    sendButton.disabled=false;
+    sendButton.disabled =
+      false;
 
     input.focus();
 
@@ -3513,16 +3527,20 @@ async function sendMessage(){
 
 }
 
-document
-  .getElementById("sendButton")
-  .onclick=sendMessage;
+
+sendButton.addEventListener(
+  "click",
+  sendMessage
+);
+
 
 input.addEventListener(
   "keydown",
-  event=>{
+  event => {
 
     if(
-      event.key==="Enter" &&
+      event.key ===
+      "Enter" &&
       !event.shiftKey
     ){
 
@@ -3535,8 +3553,9 @@ input.addEventListener(
   }
 );
 
+
 /* =========================================================
-   FILE PICKER
+   ATTACHMENT SHEET
 ========================================================= */
 
 function openSheet(){
@@ -3547,6 +3566,7 @@ function openSheet(){
 
 }
 
+
 function closeSheet(){
 
   sheetOverlay.classList.remove(
@@ -3555,115 +3575,148 @@ function closeSheet(){
 
 }
 
-document
-  .getElementById("plusButton")
-  .onclick=openSheet;
 
 document
-  .getElementById("sheetCancel")
-  .onclick=closeSheet;
+  .getElementById(
+    "plusButton"
+  )
+  .addEventListener(
+    "click",
+    openSheet
+  );
+
+
+document
+  .getElementById(
+    "sheetCancel"
+  )
+  .addEventListener(
+    "click",
+    closeSheet
+  );
+
 
 sheetOverlay.addEventListener(
   "click",
-  event=>{
+  event => {
 
     if(
-      event.target===sheetOverlay
+      event.target ===
+      sheetOverlay
     ){
+
       closeSheet();
+
     }
 
   }
 );
 
-document
-  .getElementById("photosButton")
-  .onclick=()=>{
 
-    closeSheet();
+/*
+  ÖNEMLİ:
 
-    /*
-      iPhone/Safari native
-      fotoğraf seçiciyi açar.
-    */
+  iPhone'da input.click() kullanıcı
+  tıklamasının hemen içinde yapılmalı.
 
-    setTimeout(
-      ()=>{
-        photoInput.click();
-      },
-      100
-    );
-
-  };
+  setTimeout kullanmıyoruz.
+*/
 
 document
-  .getElementById("cameraButton")
-  .onclick=()=>{
+  .getElementById(
+    "photosButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    closeSheet();
+      closeSheet();
 
-    setTimeout(
-      ()=>{
-        cameraInput.click();
-      },
-      100
-    );
+      photoInput.click();
 
-  };
+    }
+  );
+
 
 document
-  .getElementById("filesButton")
-  .onclick=()=>{
+  .getElementById(
+    "cameraButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    closeSheet();
+      closeSheet();
 
-    setTimeout(
-      ()=>{
-        fileInput.click();
-      },
-      100
-    );
+      cameraInput.click();
 
-  };
+    }
+  );
+
+
+document
+  .getElementById(
+    "filesButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSheet();
+
+      fileInput.click();
+
+    }
+  );
+
 
 photoInput.addEventListener(
   "change",
-  event=>{
+  event => {
 
     addFiles(
-      [...event.target.files]
+      Array.from(
+        event.target.files || []
+      )
     );
 
-    event.target.value="";
+    event.target.value = "";
 
   }
 );
+
 
 cameraInput.addEventListener(
   "change",
-  event=>{
+  event => {
 
     addFiles(
-      [...event.target.files]
+      Array.from(
+        event.target.files || []
+      )
     );
 
-    event.target.value="";
+    event.target.value = "";
 
   }
 );
+
 
 fileInput.addEventListener(
   "change",
-  event=>{
+  event => {
 
     addFiles(
-      [...event.target.files]
+      Array.from(
+        event.target.files || []
+      )
     );
 
-    event.target.value="";
+    event.target.value = "";
 
   }
 );
+
 
 /* =========================================================
    FILES
@@ -3675,7 +3728,9 @@ function addFiles(files){
     return;
   }
 
-  selectedFiles.push(...files);
+  selectedFiles.push(
+    ...files
+  );
 
   updatePreview();
 
@@ -3683,114 +3738,160 @@ function addFiles(files){
 
 }
 
+
 function updatePreview(){
 
-  selectedPreview.innerHTML="";
+  selectedPreview.innerHTML =
+    "";
 
   if(
-    selectedFiles.length===0
+    selectedFiles.length === 0
   ){
 
-    selectedPreview.hidden=true;
+    selectedPreview.hidden =
+      true;
 
     return;
 
   }
 
-  selectedPreview.hidden=false;
+
+  selectedPreview.hidden =
+    false;
+
 
   selectedFiles.forEach(
-    (file,index)=>{
+    (file,index) => {
 
-      const item=
-        document.createElement("div");
+      const item =
+        document.createElement(
+          "div"
+        );
 
-      item.className="previewItem";
+      item.className =
+        "previewItem";
+
 
       if(
-        file.type.startsWith("image/")
+        file.type &&
+        file.type.startsWith(
+          "image/"
+        )
       ){
 
-        const image=
-          document.createElement("img");
+        const image =
+          document.createElement(
+            "img"
+          );
 
-        image.src=
-          URL.createObjectURL(file);
+        image.src =
+          URL.createObjectURL(
+            file
+          );
 
-        item.appendChild(image);
+        item.appendChild(
+          image
+        );
 
       }else{
 
-        item.style.display="flex";
-        item.style.alignItems="center";
-        item.style.justifyContent="center";
+        item.style.display =
+          "flex";
 
-        item.textContent="📄";
+        item.style.alignItems =
+          "center";
+
+        item.style.justifyContent =
+          "center";
+
+        item.textContent =
+          "📄";
 
       }
 
-      const remove=
-        document.createElement("button");
 
-      remove.className="previewRemove";
-      remove.type="button";
-      remove.textContent="×";
-
-      remove.onclick=()=>{
-
-        selectedFiles.splice(
-          index,
-          1
+      const remove =
+        document.createElement(
+          "button"
         );
 
-        updatePreview();
+      remove.className =
+        "previewRemove";
 
-      };
+      remove.type =
+        "button";
 
-      item.appendChild(remove);
+      remove.textContent =
+        "×";
 
-      selectedPreview.appendChild(item);
+
+      remove.addEventListener(
+        "click",
+        () => {
+
+          selectedFiles.splice(
+            index,
+            1
+          );
+
+          updatePreview();
+
+        }
+      );
+
+
+      item.appendChild(
+        remove
+      );
+
+      selectedPreview.appendChild(
+        item
+      );
 
     }
   );
 
 }
+
 
 function fileToDataURL(file){
 
   return new Promise(
-    resolve=>{
+    resolve => {
 
-      const reader=
+      const reader =
         new FileReader();
 
-      reader.onload=()=>{
-        resolve(
+      reader.onload =
+        () => resolve(
           reader.result
         );
-      };
 
-      reader.onerror=()=>{
-        resolve(null);
-      };
+      reader.onerror =
+        () => resolve(null);
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(
+        file
+      );
 
     }
   );
 
 }
 
+
 async function prepareFiles(){
 
-  const result=[];
+  const result = [];
 
   for(
     const file of selectedFiles
   ){
 
-    const dataUrl=
-      await fileToDataURL(file);
+    const dataUrl =
+      await fileToDataURL(
+        file
+      );
 
     result.push({
 
@@ -3807,51 +3908,75 @@ async function prepareFiles(){
 
 }
 
+
 /* =========================================================
    RENDER
 ========================================================= */
 
 function escapeHtml(text){
 
-  return String(text||"")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  return String(text || "")
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
+
 function formatAnswer(text){
 
-  let result=
+  let result =
     escapeHtml(text);
 
-  result=
+
+  result =
     result.replace(
       /\*\*(.*?)\*\*/g,
       "<strong>$1</strong>"
     );
 
-  result=
+
+  result =
     result.replace(
       /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener">$1</a>'
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
     );
 
-  result=
+
+  result =
     result.replace(
       /\n/g,
       "<br>"
     );
 
+
   return result;
 
 }
 
+
 function renderMessages(){
 
-  chat.innerHTML="";
+  chat.innerHTML =
+    "";
+
 
   if(!messages.length){
 
@@ -3861,115 +3986,147 @@ function renderMessages(){
 
   }
 
-  messages.forEach(message=>{
 
-    if(
-      message.role!=="user" &&
-      message.role!=="assistant"
-    ){
-      return;
-    }
+  messages.forEach(
+    message => {
 
-    const row=
-      document.createElement("div");
+      if(
+        message.role !== "user" &&
+        message.role !== "assistant"
+      ){
 
-    row.className=
-      "message "+
-      (
-        message.role==="user"
-          ? "user"
-          : "assistant"
-      );
-
-    const bubble=
-      document.createElement("div");
-
-    bubble.className="bubble";
-
-    if(
-      message.role==="assistant"
-    ){
-
-      bubble.innerHTML=`
-
-        <span class="assistantLabel">
-          ASA
-        </span>
-
-        <div class="assistantText">
-          ${formatAnswer(
-            message.content||""
-          )}
-        </div>
-
-      `;
-
-    }else{
-
-      const attachments=
-        Array.isArray(
-          message.attachments
-        )
-          ? message.attachments
-          : [];
-
-      attachments.forEach(
-        attachment=>{
-
-          if(
-            attachment?.dataUrl &&
-            attachment?.type?.startsWith(
-              "image/"
-            )
-          ){
-
-            const image=
-              document.createElement("img");
-
-            image.className=
-              "messageImage";
-
-            image.src=
-              attachment.dataUrl;
-
-            image.alt=
-              attachment.name||
-              "Görsel";
-
-            bubble.appendChild(image);
-
-          }
-
-        }
-      );
-
-      if(message.content){
-
-        const text=
-          document.createElement("div");
-
-        text.textContent=
-          message.content;
-
-        bubble.appendChild(text);
+        return;
 
       }
 
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "message " +
+        (
+          message.role ===
+          "user"
+            ? "user"
+            : "assistant"
+        );
+
+
+      const bubble =
+        document.createElement(
+          "div"
+        );
+
+      bubble.className =
+        "bubble";
+
+
+      if(
+        message.role ===
+        "assistant"
+      ){
+
+        bubble.innerHTML = `
+
+          <span class="assistantLabel">
+            ASA
+          </span>
+
+          <div class="assistantText">
+            ${formatAnswer(
+              message.content || ""
+            )}
+          </div>
+
+        `;
+
+      }else{
+
+        const attachments =
+          Array.isArray(
+            message.attachments
+          )
+            ? message.attachments
+            : [];
+
+
+        attachments.forEach(
+          attachment => {
+
+            if(
+              attachment?.dataUrl &&
+              attachment?.type?.startsWith(
+                "image/"
+              )
+            ){
+
+              const image =
+                document.createElement(
+                  "img"
+                );
+
+              image.className =
+                "messageImage";
+
+              image.src =
+                attachment.dataUrl;
+
+              image.alt =
+                attachment.name ||
+                "Görsel";
+
+              bubble.appendChild(
+                image
+              );
+
+            }
+
+          }
+        );
+
+
+        if(message.content){
+
+          const text =
+            document.createElement(
+              "div"
+            );
+
+          text.textContent =
+            message.content;
+
+          bubble.appendChild(
+            text
+          );
+
+        }
+
+      }
+
+
+      row.appendChild(
+        bubble
+      );
+
+      chat.appendChild(
+        row
+      );
+
     }
+  );
 
-    row.appendChild(bubble);
-
-    chat.appendChild(row);
-
-  });
 
   scrollBottom();
 
 }
 
+
 function showEmpty(){
 
-  chat.innerHTML=`
+  chat.innerHTML = `
 
     <div class="empty">
 
@@ -3989,19 +4146,25 @@ function showEmpty(){
 
 }
 
+
 function addTyping(){
 
   removeTyping();
 
-  const row=
-    document.createElement("div");
 
-  row.className=
+  const row =
+    document.createElement(
+      "div"
+    );
+
+  row.className =
     "message assistant";
 
-  row.id="typing";
+  row.id =
+    "typing";
 
-  row.innerHTML=`
+
+  row.innerHTML = `
 
     <div class="bubble">
 
@@ -4010,158 +4173,216 @@ function addTyping(){
       </span>
 
       <div class="typing">
+
         <span></span>
         <span></span>
         <span></span>
+
       </div>
 
     </div>
 
   `;
 
-  chat.appendChild(row);
+
+  chat.appendChild(
+    row
+  );
+
 
   scrollBottom();
 
 }
 
+
 function removeTyping(){
 
   document
-    .getElementById("typing")
+    .getElementById(
+      "typing"
+    )
     ?.remove();
 
 }
 
+
 function scrollBottom(){
 
   requestAnimationFrame(
-    ()=>{
-      chat.scrollTop=
+    () => {
+
+      chat.scrollTop =
         chat.scrollHeight;
+
     }
   );
 
 }
+
 
 /* =========================================================
    SETTINGS
 ========================================================= */
 
 document
-  .getElementById("settingsMenuButton")
-  .onclick=()=>{
+  .getElementById(
+    "settingsMenuButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    closeMenu();
+      closeMenu();
 
-    settingsModal.classList.add(
-      "open"
-    );
+      settingsModal.classList.add(
+        "open"
+      );
 
-  };
+    }
+  );
 
-document
-  .getElementById("settingsClose")
-  .onclick=()=>{
-
-    settingsModal.classList.remove(
-      "open"
-    );
-
-  };
 
 document
-  .getElementById("voiceSettingsButton")
-  .onclick=()=>{
+  .getElementById(
+    "settingsClose"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    settingsModal.classList.remove(
-      "open"
-    );
+      settingsModal.classList.remove(
+        "open"
+      );
 
-    renderVoiceOptions();
+    }
+  );
 
-    voiceSettingsModal.classList.add(
-      "open"
-    );
-
-  };
-
-document
-  .getElementById("themeSettingsButton")
-  .onclick=()=>{
-
-    settingsModal.classList.remove(
-      "open"
-    );
-
-    renderThemeOptions();
-
-    themeSettingsModal.classList.add(
-      "open"
-    );
-
-  };
 
 document
-  .getElementById("voiceSettingsClose")
-  .onclick=()=>{
+  .getElementById(
+    "voiceSettingsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    voiceSettingsModal.classList.remove(
-      "open"
-    );
+      settingsModal.classList.remove(
+        "open"
+      );
 
-    settingsModal.classList.add(
-      "open"
-    );
+      renderVoiceOptions();
 
-  };
+      voiceSettingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
 
 document
-  .getElementById("themeSettingsClose")
-  .onclick=()=>{
+  .getElementById(
+    "themeSettingsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    themeSettingsModal.classList.remove(
-      "open"
-    );
+      settingsModal.classList.remove(
+        "open"
+      );
 
-    settingsModal.classList.add(
-      "open"
-    );
+      renderThemeOptions();
 
-  };
+      themeSettingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "voiceSettingsClose"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      voiceSettingsModal.classList.remove(
+        "open"
+      );
+
+      settingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "themeSettingsClose"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      themeSettingsModal.classList.remove(
+        "open"
+      );
+
+      settingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
 
 function renderVoiceOptions(){
 
-  voiceOptions.innerHTML="";
+  voiceOptions.innerHTML =
+    "";
+
 
   VOICES.forEach(
-    ([id,name,description])=>{
+    ([id,name,description]) => {
 
-      const button=
-        document.createElement("button");
+      const button =
+        document.createElement(
+          "button"
+        );
 
-      button.className=
-        "settingOption"+
+      button.className =
+        "settingOption" +
         (
-          settings.voice===id
+          settings.voice === id
             ? " active"
             : ""
         );
 
-      button.type="button";
+      button.type =
+        "button";
 
-      button.innerHTML=`
+
+      button.innerHTML = `
 
         <span>
+
           ${name}
+
           <small class="settingDescription">
             ${description}
           </small>
+
         </span>
 
         <span class="settingCheck">
           ${
-            settings.voice===id
+            settings.voice === id
               ? "✓"
               : ""
           }
@@ -4169,92 +4390,142 @@ function renderVoiceOptions(){
 
       `;
 
-      button.onclick=()=>{
 
-        settings.voice=id;
+      button.addEventListener(
+        "click",
+        () => {
 
-        saveSettings();
+          settings.voice =
+            id;
 
-        renderVoiceOptions();
+          saveSettings();
 
-      };
+          renderVoiceOptions();
 
-      voiceOptions.appendChild(button);
+        }
+      );
+
+
+      voiceOptions.appendChild(
+        button
+      );
 
     }
   );
 
 }
 
+
 function renderThemeOptions(){
 
-  themeOptions.innerHTML="";
+  themeOptions.innerHTML =
+    "";
+
 
   Object.entries(THEMES)
     .forEach(
-      ([id,theme])=>{
+      ([id,theme]) => {
 
-        const button=
-          document.createElement("button");
+        const button =
+          document.createElement(
+            "button"
+          );
 
-        button.className=
-          "settingOption"+
+        button.className =
+          "settingOption" +
           (
-            settings.theme===id
+            settings.theme === id
               ? " active"
               : ""
           );
 
-        button.type="button";
+        button.type =
+          "button";
 
-        button.innerHTML=`
+
+        button.innerHTML = `
 
           <span>
             ${theme.name}
           </span>
 
           <span class="settingCheck">
+
             ${
-              settings.theme===id
+              settings.theme === id
                 ? "✓"
                 : ""
             }
+
           </span>
 
         `;
 
-        button.onclick=()=>{
 
-          settings.theme=id;
+        button.addEventListener(
+          "click",
+          () => {
 
-          applyTheme();
+            settings.theme =
+              id;
 
-          renderThemeOptions();
+            applyTheme();
 
-        };
+            renderThemeOptions();
 
-        themeOptions.appendChild(button);
+          }
+        );
+
+
+        themeOptions.appendChild(
+          button
+        );
 
       }
     );
 
 }
 
+
 /* =========================================================
    MEMORY
 ========================================================= */
 
 document
-  .getElementById("memoryMenuButton")
-  .onclick=()=>{
+  .getElementById(
+    "memoryMenuButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-    closeMenu();
+      closeMenu();
 
-    alert(
-      "ASA'nın kalıcı hafızası Redis üzerinde çalışıyor."
-    );
+      alert(
+        "ASA'nın kalıcı hafızası Redis üzerinde çalışıyor."
+      );
 
-  };
+    }
+  );
+
+
+/* =========================================================
+   SHOW CHATS
+========================================================= */
+
+document
+  .getElementById(
+    "showChatsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      renderChatList();
+
+    }
+  );
+
 
 /* =========================================================
    MODAL BACKDROPS
@@ -4267,14 +4538,15 @@ document
   voiceSettingsModal,
   themeSettingsModal
 ].forEach(
-  modal=>{
+  modal => {
 
     modal.addEventListener(
       "click",
-      event=>{
+      event => {
 
         if(
-          event.target===modal
+          event.target ===
+          modal
         ){
 
           modal.classList.remove(
@@ -4289,81 +4561,898 @@ document
   }
 );
 
+
 /* =========================================================
-   VOICE
+   REALTIME VOICE
 ========================================================= */
 
-/*
-  Realtime.js mevcut ses sistemini
-  yönetmeye devam ediyor.
+let realtimePeer = null;
 
-  Eğer mevcut realtime.js global fonksiyonları
-  kullanıyorsa burada onlara dokunmuyoruz.
-*/
+let realtimeStream = null;
 
-const voiceButton=
-  document.getElementById(
-    "voiceButton"
+let realtimeDataChannel = null;
+
+let realtimeConnected = false;
+
+let realtimeConnecting = false;
+
+
+/* ---------------------------------------------------------
+   STATUS
+--------------------------------------------------------- */
+
+function setVoiceStatus(text){
+
+  voiceStatus.textContent =
+    text;
+
+}
+
+
+/* ---------------------------------------------------------
+   STATE
+--------------------------------------------------------- */
+
+function setVoiceState(state){
+
+  voiceMode.classList.remove(
+    "listening",
+    "speaking"
   );
 
-const voiceClose=
-  document.getElementById(
-    "voiceClose"
-  );
+  if(state){
 
-const voiceControl=
-  document.getElementById(
-    "voiceControl"
-  );
-
-voiceButton.onclick=()=>{
-
-  if(
-    typeof openVoiceMode==="function"
-  ){
-
-    openVoiceMode();
-
-  }else{
-
-    voiceMode.classList.add("open");
-
-  }
-
-};
-
-voiceClose.onclick=()=>{
-
-  if(
-    typeof closeVoiceMode==="function"
-  ){
-
-    closeVoiceMode();
-
-  }else{
-
-    voiceMode.classList.remove(
-      "open"
+    voiceMode.classList.add(
+      state
     );
 
   }
 
-};
+}
 
-voiceControl.onclick=()=>{
+
+/* ---------------------------------------------------------
+   CLIENT SECRET
+--------------------------------------------------------- */
+
+async function getRealtimeClientSecret(){
+
+  const response =
+    await fetch(
+      REALTIME_API_URL,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+            voice:
+              settings.voice ||
+              "marin"
+          })
+      }
+    );
+
+
+  const data =
+    await response.json();
+
 
   if(
-    typeof toggleRealtime==="function"
+    !response.ok ||
+    !data.success ||
+    !data.clientSecret
   ){
 
-    toggleRealtime();
+    throw new Error(
+      data.error ||
+      "Realtime client secret alınamadı."
+    );
 
   }
 
-};
+
+  return data.clientSecret;
+
+}
+
+
+/* ---------------------------------------------------------
+   ICE
+--------------------------------------------------------- */
+
+function waitForIceGathering(peer){
+
+  return new Promise(
+    resolve => {
+
+      if(
+        peer.iceGatheringState ===
+        "complete"
+      ){
+
+        resolve();
+
+        return;
+
+      }
+
+
+      const check = () => {
+
+        if(
+          peer.iceGatheringState ===
+          "complete"
+        ){
+
+          peer.removeEventListener(
+            "icegatheringstatechange",
+            check
+          );
+
+          resolve();
+
+        }
+
+      };
+
+
+      peer.addEventListener(
+        "icegatheringstatechange",
+        check
+      );
+
+
+      setTimeout(
+        resolve,
+        5000
+      );
+
+    }
+  );
+
+}
+
+
+/* ---------------------------------------------------------
+   REALTIME EVENT
+--------------------------------------------------------- */
+
+function handleRealtimeEvent(event){
+
+  if(!event){
+    return;
+  }
+
+
+  console.log(
+    "ASA REALTIME:",
+    event
+  );
+
+
+  switch(event.type){
+
+    case "session.created":
+
+      setVoiceStatus(
+        "Seni dinliyorum..."
+      );
+
+      setVoiceState(
+        "listening"
+      );
+
+      break;
+
+
+    case "input_audio_buffer.speech_started":
+
+      setVoiceStatus(
+        "Dinliyorum..."
+      );
+
+      setVoiceState(
+        "listening"
+      );
+
+      break;
+
+
+    case "input_audio_buffer.speech_stopped":
+
+      setVoiceStatus(
+        "ASA düşünüyor..."
+      );
+
+      setVoiceState(
+        null
+      );
+
+      break;
+
+
+    case "response.created":
+
+      setVoiceStatus(
+        "ASA düşünüyor..."
+      );
+
+      break;
+
+
+    case "response.output_audio.delta":
+
+    case "response.audio.delta":
+
+      setVoiceStatus(
+        "ASA konuşuyor..."
+      );
+
+      setVoiceState(
+        "speaking"
+      );
+
+      break;
+
+
+    case "response.done":
+
+      setVoiceStatus(
+        "Seni dinliyorum..."
+      );
+
+      setVoiceState(
+        "listening"
+      );
+
+      break;
+
+
+    case "error":
+
+      console.error(
+        "ASA REALTIME ERROR:",
+        event
+      );
+
+      setVoiceStatus(
+        event.error?.message ||
+        "Ses bağlantısında hata oluştu."
+      );
+
+      setVoiceState(
+        null
+      );
+
+      break;
+
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   CONNECT
+--------------------------------------------------------- */
+
+async function connectRealtime(){
+
+  if(
+    realtimeConnected ||
+    realtimeConnecting
+  ){
+
+    return;
+
+  }
+
+
+  realtimeConnecting =
+    true;
+
+
+  setVoiceStatus(
+    "ASA bağlanıyor..."
+  );
+
+
+  try{
+
+    if(
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ){
+
+      throw new Error(
+        "Bu tarayıcı mikrofon erişimini desteklemiyor."
+      );
+
+    }
+
+
+    /*
+      1.
+      Backend'den kısa ömürlü
+      client secret alıyoruz.
+    */
+
+    const clientSecret =
+      await getRealtimeClientSecret();
+
+
+    /*
+      2.
+      Peer oluştur.
+    */
+
+    realtimePeer =
+      new RTCPeerConnection();
+
+
+    /*
+      3.
+      ASA'nın sesini al.
+    */
+
+    realtimePeer.ontrack =
+      event => {
+
+        if(
+          event.streams &&
+          event.streams[0]
+        ){
+
+          remoteAudio.srcObject =
+            event.streams[0];
+
+
+          remoteAudio
+            .play()
+            .catch(
+              error => {
+
+                console.warn(
+                  "ASA audio play:",
+                  error
+                );
+
+              }
+            );
+
+        }
+
+      };
+
+
+    /*
+      4.
+      Mikrofon.
+    */
+
+    realtimeStream =
+      await navigator
+        .mediaDevices
+        .getUserMedia({
+
+          audio:{
+            echoCancellation:true,
+            noiseSuppression:true,
+            autoGainControl:true
+          },
+
+          video:false
+
+        });
+
+
+    realtimeStream
+      .getTracks()
+      .forEach(
+        track => {
+
+          realtimePeer.addTrack(
+            track,
+            realtimeStream
+          );
+
+        }
+      );
+
+
+    /*
+      5.
+      Data channel.
+    */
+
+    realtimeDataChannel =
+      realtimePeer.createDataChannel(
+        "oai-events"
+      );
+
+
+    realtimeDataChannel.onopen =
+      () => {
+
+        console.log(
+          "ASA REALTIME DATA CHANNEL OPEN"
+        );
+
+        realtimeConnected =
+          true;
+
+        realtimeConnecting =
+          false;
+
+        setVoiceStatus(
+          "Seni dinliyorum..."
+        );
+
+        setVoiceState(
+          "listening"
+        );
+
+      };
+
+
+    realtimeDataChannel.onmessage =
+      event => {
+
+        try{
+
+          const data =
+            JSON.parse(
+              event.data
+            );
+
+          handleRealtimeEvent(
+            data
+          );
+
+        }catch(error){
+
+          console.error(
+            "Realtime parse:",
+            error
+          );
+
+        }
+
+      };
+
+
+    realtimeDataChannel.onerror =
+      error => {
+
+        console.error(
+          "Realtime channel error:",
+          error
+        );
+
+      };
+
+
+    realtimeDataChannel.onclose =
+      () => {
+
+        console.log(
+          "ASA DATA CHANNEL CLOSED"
+        );
+
+      };
+
+
+    /*
+      6.
+      Offer.
+    */
+
+    const offer =
+      await realtimePeer
+        .createOffer({
+          offerToReceiveAudio:true
+        });
+
+
+    await realtimePeer
+      .setLocalDescription(
+        offer
+      );
+
+
+    /*
+      7.
+      ICE.
+    */
+
+    await waitForIceGathering(
+      realtimePeer
+    );
+
+
+    /*
+      8.
+      OpenAI Calls endpoint.
+    */
+
+    const response =
+      await fetch(
+        "https://api.openai.com/v1/realtime/calls",
+        {
+
+          method:"POST",
+
+          headers:{
+            Authorization:
+              `Bearer ${clientSecret}`
+          },
+
+          body:
+            (() => {
+
+              const form =
+                new FormData();
+
+              form.append(
+                "sdp",
+                new Blob(
+                  [
+                    realtimePeer
+                      .localDescription
+                      .sdp
+                  ],
+                  {
+                    type:
+                      "application/sdp"
+                  }
+                )
+              );
+
+              return form;
+
+            })()
+
+        }
+      );
+
+
+    const answer =
+      await response.text();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        answer ||
+        `Realtime HTTP ${response.status}`
+      );
+
+    }
+
+
+    /*
+      9.
+      SDP answer.
+    */
+
+    await realtimePeer
+      .setRemoteDescription({
+
+        type:"answer",
+
+        sdp:answer
+
+      });
+
+
+    /*
+      10.
+      Connection state.
+    */
+
+    realtimePeer
+      .addEventListener(
+        "connectionstatechange",
+        () => {
+
+          console.log(
+            "ASA CONNECTION:",
+            realtimePeer
+              ?.connectionState
+          );
+
+
+          switch(
+            realtimePeer
+              ?.connectionState
+          ){
+
+            case "connected":
+
+              realtimeConnected =
+                true;
+
+              realtimeConnecting =
+                false;
+
+              setVoiceStatus(
+                "Seni dinliyorum..."
+              );
+
+              setVoiceState(
+                "listening"
+              );
+
+              break;
+
+
+            case "disconnected":
+
+              setVoiceStatus(
+                "Bağlantı kesildi."
+              );
+
+              break;
+
+
+            case "failed":
+
+              setVoiceStatus(
+                "Ses bağlantısı kurulamadı."
+              );
+
+              break;
+
+
+            case "closed":
+
+              setVoiceStatus(
+                "Bağlantı kapandı."
+              );
+
+              break;
+
+          }
+
+        }
+      );
+
+
+  }catch(error){
+
+    console.error(
+      "ASA REALTIME CONNECT:",
+      error
+    );
+
+
+    realtimeConnected =
+      false;
+
+    realtimeConnecting =
+      false;
+
+
+    setVoiceState(
+      null
+    );
+
+
+    setVoiceStatus(
+      error?.message ||
+      "Ses bağlantısı kurulamadı."
+    );
+
+
+    await disconnectRealtime();
+
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   DISCONNECT
+--------------------------------------------------------- */
+
+async function disconnectRealtime(){
+
+  realtimeConnected =
+    false;
+
+  realtimeConnecting =
+    false;
+
+
+  if(realtimeDataChannel){
+
+    try{
+
+      realtimeDataChannel.close();
+
+    }catch{}
+
+    realtimeDataChannel =
+      null;
+
+  }
+
+
+  if(realtimeStream){
+
+    realtimeStream
+      .getTracks()
+      .forEach(
+        track => {
+
+          try{
+            track.stop();
+          }catch{}
+
+        }
+      );
+
+    realtimeStream =
+      null;
+
+  }
+
+
+  if(realtimePeer){
+
+    try{
+
+      realtimePeer.close();
+
+    }catch{}
+
+    realtimePeer =
+      null;
+
+  }
+
+
+  remoteAudio.srcObject =
+    null;
+
+}
+
+
+/* ---------------------------------------------------------
+   OPEN VOICE
+--------------------------------------------------------- */
+
+async function openVoiceMode(){
+
+  voiceMode.classList.add(
+    "open"
+  );
+
+  setVoiceStatus(
+    "ASA bağlanıyor..."
+  );
+
+
+  await connectRealtime();
+
+}
+
+
+/* ---------------------------------------------------------
+   CLOSE VOICE
+--------------------------------------------------------- */
+
+async function closeVoiceMode(){
+
+  await disconnectRealtime();
+
+  voiceMode.classList.remove(
+    "open"
+  );
+
+  setVoiceState(
+    null
+  );
+
+  setVoiceStatus(
+    "Hazırım"
+  );
+
+}
+
+
+/* ---------------------------------------------------------
+   TOGGLE MICROPHONE
+--------------------------------------------------------- */
+
+async function toggleRealtime(){
+
+  if(
+    realtimeConnected
+  ){
+
+    await disconnectRealtime();
+
+    voiceControl.classList.add(
+      "off"
+    );
+
+    setVoiceStatus(
+      "Mikrofon kapalı"
+    );
+
+    setVoiceState(
+      null
+    );
+
+    return;
+
+  }
+
+
+  voiceControl.classList.remove(
+    "off"
+  );
+
+  await connectRealtime();
+
+}
+
 
 /* =========================================================
-   INITIAL
+   VOICE BUTTONS
+========================================================= */
+
+voiceButton.addEventListener(
+  "click",
+  async () => {
+
+    await openVoiceMode();
+
+  }
+);
+
+
+voiceClose.addEventListener(
+  "click",
+  async () => {
+
+    await closeVoiceMode();
+
+  }
+);
+
+
+voiceControl.addEventListener(
+  "click",
+  async () => {
+
+    await toggleRealtime();
+
+  }
+);
+
+
+/* =========================================================
+   PAGE CLEANUP
+========================================================= */
+
+window.addEventListener(
+  "pagehide",
+  () => {
+
+    disconnectRealtime();
+
+  }
+);
+
+
+/* =========================================================
+   INITIALIZATION
 ========================================================= */
 
 applyTheme();
@@ -4376,11 +5465,16 @@ renderChatList();
 
 showEmpty();
 
-if(
-  loadChats().some(
-    item=>item.id===conversationId
-  )
-){
+
+const existingChat =
+  loadChats().find(
+    item =>
+      item.id ===
+      conversationId
+  );
+
+
+if(existingChat){
 
   openConversation(
     conversationId
