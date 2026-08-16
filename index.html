@@ -2626,10 +2626,3890 @@ button,
 
 <script>
 
-/*
-  2. PARÇA BURAYA GELECEK.
-  Şimdilik hiçbir şey ekleme.
-*/
+/* =========================================================
+   ASA — FINAL JAVASCRIPT
+========================================================= */
+
+const API_URL = "/api/chat";
+const REALTIME_URL = "/api/realtime";
+
+const STORAGE_KEY = "asa_conversations_v3";
+const ACTIVE_KEY = "asa_active_conversation_v3";
+const SETTINGS_KEY = "asa_settings_v3";
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let conversationId = getActiveConversationId();
+let messages = [];
+
+let contextConversationId = null;
+
+let selectedFiles = [];
+
+let realtime = {
+  pc: null,
+  dc: null,
+  stream: null,
+  connected: false,
+  starting: false
+};
+
+let realtimeVoice =
+  localStorage.getItem("asa_voice_v3") ||
+  "marin";
+
+let currentTheme =
+  localStorage.getItem("asa_theme_v3") ||
+  "purple";
+
+let currentMode = "idle";
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const chat =
+  document.getElementById("chat");
+
+const input =
+  document.getElementById("messageInput");
+
+const sendButton =
+  document.getElementById("sendButton");
+
+const menuButton =
+  document.getElementById("menuButton");
+
+const sidebar =
+  document.getElementById("sidebar");
+
+const overlay =
+  document.getElementById("overlay");
+
+const closeMenu =
+  document.getElementById("closeMenu");
+
+const chatList =
+  document.getElementById("chatList");
+
+const contextMenu =
+  document.getElementById("contextMenu");
+
+const renameModal =
+  document.getElementById("renameModal");
+
+const renameInput =
+  document.getElementById("renameInput");
+
+const deleteModal =
+  document.getElementById("deleteModal");
+
+const plusButton =
+  document.getElementById("plusButton");
+
+const sheetOverlay =
+  document.getElementById("sheetOverlay");
+
+const fileInput =
+  document.getElementById("fileInput");
+
+const photoInput =
+  document.getElementById("photoInput");
+
+const cameraInput =
+  document.getElementById("cameraInput");
+
+const voiceButton =
+  document.getElementById("voiceButton");
+
+const voiceMode =
+  document.getElementById("voiceMode");
+
+const voiceClose =
+  document.getElementById("voiceClose");
+
+const voiceControl =
+  document.getElementById("voiceControl");
+
+const voiceStatus =
+  document.getElementById("voiceStatus");
+
+const remoteAudio =
+  document.getElementById("remoteAudio");
+
+const settingsModal =
+  document.getElementById("settingsModal");
+
+const voiceSettingsModal =
+  document.getElementById("voiceSettingsModal");
+
+const themeSettingsModal =
+  document.getElementById("themeSettingsModal");
+
+const voiceOptions =
+  document.getElementById("voiceOptions");
+
+const themeOptions =
+  document.getElementById("themeOptions");
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+const SETTINGS = {
+  voice:
+    realtimeVoice,
+
+  theme:
+    currentTheme
+};
+
+
+function saveSettings() {
+
+  localStorage.setItem(
+    SETTINGS_KEY,
+    JSON.stringify(SETTINGS)
+  );
+
+  localStorage.setItem(
+    "asa_voice_v3",
+    SETTINGS.voice
+  );
+
+  localStorage.setItem(
+    "asa_theme_v3",
+    SETTINGS.theme
+  );
+
+}
+
+
+function loadSettings() {
+
+  try {
+
+    const saved =
+      JSON.parse(
+        localStorage.getItem(
+          SETTINGS_KEY
+        ) || "{}"
+      );
+
+    if (
+      saved.voice
+    ) {
+
+      SETTINGS.voice =
+        saved.voice;
+
+      realtimeVoice =
+        saved.voice;
+
+    }
+
+    if (
+      saved.theme
+    ) {
+
+      SETTINGS.theme =
+        saved.theme;
+
+      currentTheme =
+        saved.theme;
+
+    }
+
+  } catch {}
+
+}
+
+
+/* =========================================================
+   THEMES
+========================================================= */
+
+const THEMES = {
+
+  purple: {
+    name: "Siyah · Mor",
+
+    accent: "#a331ff",
+    accent2: "#c13cff",
+    accent3: "#7021bd",
+
+    glow:
+      "rgba(142,34,220,.18)"
+  },
+
+  red: {
+    name: "Siyah · Kırmızı",
+
+    accent: "#ff315d",
+    accent2: "#ff5578",
+    accent3: "#a7193b",
+
+    glow:
+      "rgba(220,30,70,.17)"
+  },
+
+  blue: {
+    name: "Siyah · Mavi",
+
+    accent: "#287cff",
+    accent2: "#4e9aff",
+    accent3: "#174fa9",
+
+    glow:
+      "rgba(30,90,220,.17)"
+  },
+
+  green: {
+    name: "Siyah · Yeşil",
+
+    accent: "#19c985",
+    accent2: "#39e8a0",
+    accent3: "#087c51",
+
+    glow:
+      "rgba(15,170,105,.16)"
+  },
+
+  night: {
+    name: "Gece",
+
+    accent: "#7f8cff",
+    accent2: "#9ca5ff",
+    accent3: "#4e58b7",
+
+    glow:
+      "rgba(70,80,180,.15)"
+  },
+
+  day: {
+    name: "Gündüz",
+
+    accent: "#695cff",
+    accent2: "#7e72ff",
+    accent3: "#4d43b5",
+
+    glow:
+      "rgba(100,90,240,.14)"
+  }
+
+};
+
+
+function applyTheme(
+  themeName
+) {
+
+  const theme =
+    THEMES[themeName];
+
+  if (!theme) {
+    return;
+  }
+
+  currentTheme =
+    themeName;
+
+  SETTINGS.theme =
+    themeName;
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--accent",
+      theme.accent
+    );
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--accent2",
+      theme.accent2
+    );
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--accent3",
+      theme.accent3
+    );
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--theme-glow",
+      theme.glow
+    );
+
+
+  if (
+    themeName === "day"
+  ) {
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--bg",
+        "#f4f3f8"
+      );
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--bg2",
+        "#eceaf2"
+      );
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--text",
+        "#15131c"
+      );
+
+  } else {
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--bg",
+        "#05040a"
+      );
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--bg2",
+        "#080611"
+      );
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--text",
+        "#f7f5fb"
+      );
+
+  }
+
+
+  saveSettings();
+
+}
+
+
+loadSettings();
+applyTheme(currentTheme);
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadConversations() {
+
+  try {
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          STORAGE_KEY
+        ) || "[]"
+      );
+
+    return Array.isArray(data)
+      ? data
+      : [];
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
+
+function saveConversations(
+  data
+) {
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+
+function createConversationId() {
+
+  const id =
+    "asa-" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2,9);
+
+  setActiveConversationId(
+    id
+  );
+
+  return id;
+
+}
+
+
+function getActiveConversationId() {
+
+  const saved =
+    localStorage.getItem(
+      ACTIVE_KEY
+    );
+
+  if (saved) {
+    return saved;
+  }
+
+  return createConversationId();
+
+}
+
+
+function setActiveConversationId(
+  id
+) {
+
+  localStorage.setItem(
+    ACTIVE_KEY,
+    id
+  );
+
+}
+
+
+/* =========================================================
+   TITLES
+========================================================= */
+
+function generateTitle(
+  text
+) {
+
+  let title =
+    String(text || "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  if (!title) {
+    return "Yeni Sohbet";
+  }
+
+  title =
+    title
+      .replace(/[?!.]+$/g, "")
+      .trim();
+
+  if (
+    title.length > 42
+  ) {
+
+    title =
+      title
+        .substring(0,42)
+        .trim() + "…";
+
+  }
+
+  return (
+    title.charAt(0)
+      .toUpperCase() +
+    title.slice(1)
+  );
+
+}
+
+
+function ensureConversation(
+  firstMessage = ""
+) {
+
+  const conversations =
+    loadConversations();
+
+  let item =
+    conversations.find(
+      x =>
+        x.id ===
+        conversationId
+    );
+
+
+  if (!item) {
+
+    item = {
+
+      id:
+        conversationId,
+
+      title:
+        firstMessage
+          ? generateTitle(
+              firstMessage
+            )
+          : "Yeni Sohbet",
+
+      createdAt:
+        Date.now(),
+
+      updatedAt:
+        Date.now()
+
+    };
+
+    conversations.unshift(
+      item
+    );
+
+  }
+
+
+  if (
+    firstMessage &&
+    item.title ===
+      "Yeni Sohbet"
+  ) {
+
+    item.title =
+      generateTitle(
+        firstMessage
+      );
+
+  }
+
+
+  item.updatedAt =
+    Date.now();
+
+  saveConversations(
+    conversations
+  );
+
+  return item;
+
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function openMenu() {
+
+  sidebar.classList.add(
+    "open"
+  );
+
+  overlay.classList.add(
+    "open"
+  );
+
+  renderChatList();
+
+}
+
+
+function closeSidebar() {
+
+  sidebar.classList.remove(
+    "open"
+  );
+
+  overlay.classList.remove(
+    "open"
+  );
+
+  closeContextMenu();
+
+}
+
+
+menuButton.addEventListener(
+  "click",
+  openMenu
+);
+
+closeMenu.addEventListener(
+  "click",
+  closeSidebar
+);
+
+overlay.addEventListener(
+  "click",
+  closeSidebar
+);
+
+
+/* =========================================================
+   CHAT LIST
+========================================================= */
+
+function renderChatList() {
+
+  const conversations =
+    loadConversations()
+      .sort(
+        (a,b) =>
+          (b.updatedAt || 0) -
+          (a.updatedAt || 0)
+      );
+
+  chatList.innerHTML = "";
+
+
+  if (
+    !conversations.length
+  ) {
+
+    chatList.innerHTML = `
+      <div class="noHistory">
+        Henüz kayıtlı sohbet yok.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  const groups = {};
+
+
+  conversations.forEach(
+    item => {
+
+      const date =
+        new Date(
+          item.updatedAt ||
+          item.createdAt
+        );
+
+      const key =
+        date.toDateString();
+
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+
+      groups[key].push(
+        item
+      );
+
+    }
+  );
+
+
+  Object.entries(groups)
+    .forEach(
+      ([key,items]) => {
+
+        const group =
+          document.createElement(
+            "div"
+          );
+
+        group.className =
+          "historyGroup";
+
+
+        const dateTitle =
+          document.createElement(
+            "div"
+          );
+
+        dateTitle.className =
+          "historyDate";
+
+        dateTitle.textContent =
+          getDateLabel(key);
+
+        group.appendChild(
+          dateTitle
+        );
+
+
+        items.forEach(
+          item => {
+
+            const element =
+              document.createElement(
+                "div"
+              );
+
+            element.className =
+              "historyItem" +
+              (
+                item.id ===
+                conversationId
+                  ? " active"
+                  : ""
+              );
+
+
+            const title =
+              document.createElement(
+                "div"
+              );
+
+            title.className =
+              "historyTitle";
+
+            title.textContent =
+              item.title;
+
+
+            const time =
+              document.createElement(
+                "div"
+              );
+
+            time.className =
+              "historyTime";
+
+            time.textContent =
+              formatTime(
+                item.updatedAt
+              );
+
+
+            const more =
+              document.createElement(
+                "button"
+              );
+
+            more.className =
+              "historyMore";
+
+            more.type =
+              "button";
+
+            more.textContent =
+              "•••";
+
+
+            element.appendChild(
+              title
+            );
+
+            element.appendChild(
+              time
+            );
+
+            element.appendChild(
+              more
+            );
+
+
+            element.addEventListener(
+              "click",
+              event => {
+
+                if (
+                  event.target.closest(
+                    ".historyMore"
+                  )
+                ) {
+                  return;
+                }
+
+                openConversation(
+                  item.id
+                );
+
+              }
+            );
+
+
+            more.addEventListener(
+              "click",
+              event => {
+
+                event.stopPropagation();
+
+                showContextMenu(
+                  item.id,
+                  more
+                );
+
+              }
+            );
+
+
+            group.appendChild(
+              element
+            );
+
+          }
+        );
+
+
+        chatList.appendChild(
+          group
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function getDateLabel(
+  dateString
+) {
+
+  const today =
+    new Date();
+
+  const date =
+    new Date(dateString);
+
+  const yesterday =
+    new Date();
+
+  yesterday.setDate(
+    yesterday.getDate() - 1
+  );
+
+
+  if (
+    date.toDateString() ===
+    today.toDateString()
+  ) {
+    return "BUGÜN";
+  }
+
+
+  if (
+    date.toDateString() ===
+    yesterday.toDateString()
+  ) {
+    return "DÜN";
+  }
+
+
+  return date
+    .toLocaleDateString(
+      "tr-TR",
+      {
+        day: "numeric",
+        month: "long"
+      }
+    )
+    .toUpperCase();
+
+}
+
+
+function formatTime(
+  timestamp
+) {
+
+  if (!timestamp) {
+    return "";
+  }
+
+  return new Date(
+    timestamp
+  ).toLocaleTimeString(
+    "tr-TR",
+    {
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CONTEXT MENU
+========================================================= */
+
+function showContextMenu(
+  id,
+  element
+) {
+
+  contextConversationId =
+    id;
+
+  const rect =
+    element.getBoundingClientRect();
+
+
+  contextMenu.style.left =
+    Math.max(
+      10,
+      rect.left - 175
+    ) + "px";
+
+
+  contextMenu.style.top =
+    Math.min(
+      window.innerHeight - 120,
+      rect.bottom + 6
+    ) + "px";
+
+
+  contextMenu.classList.add(
+    "open"
+  );
+
+}
+
+
+function closeContextMenu() {
+
+  contextMenu.classList.remove(
+    "open"
+  );
+
+  contextConversationId =
+    null;
+
+}
+
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !contextMenu.contains(
+        event.target
+      ) &&
+      !event.target.closest(
+        ".historyMore"
+      )
+    ) {
+
+      closeContextMenu();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   RENAME
+========================================================= */
+
+document
+  .getElementById(
+    "renameButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      const conversations =
+        loadConversations();
+
+      const item =
+        conversations.find(
+          x =>
+            x.id ===
+            contextConversationId
+        );
+
+      if (!item) {
+        return;
+      }
+
+
+      renameInput.value =
+        item.title;
+
+      renameModal.classList.add(
+        "open"
+      );
+
+      closeContextMenu();
+
+
+      setTimeout(
+        () => {
+
+          renameInput.focus();
+
+          renameInput.select();
+
+        },
+        100
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "renameCancel"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      renameModal.classList.remove(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "renameSave"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      const title =
+        renameInput.value.trim();
+
+      if (!title) {
+        return;
+      }
+
+
+      const conversations =
+        loadConversations();
+
+      const item =
+        conversations.find(
+          x =>
+            x.id ===
+            contextConversationId
+        );
+
+
+      if (item) {
+
+        item.title =
+          title;
+
+        item.updatedAt =
+          Date.now();
+
+        saveConversations(
+          conversations
+        );
+
+      }
+
+
+      renameModal.classList.remove(
+        "open"
+      );
+
+      renderChatList();
+
+    }
+  );
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+document
+  .getElementById(
+    "deleteButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      const conversations =
+        loadConversations();
+
+      const item =
+        conversations.find(
+          x =>
+            x.id ===
+            contextConversationId
+        );
+
+
+      if (!item) {
+        return;
+      }
+
+
+      document
+        .getElementById(
+          "deleteText"
+        )
+        .textContent =
+        `"${item.title}" sohbeti silinecek.`;
+
+
+      deleteModal.classList.add(
+        "open"
+      );
+
+      closeContextMenu();
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "deleteCancel"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      deleteModal.classList.remove(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "deleteConfirm"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      const id =
+        contextConversationId;
+
+
+      saveConversations(
+        loadConversations()
+          .filter(
+            x =>
+              x.id !== id
+          )
+      );
+
+
+      deleteModal.classList.remove(
+        "open"
+      );
+
+
+      try {
+
+        await fetch(
+          API_URL,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+                conversationId:
+                  id,
+
+                deleteConversation:
+                  true
+              })
+          }
+        );
+
+      } catch {}
+
+
+      if (
+        id ===
+        conversationId
+      ) {
+
+        createNewConversation();
+
+      }
+
+
+      renderChatList();
+
+    }
+  );
+
+
+/* =========================================================
+   NEW CHAT
+========================================================= */
+
+document
+  .getElementById(
+    "newChatButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      createNewConversation();
+
+      closeSidebar();
+
+    }
+  );
+
+
+function createNewConversation() {
+
+  conversationId =
+    createConversationId();
+
+  messages = [];
+
+  setActiveConversationId(
+    conversationId
+  );
+
+  showEmpty();
+
+  input.value = "";
+
+  input.focus();
+
+  renderChatList();
+
+}
+
+
+/* =========================================================
+   OPEN CONVERSATION
+========================================================= */
+
+async function openConversation(
+  id
+) {
+
+  conversationId =
+    id;
+
+  setActiveConversationId(
+    id
+  );
+
+  closeSidebar();
+
+  chat.innerHTML = "";
+
+  addTyping();
+
+
+  try {
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              conversationId:
+                id,
+
+              getHistory:
+                true
+            })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+    removeTyping();
+
+
+    if (
+      data.history &&
+      Array.isArray(
+        data.history
+      )
+    ) {
+
+      messages =
+        normalizeHistory(
+          data.history
+        );
+
+      renderMessages();
+
+    } else {
+
+      showEmpty();
+
+    }
+
+  } catch {
+
+    removeTyping();
+
+    showEmpty();
+
+  }
+
+
+  renderChatList();
+
+}
+
+
+/* =========================================================
+   NORMALIZE HISTORY
+========================================================= */
+
+function normalizeHistory(
+  history
+) {
+
+  if (
+    !Array.isArray(history)
+  ) {
+    return [];
+  }
+
+
+  return history
+    .filter(
+      message =>
+        message &&
+        (
+          message.role ===
+            "user" ||
+          message.role ===
+            "assistant"
+        )
+    )
+    .map(
+      message => {
+
+        let content =
+          message.content;
+
+
+        if (
+          typeof content ===
+          "object"
+        ) {
+
+          try {
+
+            content =
+              JSON.stringify(
+                content
+              );
+
+          } catch {
+
+            content =
+              String(
+                content
+              );
+
+          }
+
+        }
+
+
+        return {
+
+          role:
+            message.role,
+
+          content:
+            String(
+              content || ""
+            ),
+
+          attachments:
+            Array.isArray(
+              message.attachments
+            )
+              ? message.attachments
+              : []
+
+        };
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   SEND
+========================================================= */
+
+async function sendMessage() {
+
+  const text =
+    input.value.trim();
+
+
+  if (
+    !text &&
+    selectedFiles.length === 0
+  ) {
+    return;
+  }
+
+
+  input.value = "";
+
+  sendButton.disabled = true;
+
+
+  const attachments =
+    await prepareAttachments();
+
+
+  const titleText =
+    text ||
+    attachments[0]?.name ||
+    "Görsel";
+
+
+  ensureConversation(
+    titleText
+  );
+
+
+  const userMessage = {
+
+    role: "user",
+
+    content: text,
+
+    attachments
+
+  };
+
+
+  messages.push(
+    userMessage
+  );
+
+
+  renderMessages();
+
+  addTyping();
+
+
+  try {
+
+    const apiMessages = [
+      {
+        role: "user",
+
+        content:
+          buildApiContent(
+            text,
+            attachments
+          )
+      }
+    ];
+
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              conversationId,
+
+              messages:
+                apiMessages
+
+            })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    removeTyping();
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.error ||
+        "ASA cevap veremedi."
+      );
+
+    }
+
+
+    let answer =
+      data.answer ||
+      "Şu anda cevap oluşturamadım.";
+
+
+    if (
+      typeof answer ===
+      "object"
+    ) {
+
+      answer =
+        safeObjectText(
+          answer
+        );
+
+    }
+
+
+    messages.push({
+
+      role:
+        "assistant",
+
+      content:
+        String(answer)
+
+    });
+
+
+    if (
+      Array.isArray(
+        data.history
+      )
+    ) {
+
+      const history =
+        normalizeHistory(
+          data.history
+        );
+
+
+      /*
+        API geçmişinde görsel
+        attachment bilgisi yoksa
+        yerel kullanıcı mesajını
+        kaybetmiyoruz.
+      */
+
+      const localImages =
+        messages.filter(
+          m =>
+            m.role ===
+              "user" &&
+            Array.isArray(
+              m.attachments
+            ) &&
+            m.attachments.length
+        );
+
+
+      messages =
+        history;
+
+
+      for (
+        const localMessage
+        of localImages
+      ) {
+
+        const matching =
+          messages.find(
+            m =>
+              m.role ===
+                "user" &&
+              m.content ===
+                localMessage.content
+          );
+
+
+        if (
+          matching &&
+          !matching.attachments.length
+        ) {
+
+          matching.attachments =
+            localMessage.attachments;
+
+        }
+
+      }
+
+    }
+
+
+    selectedFiles = [];
+
+    ensureConversation();
+
+    renderMessages();
+
+    renderChatList();
+
+  } catch (error) {
+
+    removeTyping();
+
+
+    messages.push({
+
+      role:
+        "assistant",
+
+      content:
+        "Bir bağlantı sorunu oluştu. Birazdan tekrar deneyelim."
+
+    });
+
+
+    renderMessages();
+
+    console.error(
+      "ASA CHAT:",
+      error
+    );
+
+  }
+
+
+  sendButton.disabled =
+    false;
+
+  input.focus();
+
+}
+
+
+/* =========================================================
+   SAFE OBJECT TEXT
+========================================================= */
+
+function safeObjectText(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  if (
+    typeof value ===
+    "string"
+  ) {
+
+    return value;
+
+  }
+
+
+  if (
+    typeof value ===
+    "number" ||
+    typeof value ===
+    "boolean"
+  ) {
+
+    return String(value);
+
+  }
+
+
+  if (
+    typeof value ===
+    "object"
+  ) {
+
+    if (
+      typeof value.text ===
+      "string"
+    ) {
+
+      return value.text;
+
+    }
+
+
+    if (
+      typeof value.content ===
+      "string"
+    ) {
+
+      return value.content;
+
+    }
+
+
+    try {
+
+      return JSON.stringify(
+        value,
+        null,
+        2
+      );
+
+    } catch {
+
+      return "[Veri]";
+
+    }
+
+  }
+
+
+  return String(value);
+
+}
+
+
+/* =========================================================
+   API CONTENT
+========================================================= */
+
+function buildApiContent(
+  text,
+  attachments
+) {
+
+  const parts = [];
+
+
+  if (text) {
+
+    parts.push(
+      text
+    );
+
+  }
+
+
+  if (
+    attachments &&
+    attachments.length
+  ) {
+
+    attachments.forEach(
+      file => {
+
+        parts.push(
+          `Eklenen dosya: ${file.name}`
+        );
+
+      }
+    );
+
+  }
+
+
+  return parts.join(
+    "\n\n"
+  );
+
+}
+
+
+/* =========================================================
+   ATTACHMENTS
+========================================================= */
+
+function openSheet() {
+
+  sheetOverlay.classList.add(
+    "open"
+  );
+
+}
+
+
+function closeSheet() {
+
+  sheetOverlay.classList.remove(
+    "open"
+  );
+
+}
+
+
+plusButton.addEventListener(
+  "click",
+  openSheet
+);
+
+
+document
+  .getElementById(
+    "sheetCancel"
+  )
+  .addEventListener(
+    "click",
+    closeSheet
+  );
+
+
+sheetOverlay.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      sheetOverlay
+    ) {
+
+      closeSheet();
+
+    }
+
+  }
+);
+
+
+/* PHOTOS */
+
+document
+  .getElementById(
+    "photosButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSheet();
+
+      photoInput.click();
+
+    }
+  );
+
+
+/* CAMERA */
+
+document
+  .getElementById(
+    "cameraButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSheet();
+
+      cameraInput.click();
+
+    }
+  );
+
+
+/* FILES */
+
+document
+  .getElementById(
+    "filesButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSheet();
+
+      fileInput.click();
+
+    }
+  );
+
+
+fileInput.addEventListener(
+  "change",
+  event => {
+
+    handleFiles(
+      [
+        ...event.target.files
+      ]
+    );
+
+    event.target.value = "";
+
+  }
+);
+
+
+photoInput.addEventListener(
+  "change",
+  event => {
+
+    handleFiles(
+      [
+        ...event.target.files
+      ]
+    );
+
+    event.target.value = "";
+
+  }
+);
+
+
+cameraInput.addEventListener(
+  "change",
+  event => {
+
+    handleFiles(
+      [
+        ...event.target.files
+      ]
+    );
+
+    event.target.value = "";
+
+  }
+);
+
+
+function handleFiles(
+  files
+) {
+
+  if (
+    !files.length
+  ) {
+    return;
+  }
+
+
+  selectedFiles.push(
+    ...files
+  );
+
+
+  /*
+    Fotoğraf seçildiği anda
+    sohbette önizleme göster.
+  */
+
+  showSelectedPreview();
+
+  input.focus();
+
+}
+
+
+/* =========================================================
+   SELECTED PREVIEW
+========================================================= */
+
+function showSelectedPreview() {
+
+  const existing =
+    document.getElementById(
+      "selectedPreview"
+    );
+
+  if (existing) {
+    existing.remove();
+  }
+
+
+  if (
+    !selectedFiles.length
+  ) {
+    return;
+  }
+
+
+  const preview =
+    document.createElement(
+      "div"
+    );
+
+  preview.id =
+    "selectedPreview";
+
+  preview.style.cssText = `
+    position:absolute;
+    left:18px;
+    right:18px;
+    bottom:88px;
+    z-index:39;
+    display:flex;
+    gap:8px;
+    padding:8px;
+    overflow-x:auto;
+    border-radius:18px;
+    background:rgba(16,15,25,.96);
+    border:1px solid rgba(255,255,255,.09);
+    backdrop-filter:blur(18px);
+  `;
+
+
+  selectedFiles.forEach(
+    file => {
+
+      if (
+        !file.type.startsWith(
+          "image/"
+        )
+      ) {
+        return;
+      }
+
+
+      const image =
+        document.createElement(
+          "img"
+        );
+
+      image.style.cssText = `
+        width:58px;
+        height:58px;
+        object-fit:cover;
+        border-radius:13px;
+        flex-shrink:0;
+      `;
+
+      image.src =
+        URL.createObjectURL(
+          file
+        );
+
+      preview.appendChild(
+        image
+      );
+
+    }
+  );
+
+
+  document
+    .querySelector(
+      ".inputArea"
+    )
+    .appendChild(
+      preview
+    );
+
+}
+
+
+function removeSelectedPreview() {
+
+  const preview =
+    document.getElementById(
+      "selectedPreview"
+    );
+
+  if (preview) {
+    preview.remove();
+  }
+
+}
+
+
+/* =========================================================
+   FILE → DATA URL
+========================================================= */
+
+function fileToDataURL(
+  file
+) {
+
+  return new Promise(
+    resolve => {
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () =>
+          resolve(
+            reader.result
+          );
+
+      reader.onerror =
+        () =>
+          resolve(
+            null
+          );
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+async function prepareAttachments() {
+
+  const result = [];
+
+
+  for (
+    const file of
+    selectedFiles
+  ) {
+
+    const dataUrl =
+      await fileToDataURL(
+        file
+      );
+
+
+    result.push({
+
+      name:
+        file.name,
+
+      type:
+        file.type,
+
+      size:
+        file.size,
+
+      dataUrl
+
+    });
+
+  }
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderMessages() {
+
+  chat.innerHTML = "";
+
+
+  if (
+    !messages.length
+  ) {
+
+    showEmpty();
+
+    return;
+
+  }
+
+
+  messages.forEach(
+    message => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "message " +
+        (
+          message.role ===
+          "user"
+            ? "user"
+            : "assistant"
+        );
+
+
+      const bubble =
+        document.createElement(
+          "div"
+        );
+
+
+      bubble.className =
+        "bubble";
+
+
+      if (
+        message.role ===
+        "assistant"
+      ) {
+
+        bubble.innerHTML = `
+
+          <span class="assistantLabel">
+            ASA
+          </span>
+
+          <div class="assistantText">
+            ${formatAnswer(
+              safeObjectText(
+                message.content
+              )
+            )}
+          </div>
+
+        `;
+
+      } else {
+
+        if (
+          Array.isArray(
+            message.attachments
+          )
+        ) {
+
+          message.attachments
+            .forEach(
+              attachment => {
+
+                if (
+                  attachment &&
+                  attachment.dataUrl &&
+                  attachment.type &&
+                  attachment.type
+                    .startsWith(
+                      "image/"
+                    )
+                ) {
+
+                  const image =
+                    document.createElement(
+                      "img"
+                    );
+
+                  image.className =
+                    "messageImage";
+
+                  image.src =
+                    attachment.dataUrl;
+
+                  image.alt =
+                    attachment.name ||
+                    "Görsel";
+
+                  bubble.appendChild(
+                    image
+                  );
+
+                }
+
+              }
+            );
+
+        }
+
+
+        if (
+          message.content
+        ) {
+
+          const text =
+            document.createElement(
+              "div"
+            );
+
+          text.textContent =
+            safeObjectText(
+              message.content
+            );
+
+          bubble.appendChild(
+            text
+          );
+
+        }
+
+      }
+
+
+      row.appendChild(
+        bubble
+      );
+
+      chat.appendChild(
+        row
+      );
+
+    }
+  );
+
+
+  scrollToBottom();
+
+}
+
+
+/* =========================================================
+   ANSWER FORMAT
+========================================================= */
+
+function escapeHtml(
+  text
+) {
+
+  return String(
+    text || ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+function formatAnswer(
+  text
+) {
+
+  let result =
+    escapeHtml(
+      text
+    );
+
+
+  result =
+    result.replace(
+      /\*\*(.*?)\*\*/g,
+      "<strong>$1</strong>"
+    );
+
+
+  result =
+    result.replace(
+      /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener">$1</a>'
+    );
+
+
+  result =
+    result.replace(
+      /\n/g,
+      "<br>"
+    );
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+function showEmpty() {
+
+  chat.innerHTML = `
+
+    <div class="empty">
+
+      <div class="emptyOrb"></div>
+
+      <h1>
+        Merhaba Alperen
+      </h1>
+
+      <p>
+        ASA burada. Ne yapmak istersin?
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   TYPING
+========================================================= */
+
+function addTyping() {
+
+  removeTyping();
+
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+  row.className =
+    "message assistant";
+
+  row.id =
+    "typingMessage";
+
+
+  row.innerHTML = `
+
+    <div class="bubble">
+
+      <span class="assistantLabel">
+        ASA
+      </span>
+
+      <div class="typing">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  chat.appendChild(
+    row
+  );
+
+  scrollToBottom();
+
+}
+
+
+function removeTyping() {
+
+  const typing =
+    document.getElementById(
+      "typingMessage"
+    );
+
+  if (typing) {
+    typing.remove();
+  }
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollToBottom() {
+
+  requestAnimationFrame(
+    () => {
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   NORMAL SEND EVENTS
+========================================================= */
+
+sendButton.addEventListener(
+  "click",
+  sendMessage
+);
+
+
+input.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key ===
+      "Enter" &&
+      !event.shiftKey
+    ) {
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   SETTINGS UI
+========================================================= */
+
+document
+  .getElementById(
+    "settingsMenuButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSidebar();
+
+      settingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "settingsClose"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      settingsModal.classList.remove(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "voiceSettingsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      settingsModal.classList.remove(
+        "open"
+      );
+
+      renderVoiceOptions();
+
+      voiceSettingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "themeSettingsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      settingsModal.classList.remove(
+        "open"
+      );
+
+      renderThemeOptions();
+
+      themeSettingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "voiceSettingsClose"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      voiceSettingsModal.classList.remove(
+        "open"
+      );
+
+      settingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "themeSettingsClose"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      themeSettingsModal.classList.remove(
+        "open"
+      );
+
+      settingsModal.classList.add(
+        "open"
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   VOICE OPTIONS
+========================================================= */
+
+const VOICES = [
+
+  {
+    id: "marin",
+    name: "Marin",
+    description: "Doğal ve dengeli"
+  },
+
+  {
+    id: "cedar",
+    name: "Cedar",
+    description: "Sakin ve güçlü"
+  },
+
+  {
+    id: "coral",
+    name: "Coral",
+    description: "Sıcak ve samimi"
+  },
+
+  {
+    id: "sage",
+    name: "Sage",
+    description: "Yumuşak ve sakin"
+  },
+
+  {
+    id: "ash",
+    name: "Ash",
+    description: "Net ve doğal"
+  },
+
+  {
+    id: "verse",
+    name: "Verse",
+    description: "Canlı ve enerjik"
+  }
+
+];
+
+
+function renderVoiceOptions() {
+
+  voiceOptions.innerHTML = "";
+
+
+  VOICES.forEach(
+    voice => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type =
+        "button";
+
+      button.className =
+        "settingOption" +
+        (
+          SETTINGS.voice ===
+          voice.id
+            ? " active"
+            : ""
+        );
+
+
+      button.innerHTML = `
+
+        <span>
+          ${voice.name}
+          <small
+            style="
+              display:block;
+              color:#777483;
+              font-size:12px;
+              margin-top:3px;
+            "
+          >
+            ${voice.description}
+          </small>
+        </span>
+
+        <span class="settingCheck">
+          ${
+            SETTINGS.voice ===
+            voice.id
+              ? "✓"
+              : ""
+          }
+        </span>
+
+      `;
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          SETTINGS.voice =
+            voice.id;
+
+          realtimeVoice =
+            voice.id;
+
+          saveSettings();
+
+          renderVoiceOptions();
+
+          /*
+            Ses değişikliği yeni
+            Realtime oturumunda
+            uygulanır.
+          */
+
+        }
+      );
+
+
+      voiceOptions.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   THEME OPTIONS
+========================================================= */
+
+function renderThemeOptions() {
+
+  themeOptions.innerHTML = "";
+
+
+  Object.entries(
+    THEMES
+  ).forEach(
+    ([id,theme]) => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type =
+        "button";
+
+      button.className =
+        "settingOption" +
+        (
+          SETTINGS.theme ===
+          id
+            ? " active"
+            : ""
+        );
+
+
+      button.innerHTML = `
+
+        <span>
+          ${theme.name}
+        </span>
+
+        <span class="settingCheck">
+          ${
+            SETTINGS.theme ===
+            id
+              ? "✓"
+              : ""
+          }
+        </span>
+
+      `;
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          SETTINGS.theme =
+            id;
+
+          currentTheme =
+            id;
+
+          applyTheme(
+            id
+          );
+
+          renderThemeOptions();
+
+        }
+      );
+
+
+      themeOptions.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MEMORY
+========================================================= */
+
+document
+  .getElementById(
+    "memoryMenuButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSidebar();
+
+      alert(
+        "ASA'nın kalıcı hafızası Redis üzerinden çalışıyor."
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   SHOW CHATS
+========================================================= */
+
+document
+  .getElementById(
+    "showChatsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      renderChatList();
+
+    }
+  );
+
+
+/* =========================================================
+   REALTIME VOICE
+========================================================= */
+
+voiceButton.addEventListener(
+  "click",
+  openVoiceMode
+);
+
+
+voiceClose.addEventListener(
+  "click",
+  closeVoiceMode
+);
+
+
+voiceControl.addEventListener(
+  "click",
+  toggleRealtime
+);
+
+
+async function openVoiceMode() {
+
+  voiceMode.classList.add(
+    "open"
+  );
+
+  voiceMode.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  updateVoiceStatus(
+    "ASA hazırlanıyor..."
+  );
+
+
+  if (
+    !realtime.connected &&
+    !realtime.starting
+  ) {
+
+    await startRealtime();
+
+  }
+
+}
+
+
+async function closeVoiceMode() {
+
+  await stopRealtime();
+
+  voiceMode.classList.remove(
+    "open"
+  );
+
+  voiceMode.classList.remove(
+    "listening",
+    "speaking"
+  );
+
+  voiceMode.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  updateVoiceStatus(
+    "Hazırım"
+  );
+
+}
+
+
+function toggleRealtime() {
+
+  if (
+    realtime.connected
+  ) {
+
+    sendRealtimeEvent({
+
+      type:
+        "input_audio_buffer.clear"
+
+    });
+
+    updateVoiceStatus(
+      "Bağlantı açık"
+    );
+
+    return;
+
+  }
+
+
+  startRealtime();
+
+}
+
+
+/* =========================================================
+   START REALTIME
+========================================================= */
+
+async function startRealtime() {
+
+  if (
+    realtime.starting
+  ) {
+    return;
+  }
+
+
+  realtime.starting =
+    true;
+
+
+  updateVoiceStatus(
+    "Mikrofon hazırlanıyor..."
+  );
+
+
+  try {
+
+    if (
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices
+        .getUserMedia
+    ) {
+
+      throw new Error(
+        "Tarayıcı mikrofon erişimini desteklemiyor."
+      );
+
+    }
+
+
+    const stream =
+      await navigator
+        .mediaDevices
+        .getUserMedia({
+          audio: true
+        });
+
+
+    realtime.stream =
+      stream;
+
+
+    const pc =
+      new RTCPeerConnection();
+
+    realtime.pc =
+      pc;
+
+
+    pc.ontrack =
+      event => {
+
+        if (
+          event.streams &&
+          event.streams[0]
+        ) {
+
+          remoteAudio.srcObject =
+            event.streams[0];
+
+          remoteAudio
+            .play()
+            .catch(
+              () => {}
+            );
+
+        }
+
+      };
+
+
+    pc.onconnectionstatechange =
+      () => {
+
+        const state =
+          pc.connectionState;
+
+
+        if (
+          state ===
+            "connected"
+        ) {
+
+          realtime.connected =
+            true;
+
+          updateVoiceStatus(
+            "Dinliyorum..."
+          );
+
+        }
+
+
+        if (
+          state ===
+            "failed" ||
+          state ===
+            "disconnected"
+        ) {
+
+          realtime.connected =
+            false;
+
+          updateVoiceStatus(
+            "Sesli bağlantı kesildi."
+          );
+
+        }
+
+      };
+
+
+    stream
+      .getTracks()
+      .forEach(
+        track => {
+
+          pc.addTrack(
+            track,
+            stream
+          );
+
+        }
+      );
+
+
+    const dc =
+      pc.createDataChannel(
+        "oai-events"
+      );
+
+    realtime.dc =
+      dc;
+
+
+    dc.onopen =
+      () => {
+
+        realtime.connected =
+          true;
+
+        updateVoiceStatus(
+          "Dinliyorum..."
+        );
+
+
+        sendRealtimeEvent({
+
+          type:
+            "session.update",
+
+          session: {
+
+            type:
+              "realtime",
+
+            model:
+              "gpt-realtime",
+
+            instructions:
+              `
+Sen ASA'sın.
+Kullanıcının adı Alperen.
+Türkçe konuş.
+Samimi, doğal ve zeki ol.
+Kısa konuşmalarda kısa cevap ver.
+Kullanıcıyla gerçek bir sesli sohbet yapıyormuş gibi davran.
+Robotik ve gereksiz uzun konuşma.
+              `.trim(),
+
+            audio: {
+
+              input: {
+
+                turn_detection: {
+
+                  type:
+                    "server_vad",
+
+                  threshold:
+                    0.5,
+
+                  prefix_padding_ms:
+                    300,
+
+                  silence_duration_ms:
+                    500,
+
+                  create_response:
+                    true,
+
+                  interrupt_response:
+                    true
+
+                },
+
+                transcription: {
+
+                  model:
+                    "gpt-4o-mini-transcribe",
+
+                  language:
+                    "tr"
+
+                }
+
+              },
+
+              output: {
+
+                voice:
+                  SETTINGS.voice
+
+              }
+
+            }
+
+          }
+
+        });
+
+      };
+
+
+    dc.onmessage =
+      event => {
+
+        handleRealtimeEvent(
+          event.data
+        );
+
+      };
+
+
+    dc.onerror =
+      error => {
+
+        console.error(
+          "Realtime DataChannel:",
+          error
+        );
+
+        updateVoiceStatus(
+          "Ses bağlantısında hata oluştu."
+        );
+
+      };
+
+
+    const offer =
+      await pc.createOffer();
+
+
+    await pc.setLocalDescription(
+      offer
+    );
+
+
+    updateVoiceStatus(
+      "ASA'ya bağlanıyorum..."
+    );
+
+
+    /*
+      /api/realtime endpoint'i
+      OpenAI için kısa ömürlü
+      client secret döndürür.
+    */
+
+    const tokenResponse =
+      await fetch(
+        REALTIME_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              voice:
+                SETTINGS.voice
+
+            })
+
+        }
+      );
+
+
+    const tokenData =
+      await tokenResponse.json();
+
+
+    if (
+      !tokenResponse.ok
+    ) {
+
+      throw new Error(
+        tokenData.error ||
+        "Realtime anahtarı alınamadı."
+      );
+
+    }
+
+
+    const ephemeralKey =
+      extractRealtimeKey(
+        tokenData
+      );
+
+
+    if (
+      !ephemeralKey
+    ) {
+
+      throw new Error(
+        "Realtime endpoint geçerli bir client secret döndürmedi."
+      );
+
+    }
+
+
+    /*
+      WebRTC SDP teklifini
+      OpenAI Realtime çağrısına
+      gönderiyoruz.
+    */
+
+    const sdpResponse =
+      await fetch(
+        "https://api.openai.com/v1/realtime/calls",
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            Authorization:
+              `Bearer ${ephemeralKey}`,
+
+            "Content-Type":
+              "application/sdp"
+
+          },
+
+          body:
+            offer.sdp
+
+        }
+      );
+
+
+    if (
+      !sdpResponse.ok
+    ) {
+
+      const errorText =
+        await sdpResponse.text();
+
+      throw new Error(
+        errorText ||
+        "Realtime SDP bağlantısı kurulamadı."
+      );
+
+    }
+
+
+    const answerSdp =
+      await sdpResponse.text();
+
+
+    await pc.setRemoteDescription({
+
+      type:
+        "answer",
+
+      sdp:
+        answerSdp
+
+    });
+
+
+    realtime.starting =
+      false;
+
+
+    updateVoiceStatus(
+      "Dinliyorum..."
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "ASA REALTIME:",
+      error
+    );
+
+
+    await stopRealtime();
+
+
+    updateVoiceStatus(
+      "<strong>Sesli bağlantı kurulamadı.</strong>"
+    );
+
+
+  }
+
+}
+
+
+/* =========================================================
+   REALTIME KEY
+========================================================= */
+
+function extractRealtimeKey(
+  data
+) {
+
+  if (
+    !data
+  ) {
+    return null;
+  }
+
+
+  if (
+    typeof data ===
+    "string"
+  ) {
+    return data;
+  }
+
+
+  return (
+    data.client_secret?.value ||
+    data.client_secret ||
+    data.value ||
+    data.token ||
+    data.key ||
+    data.secret ||
+    null
+  );
+
+}
+
+
+/* =========================================================
+   REALTIME EVENTS
+========================================================= */
+
+function sendRealtimeEvent(
+  event
+) {
+
+  if (
+    !realtime.dc ||
+    realtime.dc.readyState !==
+      "open"
+  ) {
+
+    return false;
+
+  }
+
+
+  realtime.dc.send(
+    JSON.stringify(
+      event
+    )
+  );
+
+
+  return true;
+
+}
+
+
+function handleRealtimeEvent(
+  raw
+) {
+
+  let event;
+
+
+  try {
+
+    event =
+      JSON.parse(
+        raw
+      );
+
+  } catch {
+
+    return;
+
+  }
+
+
+  switch (
+    event.type
+  ) {
+
+
+    case
+      "input_audio_buffer.speech_started":
+
+      voiceMode.classList.add(
+        "listening"
+      );
+
+      voiceMode.classList.remove(
+        "speaking"
+      );
+
+      updateVoiceStatus(
+        "Dinliyorum..."
+      );
+
+      break;
+
+
+    case
+      "input_audio_buffer.speech_stopped":
+
+      voiceMode.classList.remove(
+        "listening"
+      );
+
+      updateVoiceStatus(
+        "ASA düşünüyor..."
+      );
+
+      break;
+
+
+    case
+      "response.created":
+
+      voiceMode.classList.remove(
+        "listening"
+      );
+
+      voiceMode.classList.add(
+        "speaking"
+      );
+
+      updateVoiceStatus(
+        "ASA konuşuyor..."
+      );
+
+      break;
+
+
+    case
+      "response.audio.delta":
+
+      voiceMode.classList.add(
+        "speaking"
+      );
+
+      break;
+
+
+    case
+      "response.audio_transcript.delta":
+
+      voiceMode.classList.add(
+        "speaking"
+      );
+
+      break;
+
+
+    case
+      "response.audio.done":
+
+      voiceMode.classList.remove(
+        "speaking"
+      );
+
+      updateVoiceStatus(
+        "Dinliyorum..."
+      );
+
+      break;
+
+
+    case
+      "response.done":
+
+      voiceMode.classList.remove(
+        "speaking"
+      );
+
+      updateVoiceStatus(
+        "Dinliyorum..."
+      );
+
+      break;
+
+
+    case
+      "error":
+
+      console.error(
+        "Realtime server error:",
+        event
+      );
+
+      updateVoiceStatus(
+        "<strong>ASA'nın ses bağlantısında bir hata oluştu.</strong>"
+      );
+
+      break;
+
+
+    default:
+
+      break;
+
+  }
+
+}
+
+
+/* =========================================================
+   STOP REALTIME
+========================================================= */
+
+async function stopRealtime() {
+
+  realtime.connected =
+    false;
+
+  realtime.starting =
+    false;
+
+
+  if (
+    realtime.dc
+  ) {
+
+    try {
+
+      realtime.dc.close();
+
+    } catch {}
+
+  }
+
+
+  if (
+    realtime.pc
+  ) {
+
+    try {
+
+      realtime.pc.close();
+
+    } catch {}
+
+  }
+
+
+  if (
+    realtime.stream
+  ) {
+
+    realtime.stream
+      .getTracks()
+      .forEach(
+        track => {
+
+          try {
+
+            track.stop();
+
+          } catch {}
+
+        }
+      );
+
+  }
+
+
+  realtime.dc =
+    null;
+
+  realtime.pc =
+    null;
+
+  realtime.stream =
+    null;
+
+
+  voiceMode.classList.remove(
+    "listening",
+    "speaking"
+  );
+
+
+  try {
+
+    remoteAudio.pause();
+
+    remoteAudio.srcObject =
+      null;
+
+  } catch {}
+
+}
+
+
+/* =========================================================
+   CLOSE MODALS BY BACKDROP
+========================================================= */
+
+[
+  renameModal,
+  deleteModal,
+  settingsModal,
+  voiceSettingsModal,
+  themeSettingsModal
+].forEach(
+  modal => {
+
+    modal.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          modal
+        ) {
+
+          modal.classList.remove(
+            "open"
+          );
+
+        }
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+showEmpty();
+
+renderChatList();
+
+loadActiveConversation();
+
+
+async function loadActiveConversation() {
+
+  const id =
+    getActiveConversationId();
+
+
+  conversationId =
+    id;
+
+
+  const conversations =
+    loadConversations();
+
+
+  const exists =
+    conversations.some(
+      x =>
+        x.id === id
+    );
+
+
+  if (!exists) {
+
+    showEmpty();
+
+    return;
+
+  }
+
+
+  await openConversation(
+    id
+  );
+
+}
+
+
+/* =========================================================
+   VOICE OPTION INITIAL RENDER
+========================================================= */
+
+renderVoiceOptions();
+renderThemeOptions();
+
+
+/* =========================================================
+   PAGE CLEANUP
+========================================================= */
+
+window.addEventListener(
+  "beforeunload",
+  () => {
+
+    stopRealtime();
+
+  }
+);
 
 </script>
 
