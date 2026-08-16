@@ -1,18 +1,18 @@
 /* =========================================================
    ASA REALTIME VOICE
    WebRTC + OpenAI Realtime
+   iPhone / Safari uyumlu
 ========================================================= */
 
 (() => {
-
   "use strict";
 
-  let realtimePeer = null;
-  let realtimeStream = null;
-  let realtimeDataChannel = null;
+  let peer = null;
+  let microphone = null;
+  let dataChannel = null;
 
-  let realtimeConnected = false;
-  let realtimeConnecting = false;
+  let connected = false;
+  let connecting = false;
 
   let voiceButton = null;
   let voiceClose = null;
@@ -21,417 +21,223 @@
   let voiceStatus = null;
   let remoteAudio = null;
 
-
   /* =======================================================
      DOM
   ======================================================= */
 
-  function initVoiceDOM() {
-
-    voiceButton =
-      document.getElementById("voiceButton");
-
-    voiceClose =
-      document.getElementById("voiceClose");
-
-    voiceControl =
-      document.getElementById("voiceControl");
-
-    voiceMode =
-      document.getElementById("voiceMode");
-
-    voiceStatus =
-      document.getElementById("voiceStatus");
-
-    remoteAudio =
-      document.getElementById("remoteAudio");
-
+  function initDOM() {
+    voiceButton = document.getElementById("voiceButton");
+    voiceClose = document.getElementById("voiceClose");
+    voiceControl = document.getElementById("voiceControl");
+    voiceMode = document.getElementById("voiceMode");
+    voiceStatus = document.getElementById("voiceStatus");
+    remoteAudio = document.getElementById("remoteAudio");
   }
-
 
   /* =======================================================
      STATUS
   ======================================================= */
 
-  function setVoiceStatus(text) {
-
+  function setStatus(text) {
     if (voiceStatus) {
       voiceStatus.textContent = text;
     }
-
   }
 
-
-  function setVoiceState(state) {
-
+  function setState(state) {
     if (!voiceMode) {
       return;
     }
 
     voiceMode.classList.remove(
+      "connecting",
       "listening",
-      "speaking",
-      "connecting"
+      "speaking"
     );
 
     if (state) {
       voiceMode.classList.add(state);
     }
-
   }
 
+  /* =======================================================
+     VOICE SETTING
+  ======================================================= */
+
+  function getSelectedVoice() {
+    return (
+      localStorage.getItem("asa_voice_v4") ||
+      "marin"
+    );
+  }
 
   /* =======================================================
      CLIENT SECRET
   ======================================================= */
 
-  async function getRealtimeClientSecret() {
+  async function getClientSecret() {
+    const response = await fetch(
+      "/api/realtime",
+      {
+        method: "POST",
 
-    const response =
-      await fetch(
-        "/api/realtime",
-        {
-          method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+        body: JSON.stringify({
+          voice: getSelectedVoice()
+        })
+      }
+    );
 
-          body: JSON.stringify({
-
-            voice:
-              window.settings?.voice ||
-              "marin"
-
-          })
-
-        }
-      );
-
-
-    let data = null;
+    let data;
 
     try {
-
-      data =
-        await response.json();
-
+      data = await response.json();
     } catch {
-
       throw new Error(
         "Realtime sunucusundan geçersiz cevap geldi."
       );
-
     }
-
 
     if (
       !response.ok ||
-      !data?.success ||
-      !data?.clientSecret
+      !data ||
+      !data.success ||
+      !data.clientSecret
     ) {
-
       throw new Error(
         data?.error ||
         "Realtime client secret alınamadı."
       );
-
     }
-
 
     return data.clientSecret;
-
   }
-
-
-  /* =======================================================
-     ICE
-  ======================================================= */
-
-  function waitForIceGathering(peer) {
-
-    return new Promise(resolve => {
-
-      if (
-        peer.iceGatheringState ===
-        "complete"
-      ) {
-
-        resolve();
-
-        return;
-
-      }
-
-
-      const check = () => {
-
-        if (
-          peer.iceGatheringState ===
-          "complete"
-        ) {
-
-          peer.removeEventListener(
-            "icegatheringstatechange",
-            check
-          );
-
-          resolve();
-
-        }
-
-      };
-
-
-      peer.addEventListener(
-        "icegatheringstatechange",
-        check
-      );
-
-
-      setTimeout(
-        resolve,
-        5000
-      );
-
-    });
-
-  }
-
-
-  /* =======================================================
-     REALTIME EVENT SEND
-  ======================================================= */
-
-  function sendRealtimeEvent(event) {
-
-    if (
-      !realtimeDataChannel ||
-      realtimeDataChannel.readyState !==
-        "open"
-    ) {
-
-      console.warn(
-        "Realtime DataChannel açık değil."
-      );
-
-      return false;
-
-    }
-
-
-    try {
-
-      realtimeDataChannel.send(
-        JSON.stringify(event)
-      );
-
-      return true;
-
-    } catch (error) {
-
-      console.error(
-        "Realtime event gönderilemedi:",
-        error
-      );
-
-      return false;
-
-    }
-
-  }
-
 
   /* =======================================================
      REALTIME EVENTS
   ======================================================= */
 
-  function handleRealtimeEvent(event) {
+  function sendEvent(event) {
+    if (
+      !dataChannel ||
+      dataChannel.readyState !== "open"
+    ) {
+      return false;
+    }
 
+    try {
+      dataChannel.send(
+        JSON.stringify(event)
+      );
+
+      return true;
+    } catch (error) {
+      console.error(
+        "ASA Realtime event gönderilemedi:",
+        error
+      );
+
+      return false;
+    }
+  }
+
+  /* =======================================================
+     EVENT HANDLER
+  ======================================================= */
+
+  function handleEvent(event) {
     if (!event) {
       return;
     }
 
-
     console.log(
-      "ASA REALTIME:",
+      "ASA REALTIME EVENT:",
       event
     );
-
 
     switch (event.type) {
 
       case "session.created":
-
-        setVoiceStatus(
-          "Seni dinliyorum..."
-        );
-
-        setVoiceState(
-          "listening"
-        );
-
+        setStatus("Seni dinliyorum...");
+        setState("listening");
         break;
-
 
       case "session.updated":
-
-        setVoiceStatus(
-          "Seni dinliyorum..."
-        );
-
-        setVoiceState(
-          "listening"
-        );
-
+        setStatus("Seni dinliyorum...");
+        setState("listening");
         break;
-
 
       case "input_audio_buffer.speech_started":
-
-        setVoiceStatus(
-          "Dinliyorum..."
-        );
-
-        setVoiceState(
-          "listening"
-        );
-
+        setStatus("Dinliyorum...");
+        setState("listening");
         break;
-
 
       case "input_audio_buffer.speech_stopped":
-
-        setVoiceStatus(
-          "Düşünüyorum..."
-        );
-
+        setStatus("Düşünüyorum...");
         break;
-
 
       case "response.created":
-
-        setVoiceStatus(
-          "ASA düşünüyor..."
-        );
-
+        setStatus("ASA düşünüyor...");
         break;
-
 
       case "response.output_audio.started":
-
-        setVoiceStatus(
-          "ASA konuşuyor..."
-        );
-
-        setVoiceState(
-          "speaking"
-        );
-
+        setStatus("ASA konuşuyor...");
+        setState("speaking");
         break;
-
 
       case "response.output_audio.delta":
-
-        setVoiceStatus(
-          "ASA konuşuyor..."
-        );
-
-        setVoiceState(
-          "speaking"
-        );
-
+        setStatus("ASA konuşuyor...");
+        setState("speaking");
         break;
-
 
       case "response.audio.delta":
-
-        setVoiceStatus(
-          "ASA konuşuyor..."
-        );
-
-        setVoiceState(
-          "speaking"
-        );
-
+        setStatus("ASA konuşuyor...");
+        setState("speaking");
         break;
-
 
       case "response.output_audio.done":
-
-        setVoiceStatus(
-          "Seni dinliyorum..."
-        );
-
-        setVoiceState(
-          "listening"
-        );
-
+        setStatus("Seni dinliyorum...");
+        setState("listening");
         break;
-
 
       case "response.done":
-
-        setVoiceStatus(
-          "Seni dinliyorum..."
-        );
-
-        setVoiceState(
-          "listening"
-        );
-
+        setStatus("Seni dinliyorum...");
+        setState("listening");
         break;
 
-
       case "error":
-
         console.error(
           "ASA REALTIME SERVER ERROR:",
           event
         );
 
-        setVoiceStatus(
+        setStatus(
           event.error?.message ||
           "Ses bağlantısında hata oluştu."
         );
 
-        setVoiceState(null);
-
+        setState(null);
         break;
-
     }
-
   }
 
-
   /* =======================================================
-     CONNECT
+     CONNECTION
   ======================================================= */
 
   async function connectRealtime() {
 
-    if (
-      realtimeConnected ||
-      realtimeConnecting
-    ) {
-
+    if (connected || connecting) {
       return;
-
     }
 
+    connecting = true;
 
-    realtimeConnecting = true;
-
-
-    setVoiceStatus(
-      "ASA bağlanıyor..."
-    );
-
-    setVoiceState(
-      "connecting"
-    );
-
+    setStatus("ASA bağlanıyor...");
+    setState("connecting");
 
     try {
 
@@ -440,14 +246,14 @@
       --------------------------------------------------- */
 
       const clientSecret =
-        await getRealtimeClientSecret();
+        await getClientSecret();
 
 
       /* ---------------------------------------------------
-         2. Peer
+         2. PeerConnection
       --------------------------------------------------- */
 
-      realtimePeer =
+      peer =
         new RTCPeerConnection();
 
 
@@ -455,49 +261,35 @@
          3. Remote audio
       --------------------------------------------------- */
 
-      realtimePeer.ontrack =
-        async event => {
+      peer.ontrack = async event => {
 
-          console.log(
-            "ASA remote audio track geldi."
+        console.log(
+          "ASA: remote audio geldi."
+        );
+
+        if (
+          !remoteAudio ||
+          !event.streams ||
+          !event.streams[0]
+        ) {
+          return;
+        }
+
+        remoteAudio.srcObject =
+          event.streams[0];
+
+        remoteAudio.autoplay = true;
+        remoteAudio.playsInline = true;
+
+        try {
+          await remoteAudio.play();
+        } catch (error) {
+          console.warn(
+            "ASA audio play:",
+            error
           );
-
-
-          if (
-            !remoteAudio ||
-            !event.streams?.[0]
-          ) {
-
-            return;
-
-          }
-
-
-          remoteAudio.srcObject =
-            event.streams[0];
-
-
-          remoteAudio.autoplay =
-            true;
-
-          remoteAudio.playsInline =
-            true;
-
-
-          try {
-
-            await remoteAudio.play();
-
-          } catch(error) {
-
-            console.warn(
-              "Remote audio play:",
-              error
-            );
-
-          }
-
-        };
+        }
+      };
 
 
       /* ---------------------------------------------------
@@ -508,42 +300,28 @@
         !navigator.mediaDevices ||
         !navigator.mediaDevices.getUserMedia
       ) {
-
         throw new Error(
           "Bu tarayıcı mikrofon erişimini desteklemiyor."
         );
-
       }
 
+      microphone =
+        await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          },
+          video: false
+        });
 
-      realtimeStream =
-        await navigator.mediaDevices
-          .getUserMedia({
-
-            audio: {
-
-              echoCancellation: true,
-
-              noiseSuppression: true,
-
-              autoGainControl: true
-
-            },
-
-            video: false
-
-          });
-
-
-      realtimeStream
+      microphone
         .getTracks()
         .forEach(track => {
-
-          realtimePeer.addTrack(
+          peer.addTrack(
             track,
-            realtimeStream
+            microphone
           );
-
         });
 
 
@@ -551,85 +329,63 @@
          5. Data channel
       --------------------------------------------------- */
 
-      realtimeDataChannel =
-        realtimePeer.createDataChannel(
+      dataChannel =
+        peer.createDataChannel(
           "oai-events"
         );
 
+      dataChannel.onopen = () => {
 
-      realtimeDataChannel.onopen =
-        () => {
+        console.log(
+          "ASA REALTIME DATA CHANNEL OPEN"
+        );
 
-          console.log(
-            "ASA REALTIME DATA CHANNEL: OPEN"
-          );
+        connected = true;
+        connecting = false;
 
+        setStatus(
+          "Seni dinliyorum..."
+        );
 
-          realtimeConnected =
-            true;
-
-          realtimeConnecting =
-            false;
-
-
-          setVoiceStatus(
-            "Seni dinliyorum..."
-          );
-
-          setVoiceState(
-            "listening"
-          );
+        setState(
+          "listening"
+        );
 
 
-          /*
-             Oturum ayarlarını burada gönderiyoruz.
-          */
+        /*
+          Oturum ayarları.
+        */
 
-          sendRealtimeEvent({
+        sendEvent({
+          type: "session.update",
 
-            type:
-              "session.update",
+          session: {
+            type: "realtime",
 
-            session: {
-
-              modalities: [
-                "text",
-                "audio"
-              ],
-
-              voice:
-                window.settings?.voice ||
-                "marin",
-
-              input_audio_transcription: {
-                model:
-                  "gpt-4o-mini-transcribe"
+            audio: {
+              input: {
+                turn_detection: {
+                  type: "server_vad",
+                  threshold: 0.5,
+                  prefix_padding_ms: 300,
+                  silence_duration_ms: 500
+                }
               },
 
-              turn_detection: {
-
-                type:
-                  "server_vad",
-
-                threshold:
-                  0.5,
-
-                prefix_padding_ms:
-                  300,
-
-                silence_duration_ms:
-                  500
-
+              output: {
+                voice: getSelectedVoice()
               }
+            },
 
+            input_audio_transcription: {
+              model: "gpt-4o-mini-transcribe"
             }
+          }
+        });
+      };
 
-          });
 
-        };
-
-
-      realtimeDataChannel.onmessage =
+      dataChannel.onmessage =
         event => {
 
           try {
@@ -639,116 +395,107 @@
                 event.data
               );
 
-            handleRealtimeEvent(
-              data
-            );
+            handleEvent(data);
 
-          } catch(error) {
+          } catch (error) {
 
             console.error(
-              "Realtime event parse:",
+              "ASA Realtime event parse:",
               error
             );
 
           }
-
         };
 
 
-      realtimeDataChannel.onerror =
+      dataChannel.onerror =
         error => {
 
           console.error(
-            "Realtime DataChannel error:",
+            "ASA DATA CHANNEL ERROR:",
             error
           );
 
-          setVoiceStatus(
+          setStatus(
             "Ses bağlantısında hata oluştu."
           );
-
         };
 
 
-      realtimeDataChannel.onclose =
+      dataChannel.onclose =
         () => {
 
           console.log(
-            "ASA REALTIME DATA CHANNEL: CLOSED"
+            "ASA REALTIME DATA CHANNEL CLOSED"
           );
 
         };
 
 
       /* ---------------------------------------------------
-         6. Offer
+         6. SDP OFFER
       --------------------------------------------------- */
 
       const offer =
-        await realtimePeer.createOffer({
+        await peer.createOffer();
 
-          offerToReceiveAudio: true
-
-        });
-
-
-      await realtimePeer
-        .setLocalDescription(
-          offer
-        );
+      await peer.setLocalDescription(
+        offer
+      );
 
 
       /* ---------------------------------------------------
          7. ICE
       --------------------------------------------------- */
 
-      await waitForIceGathering(
-        realtimePeer
-      );
+      await waitForIce(peer);
 
 
       /* ---------------------------------------------------
-         8. OpenAI Calls
+         8. OPENAI REALTIME
       --------------------------------------------------- */
 
-      const formData =
-        new FormData();
+      const sdp =
+        peer.localDescription?.sdp;
+
+      if (
+        !sdp ||
+        typeof sdp !== "string"
+      ) {
+        throw new Error(
+          "WebRTC SDP oluşturulamadı."
+        );
+      }
 
 
-      formData.append(
-        "sdp",
-        new Blob(
-          [
-            realtimePeer
-              .localDescription
-              .sdp
-          ],
-          {
-            type:
-              "application/sdp"
-          }
-        )
-      );
+      /*
+        ÖNEMLİ:
 
+        Burada eski kodda kullanılan:
+
+        new Blob(...)
+
+        KULLANILMIYOR.
+
+        SDP doğrudan string olarak
+        application/sdp gönderiliyor.
+      */
 
       const response =
         await fetch(
           "https://api.openai.com/v1/realtime/calls",
           {
-
-            method:
-              "POST",
+            method: "POST",
 
             headers: {
-
               Authorization:
-                `Bearer ${clientSecret}`
+                `Bearer ${clientSecret}`,
 
+              "Content-Type":
+                "application/sdp"
             },
 
-            body:
-              formData
-
+            body: sdp
           }
         );
 
@@ -759,40 +506,57 @@
 
       if (!response.ok) {
 
+        console.error(
+          "ASA REALTIME HTTP:",
+          response.status,
+          answer
+        );
+
         throw new Error(
           answer ||
           `Realtime HTTP ${response.status}`
         );
-
       }
 
 
       /* ---------------------------------------------------
-         9. Remote SDP
+         9. SDP ANSWER
       --------------------------------------------------- */
 
-      await realtimePeer
-        .setRemoteDescription({
+      if (
+        !answer ||
+        typeof answer !== "string"
+      ) {
+        throw new Error(
+          "OpenAI geçerli bir SDP cevabı göndermedi."
+        );
+      }
 
-          type:
-            "answer",
 
-          sdp:
-            answer
+      await peer.setRemoteDescription({
+        type: "answer",
+        sdp: answer
+      });
 
-        });
+
+      console.log(
+        "ASA REALTIME SDP BAĞLANTISI TAMAMLANDI"
+      );
 
 
       /* ---------------------------------------------------
-         10. Connection state
+         10. CONNECTION STATE
       --------------------------------------------------- */
 
-      realtimePeer.onconnectionstatechange =
+      peer.onconnectionstatechange =
         () => {
 
-          const state =
-            realtimePeer.connectionState;
+          if (!peer) {
+            return;
+          }
 
+          const state =
+            peer.connectionState;
 
           console.log(
             "ASA REALTIME CONNECTION:",
@@ -800,22 +564,16 @@
           );
 
 
-          switch(state) {
+          switch (state) {
 
-            case "connected":
+            case "new":
 
-              realtimeConnected =
-                true;
-
-              realtimeConnecting =
-                false;
-
-              setVoiceStatus(
-                "Seni dinliyorum..."
+              setStatus(
+                "Bağlanıyor..."
               );
 
-              setVoiceState(
-                "listening"
+              setState(
+                "connecting"
               );
 
               break;
@@ -823,12 +581,28 @@
 
             case "connecting":
 
-              setVoiceStatus(
+              setStatus(
                 "Bağlanıyor..."
               );
 
-              setVoiceState(
+              setState(
                 "connecting"
+              );
+
+              break;
+
+
+            case "connected":
+
+              connected = true;
+              connecting = false;
+
+              setStatus(
+                "Seni dinliyorum..."
+              );
+
+              setState(
+                "listening"
               );
 
               break;
@@ -836,81 +610,123 @@
 
             case "disconnected":
 
-              realtimeConnected =
-                false;
+              connected = false;
 
-              setVoiceStatus(
+              setStatus(
                 "Bağlantı kesildi."
               );
+
+              setState(null);
 
               break;
 
 
             case "failed":
 
-              realtimeConnected =
-                false;
+              connected = false;
+              connecting = false;
 
-              setVoiceStatus(
+              setStatus(
                 "Ses bağlantısı kurulamadı."
               );
 
-              setVoiceState(null);
+              setState(null);
 
               break;
 
 
             case "closed":
 
-              realtimeConnected =
-                false;
+              connected = false;
+              connecting = false;
 
-              setVoiceStatus(
+              setStatus(
                 "Bağlantı kapandı."
               );
 
-              setVoiceState(null);
+              setState(null);
 
               break;
-
           }
-
         };
 
 
-      console.log(
-        "ASA REALTIME BAĞLANTI HAZIR."
-      );
-
-
-    } catch(error) {
+    } catch (error) {
 
       console.error(
         "ASA REALTIME CONNECT ERROR:",
         error
       );
 
+      connected = false;
+      connecting = false;
 
-      realtimeConnected =
-        false;
+      setState(null);
 
-      realtimeConnecting =
-        false;
-
-
-      setVoiceState(null);
-
-
-      setVoiceStatus(
+      setStatus(
         error?.message ||
         "Ses bağlantısı kurulamadı."
       );
 
-
       await disconnectRealtime();
-
     }
+  }
 
+
+  /* =======================================================
+     ICE WAIT
+  ======================================================= */
+
+  function waitForIce(connection) {
+
+    return new Promise(resolve => {
+
+      if (
+        connection.iceGatheringState ===
+        "complete"
+      ) {
+        resolve();
+        return;
+      }
+
+      let finished = false;
+
+      const finish = () => {
+
+        if (finished) {
+          return;
+        }
+
+        finished = true;
+
+        connection.removeEventListener(
+          "icegatheringstatechange",
+          check
+        );
+
+        resolve();
+      };
+
+      const check = () => {
+
+        if (
+          connection.iceGatheringState ===
+          "complete"
+        ) {
+          finish();
+        }
+      };
+
+      connection.addEventListener(
+        "icegatheringstatechange",
+        check
+      );
+
+      setTimeout(
+        finish,
+        8000
+      );
+    });
   }
 
 
@@ -920,81 +736,59 @@
 
   async function disconnectRealtime() {
 
-    realtimeConnected =
-      false;
-
-    realtimeConnecting =
-      false;
+    connected = false;
+    connecting = false;
 
 
-    if (realtimeDataChannel) {
+    if (dataChannel) {
 
       try {
-
-        realtimeDataChannel.close();
-
+        dataChannel.close();
       } catch {}
 
-      realtimeDataChannel =
-        null;
-
+      dataChannel = null;
     }
 
 
-    if (realtimeStream) {
+    if (microphone) {
 
-      realtimeStream
+      microphone
         .getTracks()
         .forEach(track => {
 
           try {
-
             track.stop();
-
           } catch {}
 
         });
 
-
-      realtimeStream =
-        null;
-
+      microphone = null;
     }
 
 
-    if (realtimePeer) {
+    if (peer) {
 
       try {
-
-        realtimePeer.close();
-
+        peer.close();
       } catch {}
 
-      realtimePeer =
-        null;
-
+      peer = null;
     }
 
 
     if (remoteAudio) {
 
       try {
-
         remoteAudio.pause();
-
       } catch {}
 
-
-      remoteAudio.srcObject =
-        null;
-
+      remoteAudio.srcObject = null;
     }
-
   }
 
 
   /* =======================================================
-     OPEN VOICE MODE
+     OPEN
   ======================================================= */
 
   async function openVoiceMode() {
@@ -1003,47 +797,41 @@
       return;
     }
 
-
     voiceMode.classList.add(
       "open"
     );
 
-
-    setVoiceStatus(
+    setStatus(
       "ASA bağlanıyor..."
     );
 
+    setState(
+      "connecting"
+    );
 
     await connectRealtime();
-
   }
 
 
   /* =======================================================
-     CLOSE VOICE MODE
+     CLOSE
   ======================================================= */
 
   async function closeVoiceMode() {
 
     await disconnectRealtime();
 
-
     if (voiceMode) {
-
       voiceMode.classList.remove(
         "open"
       );
-
     }
 
+    setState(null);
 
-    setVoiceState(null);
-
-
-    setVoiceStatus(
+    setStatus(
       "Hazırım"
     );
-
   }
 
 
@@ -1053,26 +841,20 @@
 
   async function toggleRealtime() {
 
-    if (realtimeConnected) {
+    if (connected) {
 
       await disconnectRealtime();
 
-
-      setVoiceStatus(
+      setStatus(
         "Mikrofon kapalı"
       );
 
-
-      setVoiceState(null);
-
+      setState(null);
 
       return;
-
     }
 
-
     await connectRealtime();
-
   }
 
 
@@ -1080,44 +862,31 @@
      BUTTONS
   ======================================================= */
 
-  function setupVoiceButtons() {
+  function setupButtons() {
 
-    initVoiceDOM();
-
+    initDOM();
 
     if (!voiceButton) {
-
       console.error(
         "ASA: voiceButton bulunamadı."
       );
-
       return;
-
     }
 
+
+    /*
+      onclick yerine addEventListener
+      kullanıyoruz.
+    */
 
     voiceButton.addEventListener(
       "click",
       async event => {
 
         event.preventDefault();
-
         event.stopPropagation();
 
-
-        try {
-
-          await openVoiceMode();
-
-        } catch(error) {
-
-          console.error(
-            "Voice button:",
-            error
-          );
-
-        }
-
+        await openVoiceMode();
       }
     );
 
@@ -1129,12 +898,11 @@
         async event => {
 
           event.preventDefault();
+          event.stopPropagation();
 
           await closeVoiceMode();
-
         }
       );
-
     }
 
 
@@ -1145,35 +913,29 @@
         async event => {
 
           event.preventDefault();
+          event.stopPropagation();
 
           await toggleRealtime();
-
         }
       );
-
     }
-
   }
 
 
   /* =======================================================
-     PAGE
+     INIT
   ======================================================= */
 
   function init() {
 
-    setupVoiceButtons();
-
+    setupButtons();
 
     window.addEventListener(
       "pagehide",
       () => {
-
         disconnectRealtime();
-
       }
     );
-
   }
 
 
@@ -1185,15 +947,12 @@
     document.addEventListener(
       "DOMContentLoaded",
       init,
-      {
-        once:true
-      }
+      { once: true }
     );
 
   } else {
 
     init();
-
   }
 
 
