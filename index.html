@@ -5,7 +5,7 @@
 
 <meta
   name="viewport"
-  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
 >
 
 <title>ASA</title>
@@ -13,24 +13,42 @@
 <style>
 
 /* =====================================================
-   BASE
+   ASA — FINAL UI
 ===================================================== */
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {
   --bg: #05040a;
-  --panel: #0d0c16;
-  --panel2: #12111d;
-  --text: #f5f5fa;
-  --muted: #858394;
-  --purple: #a33cff;
-  --purple2: #c447ff;
-  --border: rgba(255,255,255,.09);
+  --bg2: #080611;
+  --panel: rgba(15, 14, 25, .92);
+  --panelSolid: #11101a;
+
+  --text: #f7f5fb;
+  --muted: #888696;
+  --muted2: #666474;
+
+  --purple: #a331ff;
+  --purple2: #c33cff;
+  --purple3: #7021bd;
+
+  --border: rgba(255,255,255,.095);
+  --borderStrong: rgba(255,255,255,.14);
+
+  --radius: 24px;
+
+  --font:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Avenir Next",
+    "Segoe UI",
+    sans-serif;
 }
 
 html,
@@ -38,14 +56,18 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+
   background: var(--bg);
   color: var(--text);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "Segoe UI",
-    sans-serif;
+
+  font-family: var(--font);
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  overscroll-behavior: none;
 }
 
 button,
@@ -58,29 +80,45 @@ button {
   color: inherit;
 }
 
+button,
+.menuItem,
+.historyItem,
+.iconButton,
+.circleButton {
+  touch-action: manipulation;
+}
+
+
 /* =====================================================
    APP
 ===================================================== */
 
 .app {
+  position: relative;
+
   width: 100%;
   height: 100dvh;
-  position: relative;
+
   overflow: hidden;
 
   background:
     radial-gradient(
-      circle at 50% 5%,
-      rgba(130,30,200,.18),
-      transparent 35%
+      circle at 55% 8%,
+      rgba(142, 34, 220, .18),
+      transparent 31%
     ),
     radial-gradient(
-      circle at 90% 70%,
-      rgba(80,0,150,.12),
-      transparent 35%
+      circle at 92% 76%,
+      rgba(93, 0, 170, .13),
+      transparent 34%
     ),
-    #05040a;
+    linear-gradient(
+      180deg,
+      #05040a,
+      #06040b
+    );
 }
+
 
 /* =====================================================
    HEADER
@@ -88,97 +126,158 @@ button {
 
 .header {
   position: absolute;
+
   top: 0;
   left: 0;
   right: 0;
 
-  height: 96px;
+  height: 112px;
 
   padding:
-    14px
+    calc(14px + env(safe-area-inset-top))
+    22px
     14px;
 
   display: flex;
   align-items: center;
-  gap: 10px;
+
+  gap: 15px;
+
+  z-index: 30;
 
   background:
     linear-gradient(
       180deg,
-      rgba(5,4,10,.99),
-      rgba(5,4,10,.90)
+      rgba(5,4,10,.98),
+      rgba(5,4,10,.88)
     );
 
   border-bottom:
-    1px solid
-    rgba(255,255,255,.06);
+    1px solid rgba(255,255,255,.075);
 
-  z-index: 30;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
-.headerButton,
-.logo {
-  width: 56px;
-  height: 56px;
+
+/* hamburger */
+
+.menuButton {
+  width: 58px;
+  height: 58px;
+
   flex-shrink: 0;
-  border-radius: 18px;
-}
 
-.headerButton {
-  background:
-    rgba(255,255,255,.035);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 19px;
+
+  background: rgba(20,19,30,.74);
 
   border:
-    1px solid
-    rgba(255,255,255,.08);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 24px;
+    1px solid var(--border);
 
   cursor: pointer;
+
+  transition:
+    transform .18s ease,
+    background .18s ease;
 }
 
-.headerButton:active {
-  transform: scale(.93);
+.menuButton span {
+  width: 25px;
+  height: 18px;
+
+  position: relative;
+
+  display: block;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8f30ff,
-      #c43cff
-    );
-
-  box-shadow:
-    0 0 30px
-    rgba(160,50,255,.30);
-
-  font-size: 30px;
-  font-weight: 800;
+.menuButton span::before,
+.menuButton span::after,
+.menuButton span {
+  background: transparent;
 }
+
+.menuButton span i {
+  position: absolute;
+
+  left: 0;
+
+  width: 25px;
+  height: 2px;
+
+  border-radius: 2px;
+
+  background: #f4f1f8;
+}
+
+.menuButton span i:nth-child(1) {
+  top: 0;
+}
+
+.menuButton span i:nth-child(2) {
+  top: 8px;
+}
+
+.menuButton span i:nth-child(3) {
+  top: 16px;
+}
+
+.menuButton:active {
+  transform: scale(.94);
+}
+
+
+/* ASA WORDMARK */
 
 .brand {
-  font-size: 27px;
-  font-weight: 800;
-  letter-spacing: 6px;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  padding-left: 4px;
+
+  user-select: none;
 }
+
+.brand span {
+  display: inline-block;
+
+  font-family:
+    "Avenir Next",
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    sans-serif;
+
+  font-size: 32px;
+
+  line-height: 1;
+
+  font-weight: 700;
+
+  letter-spacing: .28em;
+
+  color: #f6f4fa;
+}
+
+.brand span:last-child {
+  margin-left: -1px;
+}
+
+
+/* header spacer */
 
 .headerSpacer {
   flex: 1;
 }
 
-.headerActions {
-  display: flex;
-  gap: 6px;
-}
 
 /* =====================================================
    CHAT
@@ -187,21 +286,22 @@ button {
 .chat {
   position: absolute;
 
-  top: 96px;
+  top: 112px;
   left: 0;
   right: 0;
-  bottom: 92px;
+  bottom: 104px;
 
   overflow-y: auto;
   overflow-x: hidden;
 
   padding:
-    32px
-    18px
-    30px;
+    34px
+    24px
+    155px;
 
-  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+
+  overscroll-behavior: contain;
 }
 
 .chat::-webkit-scrollbar {
@@ -209,117 +309,17 @@ button {
 }
 
 .chat::-webkit-scrollbar-thumb {
-  background:
-    rgba(180,60,255,.30);
+  background: rgba(176, 55, 255, .32);
   border-radius: 10px;
 }
 
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-.message {
-  display: flex;
-  width: 100%;
-  margin-bottom: 22px;
-}
-
-.message.user {
-  justify-content: flex-end;
-}
-
-.message.assistant {
-  justify-content: flex-start;
-}
-
-/* USER */
-
-.userBubble {
-  max-width: 88%;
-
-  padding:
-    13px
-    17px;
-
-  border-radius: 21px;
-  border-bottom-right-radius: 7px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #8736e9,
-      #bd3bd6
-    );
-
-  box-shadow:
-    0 10px 30px
-    rgba(130,45,255,.13);
-
-  font-size: 17px;
-  line-height: 1.5;
-
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-/* ASSISTANT */
-
-.assistantBubble {
-  max-width: 94%;
-
-  background: transparent;
-
-  font-size: 18px;
-  line-height: 1.62;
-
-  word-break: break-word;
-}
-
-.assistantLabel {
-  display: block;
-
-  margin-bottom: 7px;
-
-  color: #b53cff;
-
-  font-size: 12px;
-  font-weight: 800;
-
-  letter-spacing: 5px;
-}
-
-.assistantText {
-  color: #f1eff6;
-}
-
-/* =====================================================
-   IMAGE MESSAGE
-===================================================== */
-
-.messageImage {
-  display: block;
-
-  max-width: 260px;
-  max-height: 330px;
-
-  border-radius: 18px;
-
-  object-fit: cover;
-
-  margin-bottom: 8px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.12);
-}
 
 /* =====================================================
    EMPTY
 ===================================================== */
 
 .empty {
-  width: 100%;
-  height: 100%;
+  min-height: 100%;
 
   display: flex;
   flex-direction: column;
@@ -332,344 +332,189 @@ button {
   padding: 30px;
 }
 
-.emptyLogo {
-  width: 86px;
-  height: 86px;
+.emptyMark {
+  width: 74px;
+  height: 74px;
 
-  border-radius: 27px;
+  margin-bottom: 25px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 24px;
+
+  position: relative;
 
   background:
-    linear-gradient(
-      135deg,
-      #8f30ff,
-      #c33cff
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(255,255,255,.38),
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 60% 65%,
+      #b833ff,
+      #6816a7
     );
 
   box-shadow:
-    0 0 65px
-    rgba(160,45,255,.27);
+    0 0 55px rgba(163,48,255,.25);
 
-  font-size: 48px;
-  font-weight: 800;
+  overflow: hidden;
+}
 
-  margin-bottom: 22px;
+.emptyMark::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 17px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.9),
+      rgba(255,255,255,.12) 25%,
+      rgba(160,42,255,.1) 55%,
+      transparent 70%
+    );
+
+  filter: blur(2px);
 }
 
 .empty h1 {
-  font-size: 27px;
-  margin-bottom: 8px;
+  font-size: 28px;
+
+  line-height: 1.2;
+
+  font-weight: 650;
+
+  letter-spacing: -.025em;
+
+  margin-bottom: 10px;
 }
 
 .empty p {
   color: var(--muted);
-  font-size: 16px;
-}
-
-/* =====================================================
-   INPUT
-===================================================== */
-
-.inputArea {
-  position: absolute;
-
-  left: 12px;
-  right: 12px;
-
-  bottom:
-    calc(
-      11px +
-      env(safe-area-inset-bottom)
-    );
-
-  z-index: 35;
-
-  transition:
-    bottom .12s ease;
-}
-
-.inputBox {
-  min-height: 64px;
-
-  display: flex;
-  align-items: center;
-
-  padding: 6px;
-
-  border-radius: 23px;
-
-  background:
-    rgba(15,14,25,.97);
-
-  border:
-    1px solid
-    rgba(255,255,255,.10);
-
-  box-shadow:
-    0 14px 45px
-    rgba(0,0,0,.42);
-}
-
-/* PLUS */
-
-.plusButton {
-  width: 48px;
-  height: 48px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 16px;
-
-  background: transparent;
-
-  color: #d5d2dc;
-
-  font-size: 29px;
-  font-weight: 300;
-
-  cursor: pointer;
-}
-
-.plusButton:active {
-  transform: scale(.90);
-}
-
-/* INPUT */
-
-.input {
-  flex: 1;
-  min-width: 0;
-
-  height: 48px;
-
-  background: transparent;
-  border: 0;
-  outline: 0;
-
-  color: white;
-
-  padding:
-    0 9px;
 
   font-size: 17px;
+
+  line-height: 1.5;
 }
 
-.input::placeholder {
-  color: #74717f;
-}
-
-/* RIGHT */
-
-.inputActions {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-}
-
-.voiceButton,
-.sendButton {
-  width: 43px;
-  height: 43px;
-
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 14px;
-
-  background: transparent;
-
-  cursor: pointer;
-}
-
-.voiceButton {
-  color: #d6d3dc;
-}
-
-.sendButton {
-  color: #b53cff;
-}
-
-.voiceButton:active,
-.sendButton:active {
-  transform: scale(.87);
-}
-
-.sendButton:disabled {
-  opacity: .25;
-}
-
-.voiceButton svg {
-  width: 21px;
-  height: 21px;
-}
-
-.sendButton svg {
-  width: 22px;
-  height: 22px;
-}
 
 /* =====================================================
-   ATTACH MENU
+   MESSAGE
 ===================================================== */
 
-.attachMenu {
-  position: absolute;
-
-  left: 4px;
-  bottom: 73px;
-
-  width: 180px;
-
-  padding: 7px;
-
-  border-radius: 19px;
-
-  background:
-    rgba(20,18,31,.98);
-
-  border:
-    1px solid
-    rgba(255,255,255,.10);
-
-  box-shadow:
-    0 20px 60px
-    rgba(0,0,0,.55);
-
-  opacity: 0;
-
-  transform:
-    translateY(8px)
-    scale(.96);
-
-  pointer-events: none;
-
-  transition: .18s;
-
-  z-index: 50;
-}
-
-.attachMenu.open {
-  opacity: 1;
-
-  transform:
-    translateY(0)
-    scale(1);
-
-  pointer-events: auto;
-}
-
-.attachItem {
+.message {
   width: 100%;
+
+  display: flex;
+
+  margin-bottom: 27px;
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.assistant {
+  justify-content: flex-start;
+}
+
+
+/* USER */
+
+.user .bubble {
+  max-width: min(78%, 680px);
 
   padding:
-    12px;
+    16px
+    20px;
 
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  border-radius: 13px;
-
-  background: transparent;
-
-  text-align: left;
-
-  cursor: pointer;
-
-  font-size: 15px;
-}
-
-.attachItem:active {
-  background:
-    rgba(255,255,255,.06);
-}
-
-.attachIcon {
-  width: 30px;
-  text-align: center;
-  font-size: 20px;
-}
-
-.hiddenFile {
-  display: none;
-}
-
-/* =====================================================
-   IMAGE PREVIEW
-===================================================== */
-
-.attachmentPreview {
-  position: absolute;
-
-  left: 4px;
-  bottom: 73px;
-
-  width: 78px;
-  height: 78px;
-
-  border-radius: 17px;
-
-  overflow: hidden;
-
-  display: none;
-
-  background: #11101b;
-
-  border:
-    1px solid
-    rgba(255,255,255,.12);
-
-  box-shadow:
-    0 18px 45px
-    rgba(0,0,0,.50);
-
-  z-index: 45;
-}
-
-.attachmentPreview.show {
-  display: block;
-}
-
-.attachmentPreview img {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-}
-
-.attachmentRemove {
-  position: absolute;
-
-  top: 5px;
-  right: 5px;
-
-  width: 24px;
-  height: 24px;
-
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 24px 24px 7px 24px;
 
   background:
-    rgba(0,0,0,.70);
+    linear-gradient(
+      135deg,
+      #8d32f1,
+      #c23bd6
+    );
 
   color: white;
 
-  cursor: pointer;
+  font-size: 18px;
+
+  line-height: 1.5;
+
+  box-shadow:
+    0 12px 35px rgba(126,37,235,.14);
 }
+
+
+/* ASSISTANT */
+
+.assistant .bubble {
+  max-width: min(92%, 820px);
+
+  padding:
+    4px
+    0;
+
+  background: transparent;
+
+  font-size: 18px;
+
+  line-height: 1.72;
+
+  color: #f4f1f7;
+}
+
+.assistantLabel {
+  display: block;
+
+  margin-bottom: 13px;
+
+  color: #b13cff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: .48em;
+}
+
+.assistantText strong {
+  font-weight: 700;
+}
+
+.assistantText a {
+  color: #c56cff;
+  text-decoration: underline;
+}
+
+
+/* IMAGE MESSAGE */
+
+.messageImage {
+  display: block;
+
+  width: min(320px, 70vw);
+  max-height: 420px;
+
+  object-fit: cover;
+
+  border-radius: 22px;
+
+  margin-bottom: 8px;
+
+  border:
+    1px solid rgba(255,255,255,.12);
+
+  box-shadow:
+    0 14px 45px rgba(0,0,0,.28);
+}
+
 
 /* =====================================================
    TYPING
@@ -677,9 +522,10 @@ button {
 
 .typing {
   display: flex;
-  gap: 5px;
 
-  padding-top: 5px;
+  gap: 7px;
+
+  padding-top: 2px;
 }
 
 .typing span {
@@ -688,10 +534,10 @@ button {
 
   border-radius: 50%;
 
-  background: #b43cff;
+  background: #b93cff;
 
   animation:
-    typing 1.05s infinite;
+    typing 1.15s infinite ease-in-out;
 }
 
 .typing span:nth-child(2) {
@@ -704,7 +550,9 @@ button {
 
 @keyframes typing {
 
-  0%,60%,100% {
+  0%,
+  60%,
+  100% {
     opacity: .25;
     transform: translateY(0);
   }
@@ -713,38 +561,384 @@ button {
     opacity: 1;
     transform: translateY(-4px);
   }
+
 }
 
+
 /* =====================================================
-   OVERLAY
+   INPUT AREA
+===================================================== */
+
+.inputArea {
+  position: absolute;
+
+  left: 18px;
+  right: 18px;
+
+  bottom:
+    calc(13px + env(safe-area-inset-bottom));
+
+  z-index: 40;
+}
+
+.inputBox {
+  min-height: 72px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 7px 8px;
+
+  border-radius: 25px;
+
+  background:
+    rgba(16,15,25,.95);
+
+  border:
+    1px solid rgba(255,255,255,.11);
+
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.38),
+    0 0 40px rgba(139,37,255,.07);
+
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+
+/* INPUT */
+
+.input {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 54px;
+
+  padding:
+    0 11px;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #f7f4fa;
+
+  font-size: 17px;
+
+  font-weight: 450;
+
+  letter-spacing: -.01em;
+}
+
+.input::placeholder {
+  color: #777483;
+}
+
+
+/* LEFT + */
+
+.plusButton {
+  width: 54px;
+  height: 54px;
+
+  flex-shrink: 0;
+
+  border-radius: 18px;
+
+  background:
+    rgba(255,255,255,.035);
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 29px;
+
+  font-weight: 300;
+
+  color: #f0edf5;
+
+  cursor: pointer;
+}
+
+.plusButton:active,
+.voiceButton:active,
+.sendButton:active {
+  transform: scale(.94);
+}
+
+
+/* VOICE */
+
+.voiceButton {
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 17px;
+
+  background: transparent;
+
+  color: #e8e4ed;
+
+  cursor: pointer;
+
+  transition: .18s;
+}
+
+.voiceIcon {
+  width: 20px;
+  height: 26px;
+
+  border:
+    2px solid currentColor;
+
+  border-radius: 12px;
+
+  position: relative;
+}
+
+.voiceIcon::before {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+
+  bottom: -9px;
+
+  width: 13px;
+  height: 8px;
+
+  transform: translateX(-50%);
+
+  border-bottom:
+    2px solid currentColor;
+
+  border-left:
+    2px solid transparent;
+
+  border-right:
+    2px solid transparent;
+
+  border-radius: 0 0 10px 10px;
+}
+
+.voiceIcon::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+
+  bottom: -14px;
+
+  width: 2px;
+  height: 6px;
+
+  transform: translateX(-50%);
+
+  background: currentColor;
+
+  border-radius: 2px;
+}
+
+
+/* SEND */
+
+.sendButton {
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
+
+  border-radius: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+
+  color: #b438ff;
+
+  cursor: pointer;
+
+  font-size: 31px;
+
+  font-weight: 300;
+
+  line-height: 1;
+
+  transition: .18s;
+}
+
+.sendButton:disabled {
+  opacity: .32;
+}
+
+
+/* =====================================================
+   ATTACHMENT SHEET
+===================================================== */
+
+.sheetOverlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 80;
+
+  background: rgba(0,0,0,.58);
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: .22s;
+}
+
+.sheetOverlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.attachmentSheet {
+  position: absolute;
+
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+
+  padding: 10px;
+
+  border-radius: 26px;
+
+  background:
+    rgba(20,19,30,.98);
+
+  border:
+    1px solid rgba(255,255,255,.10);
+
+  transform: translateY(25px);
+
+  transition: .25s;
+
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.6);
+}
+
+.sheetOverlay.open .attachmentSheet {
+  transform: translateY(0);
+}
+
+.sheetTitle {
+  padding:
+    13px
+    12px
+    10px;
+
+  color: #7d7a89;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: .25em;
+}
+
+.sheetItem {
+  width: 100%;
+
+  min-height: 57px;
+
+  padding:
+    0
+    14px;
+
+  display: flex;
+  align-items: center;
+
+  text-align: left;
+
+  background: transparent;
+
+  color: #f5f2f8;
+
+  font-size: 17px;
+
+  border-radius: 16px;
+
+  cursor: pointer;
+}
+
+.sheetItem:active {
+  background: rgba(255,255,255,.06);
+}
+
+.sheetCancel {
+  width: 100%;
+
+  height: 53px;
+
+  margin-top: 7px;
+
+  border-radius: 17px;
+
+  background:
+    rgba(255,255,255,.06);
+
+  color: #aaa7b5;
+
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   SIDEBAR
 ===================================================== */
 
 .overlay {
   position: fixed;
+
   inset: 0;
 
-  z-index: 50;
+  z-index: 90;
 
   background:
-    rgba(0,0,0,.60);
+    rgba(0,0,0,.58);
 
-  backdrop-filter:
-    blur(8px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   opacity: 0;
+
   pointer-events: none;
 
-  transition: .22s;
+  transition: .25s;
 }
 
 .overlay.open {
   opacity: 1;
   pointer-events: auto;
 }
-
-/* =====================================================
-   SIDEBAR
-===================================================== */
 
 .sidebar {
   position: fixed;
@@ -753,120 +947,114 @@ button {
   left: 0;
   bottom: 0;
 
-  width:
-    min(540px,90vw);
+  z-index: 100;
 
-  z-index: 60;
+  width: min(430px, 88vw);
 
-  padding: 22px;
-
-  display: flex;
-  flex-direction: column;
+  padding:
+    calc(23px + env(safe-area-inset-top))
+    20px
+    calc(18px + env(safe-area-inset-bottom));
 
   background:
     linear-gradient(
       180deg,
-      #0e0d19,
+      #0d0c17,
       #080710
     );
 
   border-right:
-    1px solid
-    rgba(255,255,255,.09);
+    1px solid rgba(255,255,255,.09);
 
   transform:
     translateX(-105%);
 
   transition:
-    transform .30s
-    cubic-bezier(.22,.8,.25,1);
+    transform .3s cubic-bezier(.22,.8,.25,1);
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow:
+    30px 0 90px rgba(0,0,0,.35);
 }
 
 .sidebar.open {
-  transform:
-    translateX(0);
+  transform: translateX(0);
 }
 
-/* =====================================================
-   SIDEBAR HEADER
-===================================================== */
+
+/* sidebar header */
 
 .sidebarHeader {
   display: flex;
   align-items: center;
-  gap: 14px;
 
-  flex-shrink: 0;
-
-  margin-bottom: 30px;
-}
-
-.sidebarLogo {
-  width: 57px;
-  height: 57px;
-
-  border-radius: 18px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background:
-    linear-gradient(
-      135deg,
-      #9130ff,
-      #c33cff
-    );
-
-  font-size: 30px;
-  font-weight: 800;
+  margin-bottom: 42px;
 }
 
 .sidebarBrand {
   flex: 1;
 
-  font-size: 24px;
-  font-weight: 800;
+  font-family:
+    "Avenir Next",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 
-  letter-spacing: 7px;
+  font-size: 25px;
+
+  font-weight: 700;
+
+  letter-spacing: .28em;
 }
 
 .closeButton {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
 
-  border-radius: 17px;
+  border-radius: 18px;
 
   background:
-    rgba(255,255,255,.05);
+    rgba(255,255,255,.045);
+
+  border:
+    1px solid rgba(255,255,255,.07);
+
+  color: #eeeaf2;
 
   font-size: 30px;
+
+  font-weight: 300;
 
   cursor: pointer;
 }
 
-/* =====================================================
-   SIDEBAR ITEMS
-===================================================== */
+
+/* section */
 
 .menuSectionTitle {
-  flex-shrink: 0;
-
-  margin-bottom: 8px;
-
-  color: #817e8f;
+  color: #777484;
 
   font-size: 11px;
-  font-weight: 800;
 
-  letter-spacing: 4px;
+  font-weight: 700;
+
+  letter-spacing: .35em;
+
+  margin:
+    0
+    8px
+    14px;
 }
+
+
+/* item */
 
 .menuItem {
   width: 100%;
-  min-height: 62px;
 
-  flex-shrink: 0;
+  min-height: 59px;
 
   display: flex;
   align-items: center;
@@ -874,134 +1062,66 @@ button {
   gap: 17px;
 
   padding:
-    8px 13px;
+    0
+    12px;
 
-  border-radius: 18px;
+  border-radius: 17px;
 
   background: transparent;
 
   text-align: left;
 
+  color: #f3f0f6;
+
+  font-size: 17px;
+
+  font-weight: 550;
+
   cursor: pointer;
 
-  font-size: 18px;
-  font-weight: 600;
+  transition: .18s;
 }
 
-.menuItem:active,
-.menuItem.active {
+.menuItem:active {
   background:
-    rgba(255,255,255,.065);
+    rgba(255,255,255,.06);
 }
 
 .menuIcon {
-  width: 40px;
+  width: 25px;
 
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  font-size: 25px;
+  color: #aaa6b5;
+
+  font-size: 23px;
 }
 
 .menuDivider {
   height: 1px;
 
-  flex-shrink: 0;
+  margin:
+    20px 8px;
 
   background:
-    rgba(255,255,255,.07);
-
-  margin:
-    17px 0;
+    rgba(255,255,255,.075);
 }
+
 
 /* =====================================================
-   HISTORY PANEL
+   CHAT LIST
 ===================================================== */
-
-.historyPanel {
-  position: absolute;
-
-  top: 106px;
-  left: 14px;
-  right: 14px;
-  bottom: 14px;
-
-  z-index: 80;
-
-  padding: 17px;
-
-  display: flex;
-  flex-direction: column;
-
-  border-radius: 24px;
-
-  background:
-    rgba(14,13,24,.99);
-
-  border:
-    1px solid
-    rgba(255,255,255,.10);
-
-  box-shadow:
-    0 25px 80px
-    rgba(0,0,0,.55);
-
-  opacity: 0;
-
-  transform:
-    translateY(10px)
-    scale(.98);
-
-  pointer-events: none;
-
-  transition: .20s;
-}
-
-.historyPanel.open {
-  opacity: 1;
-
-  transform:
-    translateY(0)
-    scale(1);
-
-  pointer-events: auto;
-}
-
-.historyHeader {
-  display: flex;
-  align-items: center;
-
-  margin-bottom: 12px;
-}
-
-.historyTitle {
-  flex: 1;
-
-  font-size: 20px;
-  font-weight: 750;
-}
-
-.historyClose {
-  width: 39px;
-  height: 39px;
-
-  border-radius: 13px;
-
-  background:
-    rgba(255,255,255,.05);
-
-  font-size: 21px;
-
-  cursor: pointer;
-}
 
 .chatList {
   flex: 1;
-  min-height: 0;
 
   overflow-y: auto;
 
-  padding-right: 2px;
+  padding:
+    0
+    2px;
 }
 
 .chatList::-webkit-scrollbar {
@@ -1010,29 +1130,25 @@ button {
 
 .chatList::-webkit-scrollbar-thumb {
   background:
-    rgba(180,60,255,.30);
+    rgba(172,52,255,.3);
 }
 
-/* =====================================================
-   HISTORY ITEMS
-===================================================== */
-
 .historyGroup {
-  margin-bottom: 17px;
+  margin-bottom: 23px;
 }
 
 .historyDate {
-  margin:
-    11px
-    6px
-    7px;
-
-  color: #747184;
+  color: #666372;
 
   font-size: 10px;
-  font-weight: 800;
 
-  letter-spacing: 3px;
+  font-weight: 700;
+
+  letter-spacing: .25em;
+
+  margin:
+    10px
+    8px;
 }
 
 .historyItem {
@@ -1040,15 +1156,15 @@ button {
 
   width: 100%;
 
-  min-height: 65px;
-
-  margin-bottom: 7px;
+  min-height: 70px;
 
   padding:
-    12px
-    49px
-    12px
-    14px;
+    13px
+    52px
+    13px
+    15px;
+
+  margin-bottom: 8px;
 
   border-radius: 17px;
 
@@ -1056,33 +1172,47 @@ button {
     rgba(255,255,255,.025);
 
   border:
-    1px solid
-    rgba(255,255,255,.06);
+    1px solid rgba(255,255,255,.055);
 
   cursor: pointer;
+
+  transition: .18s;
 }
 
 .historyItem.active {
   background:
-    rgba(165,55,255,.13);
+    linear-gradient(
+      135deg,
+      rgba(148,44,245,.18),
+      rgba(81,21,130,.12)
+    );
 
   border-color:
-    rgba(170,55,255,.30);
+    rgba(169,51,255,.45);
 }
 
-.historyTitleText {
-  font-size: 15px;
-  font-weight: 650;
+.historyItem:active {
+  transform: scale(.985);
+}
+
+.historyTitle {
+  color: #f2eef6;
+
+  font-size: 16px;
+
+  font-weight: 550;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
 
 .historyTime {
-  margin-top: 4px;
+  margin-top: 5px;
 
-  color: #716e7d;
+  color: #706d7c;
 
   font-size: 11px;
 }
@@ -1090,37 +1220,51 @@ button {
 .historyMore {
   position: absolute;
 
-  right: 7px;
+  right: 9px;
   top: 50%;
 
-  transform:
-    translateY(-50%);
+  width: 38px;
+  height: 38px;
 
-  width: 36px;
-  height: 36px;
+  transform: translateY(-50%);
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   background:
     rgba(255,255,255,.045);
 
-  color: #aaa7b5;
+  color: #aaa7b4;
+
+  font-size: 15px;
 
   cursor: pointer;
 }
 
 .noHistory {
-  padding: 35px 10px;
-
-  color: #686577;
+  padding: 30px 10px;
 
   text-align: center;
+
+  color: #686574;
 
   font-size: 14px;
 }
 
+.sidebarFooter {
+  padding-top: 15px;
+
+  color: #555260;
+
+  text-align: center;
+
+  font-size: 11px;
+
+  letter-spacing: .04em;
+}
+
+
 /* =====================================================
-   CONTEXT
+   CONTEXT MENU
 ===================================================== */
 
 .contextMenu {
@@ -1132,18 +1276,16 @@ button {
 
   padding: 7px;
 
-  border-radius: 17px;
+  border-radius: 18px;
 
   background:
-    #151421;
+    #161520;
 
   border:
-    1px solid
-    rgba(255,255,255,.10);
+    1px solid rgba(255,255,255,.1);
 
   box-shadow:
-    0 20px 60px
-    rgba(0,0,0,.55);
+    0 25px 70px rgba(0,0,0,.55);
 
   display: none;
 }
@@ -1156,17 +1298,20 @@ button {
   width: 100%;
 
   padding:
-    12px 14px;
+    13px
+    14px;
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   background: transparent;
 
+  color: #f2eff5;
+
   text-align: left;
 
-  cursor: pointer;
-
   font-size: 14px;
+
+  cursor: pointer;
 }
 
 .contextItem:active {
@@ -1175,15 +1320,17 @@ button {
 }
 
 .contextItem.delete {
-  color: #ff687c;
+  color: #ff7183;
 }
 
+
 /* =====================================================
-   MODAL
+   MODALS
 ===================================================== */
 
 .modalOverlay {
   position: fixed;
+
   inset: 0;
 
   z-index: 200;
@@ -1198,8 +1345,8 @@ button {
   background:
     rgba(0,0,0,.72);
 
-  backdrop-filter:
-    blur(10px);
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
 }
 
 .modalOverlay.open {
@@ -1207,67 +1354,75 @@ button {
 }
 
 .modal {
-  width: min(480px,100%);
+  width: min(470px, 100%);
 
-  padding: 26px;
+  padding: 27px;
 
-  border-radius: 26px;
+  border-radius: 27px;
 
   background:
     #12111d;
 
   border:
-    1px solid
-    rgba(255,255,255,.11);
+    1px solid rgba(255,255,255,.11);
 
   box-shadow:
-    0 30px 100px
-    rgba(0,0,0,.60);
+    0 35px 100px rgba(0,0,0,.65);
 }
 
 .modal h2 {
-  margin-bottom: 18px;
+  margin-bottom: 19px;
 
   font-size: 23px;
+
+  line-height: 1.2;
+
+  letter-spacing: -.02em;
 }
 
 .modalInput {
   width: 100%;
 
-  padding: 16px;
+  height: 57px;
 
-  border-radius: 16px;
+  padding:
+    0
+    17px;
+
+  border-radius: 17px;
 
   background:
     #090811;
 
   border:
-    1px solid
-    rgba(255,255,255,.10);
-
-  color: white;
+    1px solid rgba(255,255,255,.09);
 
   outline: 0;
 
-  font-size: 16px;
+  color: #fff;
+
+  font-size: 17px;
 }
 
 .modalButtons {
   display: flex;
+
   gap: 9px;
 
-  margin-top: 19px;
+  margin-top: 18px;
 }
 
 .modalButton {
   flex: 1;
 
-  padding: 14px;
+  height: 53px;
 
-  border-radius: 15px;
+  border-radius: 16px;
 
   background:
-    rgba(255,255,255,.06);
+    rgba(255,255,255,.055);
+
+  color: #f3eff7;
 
   cursor: pointer;
 }
@@ -1283,257 +1438,588 @@ button {
 
 .modalButton.danger {
   background:
-    #a92843;
+    #a72b45;
 }
 
+
 /* =====================================================
-   DESKTOP
+   VOICE CHAT OVERLAY
 ===================================================== */
 
-@media (min-width:601px) {
+.voiceMode {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 300;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(133,25,205,.18),
+      transparent 32%
+    ),
+    #05040a;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transform: scale(.97);
+
+  transition:
+    opacity .3s ease,
+    transform .3s ease;
+}
+
+.voiceMode.open {
+  opacity: 1;
+
+  pointer-events: auto;
+
+  transform: scale(1);
+}
+
+
+/* voice top */
+
+.voiceTop {
+  width: 100%;
+
+  padding:
+    calc(20px + env(safe-area-inset-top))
+    22px
+    0;
+
+  display: flex;
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.voiceTopTitle {
+  font-family:
+    "Avenir Next",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  font-size: 17px;
+
+  font-weight: 650;
+
+  letter-spacing: .24em;
+}
+
+.voiceClose {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 16px;
+
+  background:
+    rgba(255,255,255,.045);
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  color: #f1edf5;
+
+  font-size: 28px;
+
+  cursor: pointer;
+}
+
+
+/* voice center */
+
+.voiceCenter {
+  flex: 1;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding-bottom: 8vh;
+}
+
+
+/* ASA ORB */
+
+.asaOrb {
+  width: 190px;
+  height: 190px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 34% 28%,
+      rgba(255,255,255,.8),
+      rgba(255,255,255,.1) 9%,
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 52% 52%,
+      #d247ff 0%,
+      #9c2fe9 30%,
+      #57138d 64%,
+      #170a27 100%
+    );
+
+  box-shadow:
+    0 0 45px rgba(170,45,255,.32),
+    0 0 120px rgba(128,27,208,.22);
+
+  animation:
+    orbIdle 3.6s ease-in-out infinite;
+}
+
+.asaOrb::before,
+.asaOrb::after {
+  content: "";
+
+  position: absolute;
+
+  inset: -22px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid rgba(181,66,255,.18);
+
+  animation:
+    orbRing 3.4s ease-in-out infinite;
+}
+
+.asaOrb::after {
+  inset: -42px;
+
+  border-color:
+    rgba(164,52,255,.08);
+
+  animation-delay:
+    -.8s;
+}
+
+.orbCore {
+  width: 60px;
+  height: 60px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #fff,
+      #e5b5ff 17%,
+      #b735ff 45%,
+      rgba(110,20,170,.15) 75%
+    );
+
+  filter:
+    blur(.2px);
+
+  box-shadow:
+    0 0 35px rgba(224,161,255,.6);
+
+  animation:
+    corePulse 1.9s ease-in-out infinite;
+}
+
+.voiceMode.listening .asaOrb {
+  animation:
+    orbListening 1.15s ease-in-out infinite;
+}
+
+.voiceMode.speaking .asaOrb {
+  animation:
+    orbSpeaking .72s ease-in-out infinite;
+}
+
+.voiceMode.listening .orbCore,
+.voiceMode.speaking .orbCore {
+  animation-duration:
+    .65s;
+}
+
+@keyframes orbIdle {
+
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.045);
+  }
+
+}
+
+@keyframes orbListening {
+
+  0%, 100% {
+    transform: scale(.97);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+}
+
+@keyframes orbSpeaking {
+
+  0%, 100% {
+    transform: scale(.94);
+  }
+
+  50% {
+    transform: scale(1.13);
+  }
+
+}
+
+@keyframes corePulse {
+
+  0%, 100% {
+    transform: scale(.85);
+    opacity: .82;
+  }
+
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+
+}
+
+@keyframes orbRing {
+
+  0%, 100% {
+    transform: scale(.96);
+    opacity: .35;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: .8;
+  }
+
+}
+
+
+/* voice status */
+
+.voiceStatus {
+  margin-top: 58px;
+
+  min-height: 27px;
+
+  color: #aaa6b4;
+
+  font-size: 17px;
+
+  font-weight: 500;
+
+  letter-spacing: -.01em;
+
+  text-align: center;
+}
+
+.voiceStatus strong {
+  color: #f3eef7;
+}
+
+
+/* voice bottom */
+
+.voiceBottom {
+  width: 100%;
+
+  padding:
+    0
+    24px
+    calc(30px + env(safe-area-inset-bottom));
+
+  display: flex;
+  justify-content: center;
+}
+
+.voiceControl {
+  width: 60px;
+  height: 60px;
+
+  border-radius: 21px;
+
+  background:
+    rgba(255,255,255,.055);
+
+  border:
+    1px solid rgba(255,255,255,.10);
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voiceControl .voiceIcon {
+  transform: scale(.82);
+}
+
+
+/* =====================================================
+   HIDDEN FILE INPUTS
+===================================================== */
+
+.hiddenInput {
+  position: fixed;
+
+  width: 1px;
+  height: 1px;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 600px) {
 
   .header {
-    height: 118px;
+    height: 100px;
 
     padding:
-      20px 22px;
+      calc(12px + env(safe-area-inset-top))
+      14px
+      10px;
 
-    gap: 15px;
+    gap: 11px;
   }
 
-  .headerButton,
-  .logo {
-    width: 64px;
-    height: 64px;
+  .menuButton {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 18px;
   }
 
-  .brand {
-    font-size: 31px;
+  .brand span {
+    font-size: 28px;
+
+    letter-spacing: .25em;
   }
 
   .chat {
-    top: 118px;
-    bottom: 100px;
+    top: 100px;
+
+    bottom: 91px;
 
     padding:
-      45px
-      25px
-      35px;
+      30px
+      18px
+      145px;
   }
 
-  .userBubble {
-    font-size: 19px;
+  .user .bubble {
+    max-width: 88%;
+
+    padding:
+      14px
+      17px;
+
+    font-size: 17px;
   }
 
-  .assistantBubble {
-    font-size: 20px;
+  .assistant .bubble {
+    max-width: 94%;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+  }
+
+  .assistantLabel {
+    font-size: 11px;
+
+    margin-bottom: 10px;
   }
 
   .inputArea {
-    left: 20px;
-    right: 20px;
-    bottom: 18px;
+    left: 12px;
+    right: 12px;
+
+    bottom:
+      calc(9px + env(safe-area-inset-bottom));
   }
 
   .inputBox {
-    min-height: 70px;
+    min-height: 67px;
+
+    padding: 6px;
+
+    border-radius: 23px;
   }
+
+  .plusButton {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 17px;
+  }
+
+  .voiceButton {
+    width: 48px;
+    height: 50px;
+  }
+
+  .sendButton {
+    width: 48px;
+    height: 50px;
+  }
+
+  .input {
+    font-size: 16px;
+
+    height: 50px;
+
+    padding: 0 5px;
+  }
+
+  .asaOrb {
+    width: 160px;
+    height: 160px;
+  }
+
+  .voiceStatus {
+    margin-top: 50px;
+
+    font-size: 16px;
+  }
+
+}
+
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
 }
 
 </style>
 </head>
 
+
 <body>
 
 <div class="app">
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+  <!-- =================================================
+       HEADER
+  ================================================== -->
 
-<header class="header">
-
-  <button
-    class="headerButton"
-    id="menuButton"
-  >
-    ☰
-  </button>
-
-  <div class="logo">
-    A
-  </div>
-
-  <div class="brand">
-    ASA
-  </div>
-
-  <div class="headerSpacer"></div>
-
-  <div class="headerActions">
+  <header class="header">
 
     <button
-      class="headerButton"
-      id="memoryButton"
+      class="menuButton"
+      id="menuButton"
+      aria-label="Menü"
     >
-      🧠
-    </button>
-
-    <button
-      class="headerButton"
-      id="settingsButton"
-    >
-      ⚙️
-    </button>
-
-  </div>
-
-</header>
-
-
-<!-- =====================================================
-     CHAT
-===================================================== -->
-
-<main
-  class="chat"
-  id="chat"
-></main>
-
-
-<!-- =====================================================
-     INPUT
-===================================================== -->
-
-<div
-  class="inputArea"
-  id="inputArea"
->
-
-  <!-- IMAGE PREVIEW -->
-
-  <div
-    class="attachmentPreview"
-    id="attachmentPreview"
-  >
-
-    <img
-      id="attachmentPreviewImage"
-      alt="Seçilen görsel"
-    >
-
-    <button
-      class="attachmentRemove"
-      id="attachmentRemove"
-      type="button"
-    >
-      ×
-    </button>
-
-  </div>
-
-
-  <!-- ATTACH MENU -->
-
-  <div
-    class="attachMenu"
-    id="attachMenu"
-  >
-
-    <button
-      class="attachItem"
-      id="fileButton"
-      type="button"
-    >
-
-      <span class="attachIcon">
-        📎
-      </span>
-
       <span>
-        Fotoğraf / Dosya
+        <i></i>
+        <i></i>
+        <i></i>
       </span>
-
-    </button>
-
-    <button
-      class="attachItem"
-      id="cameraButton"
-      type="button"
-    >
-
-      <span class="attachIcon">
-        📷
-      </span>
-
-      <span>
-        Kamera
-      </span>
-
-    </button>
-
-  </div>
-
-
-  <div class="inputBox">
-
-    <button
-      class="plusButton"
-      id="plusButton"
-      type="button"
-    >
-      +
     </button>
 
 
-    <input
-      class="input"
-      id="messageInput"
-      type="text"
-      autocomplete="off"
-      placeholder="ASA'ya bir şey sor..."
-    >
+    <div class="brand" aria-label="ASA">
+      <span>A</span>
+      <span>S</span>
+      <span>A</span>
+    </div>
 
 
-    <div class="inputActions">
+    <div class="headerSpacer"></div>
+
+  </header>
+
+
+  <!-- =================================================
+       CHAT
+  ================================================== -->
+
+  <main
+    class="chat"
+    id="chat"
+  ></main>
+
+
+  <!-- =================================================
+       INPUT
+  ================================================== -->
+
+  <div class="inputArea">
+
+    <div class="inputBox">
+
+      <button
+        class="plusButton"
+        id="plusButton"
+        type="button"
+        aria-label="Ek"
+      >
+        +
+      </button>
+
+
+      <input
+        class="input"
+        id="messageInput"
+        type="text"
+        autocomplete="off"
+        enterkeyhint="send"
+        placeholder="ASA'ya bir şey sor..."
+      >
+
 
       <button
         class="voiceButton"
         id="voiceButton"
         type="button"
+        aria-label="Sesli sohbet"
       >
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <rect
-            x="9"
-            y="3"
-            width="6"
-            height="12"
-            rx="3"
-          ></rect>
-
-          <path
-            d="M5 11a7 7 0 0 0 14 0"
-          ></path>
-
-          <path
-            d="M12 18v3"
-          ></path>
-
-          <path
-            d="M8 21h8"
-          ></path>
-
-        </svg>
-
+        <span class="voiceIcon"></span>
       </button>
 
 
@@ -1541,27 +2027,9 @@ button {
         class="sendButton"
         id="sendButton"
         type="button"
+        aria-label="Gönder"
       >
-
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-
-          <path
-            d="M4 12h15"
-          ></path>
-
-          <path
-            d="m13 5 7 7-7 7"
-          ></path>
-
-        </svg>
-
+        →
       </button>
 
     </div>
@@ -1571,27 +2039,91 @@ button {
 </div>
 
 
-<input
-  type="file"
-  id="fileInput"
-  class="hiddenFile"
-  accept="image/*,.pdf,.txt,.csv,.doc,.docx,.xls,.xlsx"
+<!-- =====================================================
+     ATTACHMENT SHEET
+====================================================== -->
+
+<div
+  class="sheetOverlay"
+  id="sheetOverlay"
 >
 
-<input
-  type="file"
-  id="cameraInput"
-  class="hiddenFile"
-  accept="image/*"
-  capture="environment"
->
+  <div class="attachmentSheet">
+
+    <div class="sheetTitle">
+      EKLE
+    </div>
+
+
+    <button
+      class="sheetItem"
+      id="filesButton"
+      type="button"
+    >
+      Dosyalar
+    </button>
+
+
+    <button
+      class="sheetItem"
+      id="photosButton"
+      type="button"
+    >
+      Fotoğraflar
+    </button>
+
+
+    <button
+      class="sheetItem"
+      id="cameraButton"
+      type="button"
+    >
+      Kamera
+    </button>
+
+
+    <button
+      class="sheetCancel"
+      id="sheetCancel"
+      type="button"
+    >
+      Vazgeç
+    </button>
+
+  </div>
 
 </div>
 
 
+<!-- hidden pickers -->
+
+<input
+  class="hiddenInput"
+  id="fileInput"
+  type="file"
+  multiple
+>
+
+<input
+  class="hiddenInput"
+  id="photoInput"
+  type="file"
+  accept="image/*"
+  multiple
+>
+
+<input
+  class="hiddenInput"
+  id="cameraInput"
+  type="file"
+  accept="image/*"
+  capture="environment"
+>
+
+
 <!-- =====================================================
      OVERLAY
-===================================================== -->
+====================================================== -->
 
 <div
   class="overlay"
@@ -1601,7 +2133,7 @@ button {
 
 <!-- =====================================================
      SIDEBAR
-===================================================== -->
+====================================================== -->
 
 <aside
   class="sidebar"
@@ -1610,17 +2142,15 @@ button {
 
   <div class="sidebarHeader">
 
-    <div class="sidebarLogo">
-      A
-    </div>
-
     <div class="sidebarBrand">
       ASA
     </div>
 
+
     <button
       class="closeButton"
       id="closeMenu"
+      type="button"
     >
       ×
     </button>
@@ -1640,7 +2170,7 @@ button {
   >
 
     <span class="menuIcon">
-      ＋
+      +
     </span>
 
     <span>
@@ -1657,7 +2187,7 @@ button {
   >
 
     <span class="menuIcon">
-      💬
+      ≡
     </span>
 
     <span>
@@ -1682,7 +2212,7 @@ button {
   >
 
     <span class="menuIcon">
-      🧠
+      ◉
     </span>
 
     <span>
@@ -1699,7 +2229,7 @@ button {
   >
 
     <span class="menuIcon">
-      ⚙️
+      ⚙
     </span>
 
     <span>
@@ -1709,43 +2239,25 @@ button {
   </button>
 
 
-  <!-- HISTORY -->
-
-  <section
-    class="historyPanel"
-    id="historyPanel"
-  >
-
-    <div class="historyHeader">
-
-      <div class="historyTitle">
-        Sohbetler
-      </div>
-
-      <button
-        class="historyClose"
-        id="historyClose"
-        type="button"
-      >
-        ×
-      </button>
-
-    </div>
+  <div class="menuDivider"></div>
 
 
-    <div
-      class="chatList"
-      id="chatList"
-    ></div>
+  <div
+    class="chatList"
+    id="chatList"
+  ></div>
 
-  </section>
+
+  <div class="sidebarFooter">
+    ASA · kişisel yapay zeka asistanı
+  </div>
 
 </aside>
 
 
 <!-- =====================================================
      CONTEXT MENU
-===================================================== -->
+====================================================== -->
 
 <div
   class="contextMenu"
@@ -1757,15 +2269,16 @@ button {
     id="renameButton"
     type="button"
   >
-    ✏️ Başlığı değiştir
+    Başlığı değiştir
   </button>
+
 
   <button
     class="contextItem delete"
     id="deleteButton"
     type="button"
   >
-    🗑️ Sohbeti sil
+    Sohbeti sil
   </button>
 
 </div>
@@ -1773,7 +2286,7 @@ button {
 
 <!-- =====================================================
      RENAME
-===================================================== -->
+====================================================== -->
 
 <div
   class="modalOverlay"
@@ -1786,25 +2299,31 @@ button {
       Sohbet başlığını değiştir
     </h2>
 
+
     <input
       class="modalInput"
       id="renameInput"
+      type="text"
       maxlength="80"
       placeholder="Sohbet adı"
     >
+
 
     <div class="modalButtons">
 
       <button
         class="modalButton"
         id="renameCancel"
+        type="button"
       >
         İptal
       </button>
 
+
       <button
         class="modalButton primary"
         id="renameSave"
+        type="button"
       >
         Kaydet
       </button>
@@ -1818,7 +2337,7 @@ button {
 
 <!-- =====================================================
      DELETE
-===================================================== -->
+====================================================== -->
 
 <div
   class="modalOverlay"
@@ -1831,28 +2350,34 @@ button {
       Sohbet silinsin mi?
     </h2>
 
+
     <p
       id="deleteText"
       style="
         color:#898796;
-        line-height:1.5;
+        line-height:1.55;
+        margin-bottom:5px;
       "
     >
       Bu sohbet silinecek.
     </p>
+
 
     <div class="modalButtons">
 
       <button
         class="modalButton"
         id="deleteCancel"
+        type="button"
       >
         İptal
       </button>
 
+
       <button
         class="modalButton danger"
         id="deleteConfirm"
+        type="button"
       >
         Sil
       </button>
@@ -1864,6 +2389,73 @@ button {
 </div>
 
 
+<!-- =====================================================
+     VOICE MODE
+====================================================== -->
+
+<section
+  class="voiceMode"
+  id="voiceMode"
+  aria-hidden="true"
+>
+
+  <div class="voiceTop">
+
+    <div class="voiceTopTitle">
+      ASA
+    </div>
+
+
+    <button
+      class="voiceClose"
+      id="voiceClose"
+      type="button"
+      aria-label="Sesli sohbeti kapat"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+  <div class="voiceCenter">
+
+    <div
+      class="asaOrb"
+      id="asaOrb"
+    >
+
+      <div class="orbCore"></div>
+
+    </div>
+
+
+    <div
+      class="voiceStatus"
+      id="voiceStatus"
+    >
+      Hazırım
+    </div>
+
+  </div>
+
+
+  <div class="voiceBottom">
+
+    <button
+      class="voiceControl"
+      id="voiceControl"
+      type="button"
+      aria-label="Mikrofon"
+    >
+      <span class="voiceIcon"></span>
+    </button>
+
+  </div>
+
+</section>
+
+
 <script>
 
 /* =====================================================
@@ -1873,10 +2465,10 @@ button {
 const API_URL = "/api/chat";
 
 const STORAGE_KEY =
-  "asa_conversations_luna_v1";
+  "asa_conversations_v2";
 
 const ACTIVE_KEY =
-  "asa_active_luna_v1";
+  "asa_active_conversation_v2";
 
 
 /* =====================================================
@@ -1884,18 +2476,21 @@ const ACTIVE_KEY =
 ===================================================== */
 
 let conversationId =
-  localStorage.getItem(
-    ACTIVE_KEY
-  );
+  getActiveConversationId();
 
 let messages = [];
 
-let selectedConversationId =
-  null;
+let contextConversationId = null;
 
-let selectedImage = null;
+let selectedFiles = [];
 
-let selectedImageData = null;
+let isVoiceMode = false;
+
+let isListening = false;
+
+let isSpeaking = false;
+
+let recognition = null;
 
 
 /* =====================================================
@@ -1906,63 +2501,71 @@ const chat =
   document.getElementById("chat");
 
 const input =
-  document.getElementById(
-    "messageInput"
-  );
+  document.getElementById("messageInput");
 
 const sendButton =
-  document.getElementById(
-    "sendButton"
-  );
+  document.getElementById("sendButton");
+
+const menuButton =
+  document.getElementById("menuButton");
 
 const sidebar =
-  document.getElementById(
-    "sidebar"
-  );
+  document.getElementById("sidebar");
 
 const overlay =
-  document.getElementById(
-    "overlay"
-  );
+  document.getElementById("overlay");
 
-const historyPanel =
-  document.getElementById(
-    "historyPanel"
-  );
+const closeMenu =
+  document.getElementById("closeMenu");
 
 const chatList =
-  document.getElementById(
-    "chatList"
-  );
+  document.getElementById("chatList");
 
 const contextMenu =
-  document.getElementById(
-    "contextMenu"
-  );
+  document.getElementById("contextMenu");
 
-const attachMenu =
-  document.getElementById(
-    "attachMenu"
-  );
+const renameModal =
+  document.getElementById("renameModal");
 
-const inputArea =
-  document.getElementById(
-    "inputArea"
-  );
+const renameInput =
+  document.getElementById("renameInput");
 
-const attachmentPreview =
-  document.getElementById(
-    "attachmentPreview"
-  );
+const deleteModal =
+  document.getElementById("deleteModal");
 
-const attachmentPreviewImage =
-  document.getElementById(
-    "attachmentPreviewImage"
-  );
+const plusButton =
+  document.getElementById("plusButton");
+
+const sheetOverlay =
+  document.getElementById("sheetOverlay");
+
+const fileInput =
+  document.getElementById("fileInput");
+
+const photoInput =
+  document.getElementById("photoInput");
+
+const cameraInput =
+  document.getElementById("cameraInput");
+
+const voiceButton =
+  document.getElementById("voiceButton");
+
+const voiceMode =
+  document.getElementById("voiceMode");
+
+const voiceClose =
+  document.getElementById("voiceClose");
+
+const voiceControl =
+  document.getElementById("voiceControl");
+
+const voiceStatus =
+  document.getElementById("voiceStatus");
 
 
 /* =====================================================
-   LOCAL STORAGE
+   STORAGE
 ===================================================== */
 
 function loadConversations() {
@@ -1989,35 +2592,52 @@ function loadConversations() {
 }
 
 
-function saveConversations(
-  conversations
-) {
+function saveConversations(data) {
 
   localStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify(
-      conversations
-    )
+    JSON.stringify(data)
   );
 
 }
 
 
-function getConversation(id) {
+function createConversationId() {
 
-  return loadConversations()
-    .find(
-      item =>
-        item.id === id
-    );
+  const id =
+    "asa-" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2, 9);
+
+  setActiveConversationId(id);
+
+  return id;
 
 }
 
 
-function setActive(id) {
+function getActiveConversationId() {
 
-  conversationId =
-    id;
+  const saved =
+    localStorage.getItem(
+      ACTIVE_KEY
+    );
+
+  if (saved) {
+
+    return saved;
+
+  }
+
+  return createConversationId();
+
+}
+
+
+function setActiveConversationId(id) {
 
   localStorage.setItem(
     ACTIVE_KEY,
@@ -2028,127 +2648,34 @@ function setActive(id) {
 
 
 /* =====================================================
-   CREATE CONVERSATION
+   CONVERSATION METADATA
 ===================================================== */
 
-function createId() {
-
-  return (
-    "chat-" +
-    Date.now() +
-    "-" +
-    Math.random()
-      .toString(36)
-      .slice(2,9)
-  );
-
-}
-
-
-function createConversation(
-  title = "Yeni Sohbet"
-) {
-
-  const conversation = {
-
-    id:
-      createId(),
-
-    title,
-
-    createdAt:
-      Date.now(),
-
-    updatedAt:
-      Date.now(),
-
-    messages: []
-
-  };
-
-
-  const conversations =
-    loadConversations();
-
-
-  conversations.unshift(
-    conversation
-  );
-
-
-  saveConversations(
-    conversations
-  );
-
-
-  return conversation;
-
-}
-
-
-function createNewConversation() {
-
-  const conversation =
-    createConversation();
-
-
-  setActive(
-    conversation.id
-  );
-
-
-  messages = [];
-
-
-  clearAttachment();
-
-  showEmpty();
-
-  renderChatList();
-
-  closeHistory();
-
-  closeSidebar();
-
-  input.focus();
-
-}
-
-
-/* =====================================================
-   TITLE
-===================================================== */
-
-function generateTitle(
-  text
-) {
+function generateTitle(text) {
 
   let title =
-    String(text)
-      .replace(/\s+/g," ")
+    String(text || "")
+      .replace(/\s+/g, " ")
       .trim();
 
-
   if (!title) {
-    return "Yeni Sohbet";
-  }
 
+    return "Yeni Sohbet";
+
+  }
 
   title =
     title
-      .replace(/[?!.]+$/g,"")
+      .replace(/[?!.]+$/g, "")
       .trim();
-
 
   if (title.length > 42) {
 
     title =
-      title.slice(0,42)
-        .trim() +
-      "…";
+      title.substring(0, 42)
+      .trim() + "…";
 
   }
-
 
   return (
     title.charAt(0).toUpperCase() +
@@ -2158,43 +2685,64 @@ function generateTitle(
 }
 
 
-/* =====================================================
-   SAVE CURRENT
-===================================================== */
-
-function saveCurrentConversation() {
-
-  if (!conversationId) {
-    return;
-  }
-
+function ensureConversation(
+  firstMessage = ""
+) {
 
   const conversations =
     loadConversations();
 
-
-  const item =
+  let item =
     conversations.find(
       x =>
-        x.id === conversationId
+        x.id ===
+        conversationId
     );
 
-
   if (!item) {
-    return;
+
+    item = {
+
+      id:
+        conversationId,
+
+      title:
+        firstMessage
+          ? generateTitle(firstMessage)
+          : "Yeni Sohbet",
+
+      createdAt:
+        Date.now(),
+
+      updatedAt:
+        Date.now()
+
+    };
+
+    conversations.unshift(item);
+
   }
 
 
-  item.messages =
-    messages;
+  if (
+    firstMessage &&
+    item.title === "Yeni Sohbet"
+  ) {
+
+    item.title =
+      generateTitle(firstMessage);
+
+  }
+
 
   item.updatedAt =
     Date.now();
 
-
   saveConversations(
     conversations
   );
+
+  return item;
 
 }
 
@@ -2203,55 +2751,37 @@ function saveCurrentConversation() {
    MENU
 ===================================================== */
 
-function openSidebar() {
+function openMenu() {
 
-  sidebar.classList.add(
-    "open"
-  );
+  sidebar.classList.add("open");
 
-  overlay.classList.add(
-    "open"
-  );
+  overlay.classList.add("open");
+
+  renderChatList();
 
 }
 
 
 function closeSidebar() {
 
-  sidebar.classList.remove(
-    "open"
-  );
+  sidebar.classList.remove("open");
 
-  overlay.classList.remove(
-    "open"
-  );
-
-  closeHistory();
+  overlay.classList.remove("open");
 
   closeContextMenu();
 
 }
 
 
-document
-  .getElementById(
-    "menuButton"
-  )
-  .addEventListener(
-    "click",
-    openSidebar
-  );
+menuButton.addEventListener(
+  "click",
+  openMenu
+);
 
-
-document
-  .getElementById(
-    "closeMenu"
-  )
-  .addEventListener(
-    "click",
-    closeSidebar
-  );
-
+closeMenu.addEventListener(
+  "click",
+  closeSidebar
+);
 
 overlay.addEventListener(
   "click",
@@ -2260,67 +2790,7 @@ overlay.addEventListener(
 
 
 /* =====================================================
-   HISTORY
-===================================================== */
-
-function openHistory() {
-
-  renderChatList();
-
-  historyPanel.classList.add(
-    "open"
-  );
-
-  document
-    .getElementById(
-      "showChatsButton"
-    )
-    .classList.add(
-      "active"
-    );
-
-}
-
-
-function closeHistory() {
-
-  historyPanel.classList.remove(
-    "open"
-  );
-
-  document
-    .getElementById(
-      "showChatsButton"
-    )
-    .classList.remove(
-      "active"
-    );
-
-}
-
-
-document
-  .getElementById(
-    "showChatsButton"
-  )
-  .addEventListener(
-    "click",
-    openHistory
-  );
-
-
-document
-  .getElementById(
-    "historyClose"
-  )
-  .addEventListener(
-    "click",
-    closeHistory
-  );
-
-
-/* =====================================================
-   HISTORY LIST
+   CHAT LIST
 ===================================================== */
 
 function renderChatList() {
@@ -2328,11 +2798,10 @@ function renderChatList() {
   const conversations =
     loadConversations()
       .sort(
-        (a,b) =>
+        (a, b) =>
           (b.updatedAt || 0) -
           (a.updatedAt || 0)
       );
-
 
   chatList.innerHTML = "";
 
@@ -2362,19 +2831,16 @@ function renderChatList() {
           item.createdAt
         );
 
-
       const key =
         date.toDateString();
 
-
       if (!groups[key]) {
+
         groups[key] = [];
+
       }
 
-
-      groups[key].push(
-        item
-      );
+      groups[key].push(item);
 
     }
   );
@@ -2382,7 +2848,7 @@ function renderChatList() {
 
   Object.entries(groups)
     .forEach(
-      ([key,items]) => {
+      ([key, items]) => {
 
         const group =
           document.createElement(
@@ -2393,46 +2859,38 @@ function renderChatList() {
           "historyGroup";
 
 
-        const date =
+        const dateTitle =
           document.createElement(
             "div"
           );
 
-        date.className =
+        dateTitle.className =
           "historyDate";
 
-        date.textContent =
-          dateLabel(key);
-
+        dateTitle.textContent =
+          getDateLabel(key);
 
         group.appendChild(
-          date
+          dateTitle
         );
 
 
         items.forEach(
           item => {
 
-            const row =
+            const element =
               document.createElement(
                 "div"
               );
 
-
-            row.className =
-              "historyItem";
-
-
-            if (
-              item.id ===
-              conversationId
-            ) {
-
-              row.classList.add(
-                "active"
+            element.className =
+              "historyItem" +
+              (
+                item.id ===
+                conversationId
+                  ? " active"
+                  : ""
               );
-
-            }
 
 
             const title =
@@ -2440,14 +2898,11 @@ function renderChatList() {
                 "div"
               );
 
-
             title.className =
-              "historyTitleText";
-
+              "historyTitle";
 
             title.textContent =
-              item.title ||
-              "Yeni Sohbet";
+              item.title;
 
 
             const time =
@@ -2455,10 +2910,8 @@ function renderChatList() {
                 "div"
               );
 
-
             time.className =
               "historyTime";
-
 
             time.textContent =
               formatTime(
@@ -2471,7 +2924,6 @@ function renderChatList() {
                 "button"
               );
 
-
             more.className =
               "historyMore";
 
@@ -2482,22 +2934,32 @@ function renderChatList() {
               "•••";
 
 
-            row.appendChild(
+            element.appendChild(
               title
             );
 
-            row.appendChild(
+            element.appendChild(
               time
             );
 
-            row.appendChild(
+            element.appendChild(
               more
             );
 
 
-            row.addEventListener(
+            element.addEventListener(
               "click",
-              () => {
+              event => {
+
+                if (
+                  event.target.closest(
+                    ".historyMore"
+                  )
+                ) {
+
+                  return;
+
+                }
 
                 openConversation(
                   item.id
@@ -2523,7 +2985,7 @@ function renderChatList() {
 
 
             group.appendChild(
-              row
+              element
             );
 
           }
@@ -2540,19 +3002,22 @@ function renderChatList() {
 }
 
 
-function dateLabel(
+/* =====================================================
+   DATE
+===================================================== */
+
+function getDateLabel(
   dateString
 ) {
-
-  const date =
-    new Date(dateString);
 
   const today =
     new Date();
 
+  const date =
+    new Date(dateString);
+
   const yesterday =
     new Date();
-
 
   yesterday.setDate(
     yesterday.getDate() - 1
@@ -2597,20 +3062,378 @@ function formatTime(
 ) {
 
   if (!timestamp) {
-    return "";
-  }
 
+    return "";
+
+  }
 
   return new Date(
     timestamp
-  )
-    .toLocaleTimeString(
-      "tr-TR",
-      {
-        hour: "2-digit",
-        minute: "2-digit"
+  ).toLocaleTimeString(
+    "tr-TR",
+    {
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+/* =====================================================
+   CONTEXT MENU
+===================================================== */
+
+function showContextMenu(
+  id,
+  element
+) {
+
+  contextConversationId =
+    id;
+
+  const rect =
+    element.getBoundingClientRect();
+
+
+  contextMenu.style.left =
+    Math.max(
+      10,
+      rect.left - 175
+    ) + "px";
+
+
+  contextMenu.style.top =
+    Math.min(
+      window.innerHeight - 120,
+      rect.bottom + 6
+    ) + "px";
+
+
+  contextMenu.classList.add(
+    "open"
+  );
+
+}
+
+
+function closeContextMenu() {
+
+  contextMenu.classList.remove(
+    "open"
+  );
+
+  contextConversationId =
+    null;
+
+}
+
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if (
+      !contextMenu.contains(
+        event.target
+      ) &&
+      !event.target.closest(
+        ".historyMore"
+      )
+    ) {
+
+      closeContextMenu();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   RENAME
+===================================================== */
+
+document
+  .getElementById("renameButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      const conversations =
+        loadConversations();
+
+      const item =
+        conversations.find(
+          x =>
+            x.id ===
+            contextConversationId
+        );
+
+      if (!item) {
+
+        return;
+
       }
-    );
+
+
+      renameInput.value =
+        item.title;
+
+      renameModal.classList.add(
+        "open"
+      );
+
+      closeContextMenu();
+
+
+      setTimeout(
+        () => {
+
+          renameInput.focus();
+
+          renameInput.select();
+
+        },
+        100
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("renameCancel")
+  .addEventListener(
+    "click",
+    () => {
+
+      renameModal.classList.remove(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("renameSave")
+  .addEventListener(
+    "click",
+    () => {
+
+      const title =
+        renameInput.value.trim();
+
+      if (!title) {
+
+        return;
+
+      }
+
+
+      const conversations =
+        loadConversations();
+
+      const item =
+        conversations.find(
+          x =>
+            x.id ===
+            contextConversationId
+        );
+
+
+      if (item) {
+
+        item.title =
+          title;
+
+        item.updatedAt =
+          Date.now();
+
+        saveConversations(
+          conversations
+        );
+
+      }
+
+
+      renameModal.classList.remove(
+        "open"
+      );
+
+      renderChatList();
+
+    }
+  );
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+document
+  .getElementById("deleteButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      const conversations =
+        loadConversations();
+
+      const item =
+        conversations.find(
+          x =>
+            x.id ===
+            contextConversationId
+        );
+
+
+      if (!item) {
+
+        return;
+
+      }
+
+
+      document
+        .getElementById(
+          "deleteText"
+        )
+        .textContent =
+        `"${item.title}" sohbeti silinecek.`;
+
+
+      deleteModal.classList.add(
+        "open"
+      );
+
+      closeContextMenu();
+
+    }
+  );
+
+
+document
+  .getElementById("deleteCancel")
+  .addEventListener(
+    "click",
+    () => {
+
+      deleteModal.classList.remove(
+        "open"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("deleteConfirm")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const id =
+        contextConversationId;
+
+
+      let conversations =
+        loadConversations()
+          .filter(
+            x => x.id !== id
+          );
+
+
+      saveConversations(
+        conversations
+      );
+
+
+      deleteModal.classList.remove(
+        "open"
+      );
+
+
+      try {
+
+        await fetch(
+          API_URL,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+                conversationId: id,
+                deleteConversation: true
+              })
+
+          }
+        );
+
+      } catch {
+
+        // Yerel geçmiş yine silinir.
+
+      }
+
+
+      if (
+        id === conversationId
+      ) {
+
+        createNewConversation();
+
+      }
+
+
+      renderChatList();
+
+    }
+  );
+
+
+/* =====================================================
+   NEW CHAT
+===================================================== */
+
+document
+  .getElementById("newChatButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      createNewConversation();
+
+      closeSidebar();
+
+    }
+  );
+
+
+function createNewConversation() {
+
+  conversationId =
+    createConversationId();
+
+  messages = [];
+
+  setActiveConversationId(
+    conversationId
+  );
+
+  showEmpty();
+
+  input.value = "";
+
+  input.focus();
+
+  renderChatList();
 
 }
 
@@ -2623,39 +3446,19 @@ async function openConversation(
   id
 ) {
 
-  const local =
-    getConversation(id);
+  conversationId =
+    id;
 
-
-  if (!local) {
-    return;
-  }
-
-
-  setActive(id);
-
-
-  messages =
-    Array.isArray(
-      local.messages
-    )
-      ? local.messages
-      : [];
-
-
-  closeHistory();
+  setActiveConversationId(
+    id
+  );
 
   closeSidebar();
 
-  closeContextMenu();
+  chat.innerHTML = "";
 
+  addTyping();
 
-  renderMessages();
-
-
-  /*
-    Redis'teki gerçek geçmişi çek.
-  */
 
   try {
 
@@ -2663,6 +3466,7 @@ async function openConversation(
       await fetch(
         API_URL,
         {
+
           method: "POST",
 
           headers: {
@@ -2672,14 +3476,10 @@ async function openConversation(
 
           body:
             JSON.stringify({
-
-              action:
-                "getHistory",
-
-              conversationId:
-                id
-
+              conversationId: id,
+              getHistory: true
             })
+
         }
       );
 
@@ -2687,9 +3487,11 @@ async function openConversation(
     const data =
       await response.json();
 
+    removeTyping();
+
 
     if (
-      response.ok &&
+      data.history &&
       Array.isArray(
         data.history
       )
@@ -2698,21 +3500,25 @@ async function openConversation(
       messages =
         data.history;
 
-
-      saveCurrentConversation();
-
       renderMessages();
+
+    } else {
+
+      showEmpty();
 
     }
 
-  } catch(error) {
 
-    console.error(
-      "Geçmiş alınamadı:",
-      error
-    );
+  } catch {
+
+    removeTyping();
+
+    showEmpty();
 
   }
+
+
+  renderChatList();
 
 }
 
@@ -2721,112 +3527,54 @@ async function openConversation(
    SEND
 ===================================================== */
 
-async function sendMessage() {
+async function sendMessage(
+  overrideText = null,
+  voiceReply = false
+) {
 
   const text =
-    input.value.trim();
+    overrideText !== null
+      ? overrideText.trim()
+      : input.value.trim();
 
 
   if (
     !text &&
-    !selectedImageData
+    selectedFiles.length === 0
   ) {
+
     return;
-  }
-
-
-  /*
-    Sohbet yoksa oluştur.
-  */
-
-  if (!conversationId) {
-
-    const conversation =
-      createConversation();
-
-    setActive(
-      conversation.id
-    );
 
   }
 
 
-  let conversation =
-    getConversation(
-      conversationId
-    );
+  input.value = "";
+
+  sendButton.disabled = true;
 
 
-  if (!conversation) {
-
-    conversation =
-      createConversation();
+  const attachments =
+    await prepareAttachments();
 
 
-    setActive(
-      conversation.id
-    );
+  ensureConversation(
+    text ||
+    (
+      attachments[0]?.name ||
+      "Dosya"
+    )
+  );
 
-  }
-
-
-  /*
-    İlk mesaj başlığı
-  */
-
-  if (
-    conversation.title ===
-    "Yeni Sohbet"
-  ) {
-
-    conversation.title =
-      generateTitle(
-        text ||
-        "Görsel sohbet"
-      );
-
-  }
-
-
-  /*
-    UI mesajı
-  */
 
   const userMessage = {
+
     role: "user",
-    content: text || ""
+
+    content: text,
+
+    attachments
+
   };
-
-
-  /*
-    Görsel varsa
-    API'ye multimodal içerik gönder.
-  */
-
-  if (selectedImageData) {
-
-    userMessage.content = [
-
-      {
-        type:
-          "input_text",
-
-        text:
-          text ||
-          "Bu görseli incele."
-      },
-
-      {
-        type:
-          "input_image",
-
-        image_url:
-          selectedImageData
-      }
-
-    ];
-
-  }
 
 
   messages.push(
@@ -2834,29 +3582,7 @@ async function sendMessage() {
   );
 
 
-  saveCurrentConversation();
-
   renderMessages();
-
-  renderChatList();
-
-
-  /*
-    UI temizle
-  */
-
-  input.value = "";
-
-  sendButton.disabled =
-    true;
-
-
-  const imageToSend =
-    selectedImageData;
-
-
-  clearAttachment();
-
 
   addTyping();
 
@@ -2878,13 +3604,18 @@ async function sendMessage() {
           body:
             JSON.stringify({
 
-              action:
-                "chat",
-
               conversationId,
 
               messages: [
-                userMessage
+                {
+                  role: "user",
+
+                  content:
+                    buildApiContent(
+                      text,
+                      attachments
+                    )
+                }
               ]
 
             })
@@ -2913,12 +3644,22 @@ async function sendMessage() {
     }
 
 
-    /*
-      API'nin kaydettiği
-      gerçek geçmişi kullan.
-    */
+    const answer =
+      data.answer ||
+      "Şu anda cevap oluşturamadım.";
+
+
+    messages.push({
+
+      role: "assistant",
+
+      content: answer
+
+    });
+
 
     if (
+      data.history &&
       Array.isArray(
         data.history
       )
@@ -2927,60 +3668,55 @@ async function sendMessage() {
       messages =
         data.history;
 
-    } else {
-
-      messages.push({
-
-        role:
-          "assistant",
-
-        content:
-          data.answer || ""
-
-      });
-
     }
 
 
-    saveCurrentConversation();
+    selectedFiles = [];
+
+    ensureConversation();
 
     renderMessages();
 
     renderChatList();
 
 
-  } catch(error) {
+    if (
+      voiceReply
+    ) {
+
+      speakText(
+        answer
+      );
+
+    }
+
+
+  } catch (error) {
 
     removeTyping();
 
+
+    messages.push({
+
+      role: "assistant",
+
+      content:
+        "Bir bağlantı sorunu oluştu. Birazdan tekrar deneyelim."
+
+    });
+
+
+    renderMessages();
 
     console.error(
       "ASA:",
       error
     );
 
-
-    messages.push({
-
-      role:
-        "assistant",
-
-      content:
-        "Bağlantıda bir sorun oluştu. Birazdan tekrar deneyelim."
-
-    });
-
-
-    saveCurrentConversation();
-
-    renderMessages();
-
   }
 
 
-  sendButton.disabled =
-    false;
-
+  sendButton.disabled = false;
 
   input.focus();
 
@@ -2988,7 +3724,285 @@ async function sendMessage() {
 
 
 /* =====================================================
-   RENDER MESSAGES
+   API CONTENT
+===================================================== */
+
+function buildApiContent(
+  text,
+  attachments
+) {
+
+  if (!attachments.length) {
+
+    return text;
+
+  }
+
+
+  const names =
+    attachments
+      .map(
+        file =>
+          `Dosya: ${file.name}`
+      )
+      .join("\n");
+
+
+  return (
+    text
+      ? `${text}\n\n${names}`
+      : names
+  );
+
+}
+
+
+/* =====================================================
+   FILES
+===================================================== */
+
+function openSheet() {
+
+  sheetOverlay.classList.add(
+    "open"
+  );
+
+}
+
+
+function closeSheet() {
+
+  sheetOverlay.classList.remove(
+    "open"
+  );
+
+}
+
+
+plusButton.addEventListener(
+  "click",
+  openSheet
+);
+
+
+document
+  .getElementById("sheetCancel")
+  .addEventListener(
+    "click",
+    closeSheet
+  );
+
+
+sheetOverlay.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      sheetOverlay
+    ) {
+
+      closeSheet();
+
+    }
+
+  }
+);
+
+
+/* DOSYALAR */
+
+document
+  .getElementById("filesButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSheet();
+
+      fileInput.click();
+
+    }
+  );
+
+
+/* FOTOĞRAFLAR */
+
+document
+  .getElementById("photosButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSheet();
+
+      photoInput.click();
+
+    }
+  );
+
+
+/* KAMERA */
+
+document
+  .getElementById("cameraButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      closeSheet();
+
+      cameraInput.click();
+
+    }
+  );
+
+
+fileInput.addEventListener(
+  "change",
+  event => {
+
+    handleFiles(
+      [...event.target.files]
+    );
+
+    event.target.value = "";
+
+  }
+);
+
+
+photoInput.addEventListener(
+  "change",
+  event => {
+
+    handleFiles(
+      [...event.target.files]
+    );
+
+    event.target.value = "";
+
+  }
+);
+
+
+cameraInput.addEventListener(
+  "change",
+  event => {
+
+    handleFiles(
+      [...event.target.files]
+    );
+
+    event.target.value = "";
+
+  }
+);
+
+
+function handleFiles(
+  files
+) {
+
+  if (!files.length) {
+
+    return;
+
+  }
+
+
+  selectedFiles.push(
+    ...files
+  );
+
+
+  /*
+    Dosya seçildiğinde kullanıcı
+    yazmaya devam edebilir.
+
+    Göndermek için normal gönder
+    tuşuna basılır.
+  */
+
+  input.focus();
+
+}
+
+
+/* =====================================================
+   FILE -> DATA URL
+===================================================== */
+
+function fileToDataURL(
+  file
+) {
+
+  return new Promise(
+    resolve => {
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        () => resolve(
+          reader.result
+        );
+
+      reader.onerror =
+        () => resolve(
+          null
+        );
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+async function prepareAttachments() {
+
+  const result = [];
+
+
+  for (
+    const file of selectedFiles
+  ) {
+
+    const dataUrl =
+      await fileToDataURL(
+        file
+      );
+
+
+    result.push({
+
+      name:
+        file.name,
+
+      type:
+        file.type,
+
+      size:
+        file.size,
+
+      dataUrl
+
+    });
+
+  }
+
+
+  return result;
+
+}
+
+
+/* =====================================================
+   RENDER
 ===================================================== */
 
 function renderMessages() {
@@ -3008,243 +4022,163 @@ function renderMessages() {
   messages.forEach(
     message => {
 
-      renderMessage(
-        message
-      );
-
-    }
-  );
+      const row =
+        document.createElement(
+          "div"
+        );
 
 
-  scrollBottom();
-
-}
-
-
-function renderMessage(
-  message
-) {
-
-  const row =
-    document.createElement(
-      "div"
-    );
+      row.className =
+        "message " +
+        (
+          message.role ===
+          "user"
+            ? "user"
+            : "assistant"
+        );
 
 
-  row.className =
-    "message " +
-    (
-      message.role === "user"
-        ? "user"
-        : "assistant"
-    );
+      const bubble =
+        document.createElement(
+          "div"
+        );
 
 
-  /*
-    USER
-  */
-
-  if (
-    message.role === "user"
-  ) {
-
-    const bubble =
-      document.createElement(
-        "div"
-      );
+      bubble.className =
+        "bubble";
 
 
-    bubble.className =
-      "userBubble";
+      if (
+        message.role ===
+        "assistant"
+      ) {
 
+        bubble.innerHTML = `
 
-    /*
-      Multimodal
-    */
+          <span class="assistantLabel">
+            ASA
+          </span>
 
-    if (
-      Array.isArray(
-        message.content
-      )
-    ) {
+          <div class="assistantText">
+            ${formatAnswer(
+              message.content
+            )}
+          </div>
 
-      message.content.forEach(
-        part => {
+        `;
 
-          if (
-            part.type ===
-            "input_image" &&
-            part.image_url
-          ) {
+      } else {
 
-            const image =
-              document.createElement(
-                "img"
-              );
+        if (
+          Array.isArray(
+            message.attachments
+          )
+        ) {
 
+          message.attachments
+            .forEach(
+              attachment => {
 
-            image.className =
-              "messageImage";
+                if (
+                  attachment.dataUrl &&
+                  attachment.type &&
+                  attachment.type.startsWith(
+                    "image/"
+                  )
+                ) {
 
+                  const image =
+                    document.createElement(
+                      "img"
+                    );
 
-            image.src =
-              part.image_url;
+                  image.className =
+                    "messageImage";
 
+                  image.src =
+                    attachment.dataUrl;
 
-            image.alt =
-              "Gönderilen görsel";
+                  image.alt =
+                    attachment.name ||
+                    "Görsel";
 
+                  bubble.appendChild(
+                    image
+                  );
 
-            bubble.appendChild(
-              image
+                }
+
+              }
             );
-
-          }
-
-
-          if (
-            part.type ===
-            "input_text"
-          ) {
-
-            const text =
-              document.createElement(
-                "div"
-              );
-
-
-            text.textContent =
-              part.text || "";
-
-
-            bubble.appendChild(
-              text
-            );
-
-          }
 
         }
+
+
+        if (
+          message.content
+        ) {
+
+          const text =
+            document.createElement(
+              "div"
+            );
+
+          text.textContent =
+            message.content;
+
+          bubble.appendChild(
+            text
+          );
+
+        }
+
+      }
+
+
+      row.appendChild(
+        bubble
       );
 
-    } else {
-
-      bubble.textContent =
-        message.content || "";
+      chat.appendChild(
+        row
+      );
 
     }
-
-
-    row.appendChild(
-      bubble
-    );
-
-
-    chat.appendChild(
-      row
-    );
-
-
-    return;
-
-  }
-
-
-  /*
-    ASSISTANT
-  */
-
-  const bubble =
-    document.createElement(
-      "div"
-    );
-
-
-  bubble.className =
-    "assistantBubble";
-
-
-  const label =
-    document.createElement(
-      "span"
-    );
-
-
-  label.className =
-    "assistantLabel";
-
-
-  label.textContent =
-    "ASA";
-
-
-  const text =
-    document.createElement(
-      "div"
-    );
-
-
-  text.className =
-    "assistantText";
-
-
-  text.innerHTML =
-    formatAnswer(
-      message.content || ""
-    );
-
-
-  bubble.appendChild(
-    label
   );
 
 
-  bubble.appendChild(
-    text
-  );
-
-
-  row.appendChild(
-    bubble
-  );
-
-
-  chat.appendChild(
-    row
-  );
+  scrollToBottom();
 
 }
 
 
 /* =====================================================
-   FORMAT
+   ANSWER FORMAT
 ===================================================== */
 
 function escapeHtml(
-  value
+  text
 ) {
 
-  return String(value)
-
+  return String(
+    text || ""
+  )
     .replaceAll(
       "&",
       "&amp;"
     )
-
     .replaceAll(
       "<",
       "&lt;"
     )
-
     .replaceAll(
       ">",
       "&gt;"
     )
-
     .replaceAll(
       '"',
       "&quot;"
     )
-
     .replaceAll(
       "'",
       "&#039;"
@@ -3272,8 +4206,8 @@ function formatAnswer(
 
   result =
     result.replace(
-      /`([^`]+)`/g,
-      "<code>$1</code>"
+      /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener">$1</a>'
     );
 
 
@@ -3299,12 +4233,10 @@ function showEmpty() {
 
     <div class="empty">
 
-      <div class="emptyLogo">
-        A
-      </div>
+      <div class="emptyMark"></div>
 
       <h1>
-        Merhaba Alperen 👋
+        Merhaba Alperen
       </h1>
 
       <p>
@@ -3336,25 +4268,22 @@ function addTyping() {
   row.className =
     "message assistant";
 
-
   row.id =
     "typingMessage";
 
 
   row.innerHTML = `
 
-    <div class="assistantBubble">
+    <div class="bubble">
 
       <span class="assistantLabel">
         ASA
       </span>
 
       <div class="typing">
-
         <span></span>
         <span></span>
         <span></span>
-
       </div>
 
     </div>
@@ -3367,21 +4296,23 @@ function addTyping() {
   );
 
 
-  scrollBottom();
+  scrollToBottom();
 
 }
 
 
 function removeTyping() {
 
-  const element =
+  const typing =
     document.getElementById(
       "typingMessage"
     );
 
 
-  if (element) {
-    element.remove();
+  if (typing) {
+
+    typing.remove();
+
   }
 
 }
@@ -3391,7 +4322,7 @@ function removeTyping() {
    SCROLL
 ===================================================== */
 
-function scrollBottom() {
+function scrollToBottom() {
 
   requestAnimationFrame(
     () => {
@@ -3406,347 +4337,16 @@ function scrollBottom() {
 
 
 /* =====================================================
-   ATTACH MENU
-===================================================== */
-
-document
-  .getElementById(
-    "plusButton"
-  )
-  .addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-      attachMenu.classList.toggle(
-        "open"
-      );
-
-    }
-  );
-
-
-document.addEventListener(
-  "click",
-  event => {
-
-    if (
-      !event.target.closest(
-        "#plusButton"
-      ) &&
-      !event.target.closest(
-        "#attachMenu"
-      )
-    ) {
-
-      attachMenu.classList.remove(
-        "open"
-      );
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   FILE
-===================================================== */
-
-document
-  .getElementById(
-    "fileButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "fileInput"
-        )
-        .click();
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "fileInput"
-  )
-  .addEventListener(
-    "change",
-    event => {
-
-      const file =
-        event.target.files[0];
-
-
-      if (!file) {
-        return;
-      }
-
-
-      if (
-        !file.type.startsWith(
-          "image/"
-        )
-      ) {
-
-        alert(
-          "Bu aşamada görsel yükleyebilirsin."
-        );
-
-        event.target.value =
-          "";
-
-        return;
-
-      }
-
-
-      readImage(
-        file
-      );
-
-    }
-  );
-
-
-/* =====================================================
-   CAMERA
-===================================================== */
-
-document
-  .getElementById(
-    "cameraButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "cameraInput"
-        )
-        .click();
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "cameraInput"
-  )
-  .addEventListener(
-    "change",
-    event => {
-
-      const file =
-        event.target.files[0];
-
-
-      if (!file) {
-        return;
-      }
-
-
-      readImage(
-        file
-      );
-
-    }
-  );
-
-
-/* =====================================================
-   READ IMAGE
-===================================================== */
-
-function readImage(
-  file
-) {
-
-  if (
-    !file.type.startsWith(
-      "image/"
-    )
-  ) {
-    return;
-  }
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload =
-    event => {
-
-      selectedImage =
-        file;
-
-      selectedImageData =
-        event.target.result;
-
-
-      attachmentPreviewImage.src =
-        selectedImageData;
-
-
-      attachmentPreview.classList.add(
-        "show"
-      );
-
-
-      attachMenu.classList.remove(
-        "open"
-      );
-
-
-      input.placeholder =
-        "Görsel hakkında bir şey sor...";
-
-
-      input.focus();
-
-    };
-
-
-  reader.readAsDataURL(
-    file
-  );
-
-}
-
-
-/* =====================================================
-   CLEAR IMAGE
-===================================================== */
-
-function clearAttachment() {
-
-  selectedImage =
-    null;
-
-  selectedImageData =
-    null;
-
-
-  attachmentPreview.classList.remove(
-    "show"
-  );
-
-
-  attachmentPreviewImage.src =
-    "";
-
-
-  document
-    .getElementById(
-      "fileInput"
-    )
-    .value =
-    "";
-
-
-  document
-    .getElementById(
-      "cameraInput"
-    )
-    .value =
-    "";
-
-
-  input.placeholder =
-    "ASA'ya bir şey sor...";
-
-}
-
-
-document
-  .getElementById(
-    "attachmentRemove"
-  )
-  .addEventListener(
-    "click",
-    clearAttachment
-  );
-
-
-/* =====================================================
-   VOICE
-===================================================== */
-
-document
-  .getElementById(
-    "voiceButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const Recognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-
-      if (!Recognition) {
-
-        alert(
-          "Bu tarayıcı sesli girişi desteklemiyor."
-        );
-
-        return;
-
-      }
-
-
-      const recognition =
-        new Recognition();
-
-
-      recognition.lang =
-        "tr-TR";
-
-
-      recognition.continuous =
-        false;
-
-
-      recognition.interimResults =
-        false;
-
-
-      recognition.onresult =
-        event => {
-
-          input.value =
-            event
-              .results[0][0]
-              .transcript;
-
-          input.focus();
-
-        };
-
-
-      recognition.start();
-
-    }
-  );
-
-
-/* =====================================================
-   SEND EVENTS
+   NORMAL SEND
 ===================================================== */
 
 sendButton.addEventListener(
   "click",
-  sendMessage
+  () => {
+
+    sendMessage();
+
+  }
 );
 
 
@@ -3755,7 +4355,8 @@ input.addEventListener(
   event => {
 
     if (
-      event.key === "Enter"
+      event.key === "Enter" &&
+      !event.shiftKey
     ) {
 
       event.preventDefault();
@@ -3769,451 +4370,410 @@ input.addEventListener(
 
 
 /* =====================================================
-   CONTEXT MENU
+   VOICE CHAT
 ===================================================== */
 
-function showContextMenu(
-  id,
-  element
-) {
-
-  selectedConversationId =
-    id;
-
-
-  const rect =
-    element.getBoundingClientRect();
-
-
-  let left =
-    rect.left - 175;
-
-
-  let top =
-    rect.bottom + 5;
-
-
-  left =
-    Math.max(
-      10,
-      Math.min(
-        left,
-        window.innerWidth - 215
-      )
-    );
-
-
-  top =
-    Math.min(
-      top,
-      window.innerHeight - 120
-    );
-
-
-  contextMenu.style.left =
-    left + "px";
-
-
-  contextMenu.style.top =
-    top + "px";
-
-
-  contextMenu.classList.add(
-    "open"
-  );
-
-}
-
-
-function closeContextMenu() {
-
-  contextMenu.classList.remove(
-    "open"
-  );
-
-}
-
-
-document.addEventListener(
+voiceButton.addEventListener(
   "click",
-  event => {
-
-    if (
-      !contextMenu.contains(
-        event.target
-      ) &&
-      !event.target.closest(
-        ".historyMore"
-      )
-    ) {
-
-      closeContextMenu();
-
-    }
-
-  }
+  openVoiceMode
 );
 
 
+voiceClose.addEventListener(
+  "click",
+  closeVoiceMode
+);
+
+
+voiceControl.addEventListener(
+  "click",
+  toggleVoiceListening
+);
+
+
+function openVoiceMode() {
+
+  isVoiceMode = true;
+
+  voiceMode.classList.add(
+    "open"
+  );
+
+  voiceMode.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  updateVoiceStatus(
+    "Hazırım"
+  );
+
+}
+
+
+function closeVoiceMode() {
+
+  stopRecognition();
+
+  speechSynthesis.cancel();
+
+  isVoiceMode = false;
+
+  isListening = false;
+
+  isSpeaking = false;
+
+  voiceMode.classList.remove(
+    "open",
+    "listening",
+    "speaking"
+  );
+
+  voiceMode.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  updateVoiceStatus(
+    "Hazırım"
+  );
+
+}
+
+
+function updateVoiceStatus(
+  text
+) {
+
+  voiceStatus.innerHTML =
+    text;
+
+}
+
+
 /* =====================================================
-   RENAME
+   SPEECH RECOGNITION
 ===================================================== */
 
-document
-  .getElementById(
-    "renameButton"
-  )
-  .addEventListener(
-    "click",
+function getSpeechRecognition() {
+
+  return (
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition ||
+    null
+  );
+
+}
+
+
+function toggleVoiceListening() {
+
+  if (
+    isListening
+  ) {
+
+    stopRecognition();
+
+    return;
+
+  }
+
+
+  startRecognition();
+
+}
+
+
+function startRecognition() {
+
+  const SpeechRecognition =
+    getSpeechRecognition();
+
+
+  if (!SpeechRecognition) {
+
+    updateVoiceStatus(
+      "<strong>Bu tarayıcı sesli girişi desteklemiyor.</strong>"
+    );
+
+    return;
+
+  }
+
+
+  if (
+    isSpeaking
+  ) {
+
+    speechSynthesis.cancel();
+
+    isSpeaking = false;
+
+  }
+
+
+  recognition =
+    new SpeechRecognition();
+
+
+  recognition.lang =
+    "tr-TR";
+
+  recognition.continuous =
+    false;
+
+  recognition.interimResults =
+    false;
+
+
+  recognition.onstart =
     () => {
 
-      const item =
-        getConversation(
-          selectedConversationId
-        );
+      isListening = true;
 
-
-      if (!item) {
-        return;
-      }
-
-
-      document
-        .getElementById(
-          "renameInput"
-        )
-        .value =
-        item.title;
-
-
-      closeContextMenu();
-
-
-      document
-        .getElementById(
-          "renameModal"
-        )
-        .classList.add(
-          "open"
-        );
-
-
-      setTimeout(
-        () => {
-
-          const input =
-            document.getElementById(
-              "renameInput"
-            );
-
-          input.focus();
-          input.select();
-
-        },
-        100
+      voiceMode.classList.add(
+        "listening"
       );
 
-    }
-  );
+      updateVoiceStatus(
+        "Dinliyorum..."
+      );
+
+    };
 
 
-document
-  .getElementById(
-    "renameCancel"
-  )
-  .addEventListener(
-    "click",
-    () => {
+  recognition.onresult =
+    event => {
 
-      document
-        .getElementById(
-          "renameModal"
-        )
-        .classList.remove(
-          "open"
-        );
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "renameSave"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const title =
-        document
-          .getElementById(
-            "renameInput"
-          )
-          .value
+      const text =
+        event
+          .results[0][0]
+          .transcript
           .trim();
 
 
-      if (!title) {
+      if (!text) {
+
         return;
-      }
-
-
-      const conversations =
-        loadConversations();
-
-
-      const item =
-        conversations.find(
-          x =>
-            x.id ===
-            selectedConversationId
-        );
-
-
-      if (item) {
-
-        item.title =
-          title;
-
-        item.updatedAt =
-          Date.now();
-
-        saveConversations(
-          conversations
-        );
 
       }
 
 
-      document
-        .getElementById(
-          "renameModal"
-        )
-        .classList.remove(
-          "open"
-        );
+      stopRecognition();
 
-
-      renderChatList();
-
-    }
-  );
-
-
-/* =====================================================
-   DELETE
-===================================================== */
-
-document
-  .getElementById(
-    "deleteButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      const item =
-        getConversation(
-          selectedConversationId
-        );
-
-
-      if (!item) {
-        return;
-      }
-
-
-      document
-        .getElementById(
-          "deleteText"
-        )
-        .textContent =
-        `"${item.title}" sohbeti silinecek.`;
-
-
-      closeContextMenu();
-
-
-      document
-        .getElementById(
-          "deleteModal"
-        )
-        .classList.add(
-          "open"
-        );
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "deleteCancel"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "deleteModal"
-        )
-        .classList.remove(
-          "open"
-        );
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "deleteConfirm"
-  )
-  .addEventListener(
-    "click",
-    async () => {
-
-      const id =
-        selectedConversationId;
-
-
-      if (!id) {
-        return;
-      }
-
-
-      /*
-        Önce Redis'ten sil.
-      */
-
-      try {
-
-        await fetch(
-          API_URL,
-          {
-
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify({
-
-                action:
-                  "deleteConversation",
-
-                conversationId:
-                  id
-
-              })
-
-          }
-        );
-
-      } catch(error) {
-
-        console.error(
-          error
-        );
-
-      }
-
-
-      /*
-        Local'den de sil.
-      */
-
-      let conversations =
-        loadConversations();
-
-
-      conversations =
-        conversations.filter(
-          item =>
-            item.id !== id
-        );
-
-
-      saveConversations(
-        conversations
+      updateVoiceStatus(
+        "ASA düşünüyor..."
       );
 
 
-      if (
-        id === conversationId
-      ) {
+      sendMessage(
+        text,
+        true
+      );
 
-        conversationId =
-          null;
-
-        localStorage.removeItem(
-          ACTIVE_KEY
-        );
-
-        messages = [];
-
-        createNewConversation();
-
-      }
+    };
 
 
-      selectedConversationId =
-        null;
+  recognition.onerror =
+    error => {
+
+      console.warn(
+        "Voice recognition:",
+        error
+      );
+
+      isListening = false;
+
+      voiceMode.classList.remove(
+        "listening"
+      );
+
+      updateVoiceStatus(
+        "Tekrar deneyelim"
+      );
+
+    };
 
 
-      document
-        .getElementById(
-          "deleteModal"
-        )
-        .classList.remove(
-          "open"
-        );
+  recognition.onend =
+    () => {
+
+      isListening = false;
+
+      voiceMode.classList.remove(
+        "listening"
+      );
+
+    };
 
 
-      renderChatList();
+  try {
 
-    }
+    recognition.start();
+
+  } catch {
+
+    isListening = false;
+
+  }
+
+}
+
+
+function stopRecognition() {
+
+  if (
+    recognition
+  ) {
+
+    try {
+
+      recognition.stop();
+
+    } catch {}
+
+  }
+
+
+  recognition =
+    null;
+
+  isListening = false;
+
+  voiceMode.classList.remove(
+    "listening"
   );
+
+}
 
 
 /* =====================================================
-   NEW CHAT
+   TEXT TO SPEECH
 ===================================================== */
 
-document
-  .getElementById(
-    "newChatButton"
-  )
-  .addEventListener(
-    "click",
-    createNewConversation
+function speakText(
+  text
+) {
+
+  if (
+    !("speechSynthesis" in window)
+  ) {
+
+    updateVoiceStatus(
+      "ASA cevap verdi."
+    );
+
+    return;
+
+  }
+
+
+  speechSynthesis.cancel();
+
+
+  const utterance =
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+
+  utterance.lang =
+    "tr-TR";
+
+  utterance.rate =
+    0.96;
+
+  utterance.pitch =
+    1.0;
+
+  utterance.volume =
+    1;
+
+
+  const voices =
+    speechSynthesis
+      .getVoices();
+
+
+  const turkishVoice =
+    voices.find(
+      voice =>
+        voice.lang
+          ?.toLowerCase()
+          .startsWith(
+            "tr"
+          )
+    );
+
+
+  if (
+    turkishVoice
+  ) {
+
+    utterance.voice =
+      turkishVoice;
+
+  }
+
+
+  utterance.onstart =
+    () => {
+
+      isSpeaking = true;
+
+      voiceMode.classList.add(
+        "speaking"
+      );
+
+      updateVoiceStatus(
+        "ASA konuşuyor..."
+      );
+
+    };
+
+
+  utterance.onend =
+    () => {
+
+      isSpeaking = false;
+
+      voiceMode.classList.remove(
+        "speaking"
+      );
+
+      updateVoiceStatus(
+        "Dinliyorum..."
+      );
+
+    };
+
+
+  utterance.onerror =
+    () => {
+
+      isSpeaking = false;
+
+      voiceMode.classList.remove(
+        "speaking"
+      );
+
+      updateVoiceStatus(
+        "Hazırım"
+      );
+
+    };
+
+
+  speechSynthesis.speak(
+    utterance
   );
+
+}
 
 
 /* =====================================================
    MEMORY / SETTINGS
 ===================================================== */
-
-document
-  .getElementById(
-    "memoryButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      alert(
-        "🧠 ASA kalıcı hafızası aktif."
-      );
-
-    }
-  );
-
 
 document
   .getElementById(
@@ -4226,23 +4786,7 @@ document
       closeSidebar();
 
       alert(
-        "🧠 ASA kalıcı hafızası aktif."
-      );
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "settingsButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      alert(
-        "⚙️ Ayarlar panelini sonraki aşamada geliştireceğiz."
+        "Hafıza Redis üzerinden çalışıyor."
       );
 
     }
@@ -4260,122 +4804,60 @@ document
       closeSidebar();
 
       alert(
-        "⚙️ Ayarlar panelini sonraki aşamada geliştireceğiz."
+        "Ayarlar panelini geliştirme aşamasında bağlayacağız."
       );
 
     }
   );
 
 
-/* =====================================================
-   KEYBOARD
-===================================================== */
+document
+  .getElementById(
+    "showChatsButton"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-function updateKeyboard() {
+      renderChatList();
 
-  if (
-    !window.visualViewport
-  ) {
-    return;
-  }
-
-
-  const viewport =
-    window.visualViewport;
-
-
-  const keyboard =
-    Math.max(
-      0,
-      window.innerHeight -
-      viewport.height -
-      viewport.offsetTop
-    );
-
-
-  if (
-    keyboard > 100
-  ) {
-
-    inputArea.style.bottom =
-      (
-        keyboard + 7
-      ) + "px";
-
-  } else {
-
-    inputArea.style.bottom =
-      "calc(11px + env(safe-area-inset-bottom))";
-
-  }
-
-}
-
-
-if (
-  window.visualViewport
-) {
-
-  window.visualViewport.addEventListener(
-    "resize",
-    updateKeyboard
+    }
   );
-
-  window.visualViewport.addEventListener(
-    "scroll",
-    updateKeyboard
-  );
-
-}
 
 
 /* =====================================================
    START
 ===================================================== */
 
-async function start() {
+showEmpty();
 
-  let active =
-    conversationId
-      ? getConversation(
-          conversationId
-        )
-      : null;
+loadActiveConversation();
+
+renderChatList();
 
 
-  /*
-    Eski local sohbetler varsa
-    ilkini kullan.
-  */
+async function loadActiveConversation() {
 
-  if (!active) {
-
-    const conversations =
-      loadConversations();
+  const id =
+    getActiveConversationId();
 
 
-    if (
-      conversations.length
-    ) {
-
-      active =
-        conversations[0];
-
-      setActive(
-        active.id
-      );
-
-    }
-
-  }
+  conversationId =
+    id;
 
 
-  /*
-    Hiç sohbet yoksa
-    boş yeni sohbet.
-  */
+  const conversations =
+    loadConversations();
 
-  if (!active) {
+
+  const exists =
+    conversations.some(
+      x =>
+        x.id === id
+    );
+
+
+  if (!exists) {
 
     showEmpty();
 
@@ -4384,20 +4866,11 @@ async function start() {
   }
 
 
-  messages =
-    Array.isArray(
-      active.messages
-    )
-      ? active.messages
-      : [];
-
-
-  renderMessages();
+  await openConversation(
+    id
+  );
 
 }
-
-
-start();
 
 </script>
 
