@@ -4,11 +4,52 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const ASA_INSTRUCTIONS = `
+Sen ASA'sın.
+
+Alperen'in kişisel yapay zeka asistanısın.
+
+Kullanıcının adı Alperen.
+
+Her zaman Türkçe konuş.
+
+Samimi, doğal, sakin ve zeki ol.
+
+Alperen seninle günlük konuşuyorsa
+arkadaşça ve rahat cevap ver.
+
+Robotik konuşma.
+
+Kısa sorulara kısa cevap ver.
+
+Gereksiz yere uzun konuşma.
+
+Karmaşık konularda gerektiği kadar
+detaylı açıklama yap.
+
+Sesli konuşmada doğal konuş.
+
+Cümlelerini konuşma diline uygun kur.
+
+Alperen sözünü kestiğinde hemen dur
+ve onu dinlemeye devam et.
+
+Alperen konuşmayı bitirdiğinde
+gereksiz bekleme yapmadan cevap ver.
+
+Kendinden bahsederken ASA adını kullan.
+`;
+
+
+/* =========================================================
+   ASA REALTIME — CLIENT SECRET
+========================================================= */
+
 export default async function handler(req, res) {
 
-  /* =====================================================
+  /* =======================================================
      METHOD
-  ===================================================== */
+  ======================================================= */
 
   if (req.method !== "POST") {
 
@@ -20,9 +61,52 @@ export default async function handler(req, res) {
   }
 
 
-  /* =====================================================
-     REALTIME CLIENT SECRET
-  ===================================================== */
+  /* =======================================================
+     API KEY CHECK
+  ======================================================= */
+
+  if (!process.env.OPENAI_API_KEY) {
+
+    console.error(
+      "OPENAI_API_KEY bulunamadı."
+    );
+
+    return res.status(500).json({
+      success: false,
+      error:
+        "Sunucuda OPENAI_API_KEY tanımlı değil.",
+    });
+
+  }
+
+
+  /* =======================================================
+     VOICE
+  ======================================================= */
+
+  const requestedVoice =
+    req.body?.voice;
+
+  const allowedVoices = [
+    "marin",
+    "cedar",
+    "coral",
+    "sage",
+    "ash",
+    "verse",
+  ];
+
+  const voice =
+    allowedVoices.includes(
+      requestedVoice
+    )
+      ? requestedVoice
+      : "marin";
+
+
+  /* =======================================================
+     CREATE EPHEMERAL CLIENT SECRET
+  ======================================================= */
 
   try {
 
@@ -41,41 +125,8 @@ export default async function handler(req, res) {
           model:
             "gpt-realtime-1.5",
 
-          instructions: `
-Sen ASA'sın.
-
-Alperen'in kişisel yapay zeka
-asistanısın.
-
-Türkçe konuş.
-
-Samimi, doğal, sakin ve zeki ol.
-
-Alperen sana günlük konuşma
-yapıyorsa arkadaşça cevap ver.
-
-Robot gibi konuşma.
-
-Kısa sorulara kısa cevap ver.
-
-Karmaşık konularda yeterli açıklama yap.
-
-Kullanıcının adı Alperen.
-
-Kendinden bahsederken
-her zaman ASA adını kullan.
-
-Başka bir isimle çağrılırsan
-nazikçe düzelt.
-
-Sesli konuşmada doğal konuş.
-
-Cümleleri gereksiz yere uzatma.
-
-Kullanıcı sözünü kestiğinde
-veya tekrar konuşmaya başladığında
-cevabı uzatma ve onu dinlemeye devam et.
-`,
+          instructions:
+            ASA_INSTRUCTIONS,
 
           audio: {
 
@@ -86,6 +137,7 @@ cevabı uzatma ve onu dinlemeye devam et.
               },
 
               turn_detection: {
+
                 type:
                   "semantic_vad",
 
@@ -97,6 +149,7 @@ cevabı uzatma ve onu dinlemeye devam et.
 
                 interrupt_response:
                   true,
+
               },
 
             },
@@ -104,7 +157,7 @@ cevabı uzatma ve onu dinlemeye devam et.
             output: {
 
               voice:
-                "marin",
+                voice,
 
             },
 
@@ -113,6 +166,22 @@ cevabı uzatma ve onu dinlemeye devam et.
         },
 
       });
+
+
+    /* =====================================================
+       VERIFY SECRET
+    ===================================================== */
+
+    if (
+      !response ||
+      !response.value
+    ) {
+
+      throw new Error(
+        "OpenAI geçerli bir Realtime client secret döndürmedi."
+      );
+
+    }
 
 
     /* =====================================================
@@ -129,8 +198,7 @@ cevabı uzatma ve onu dinlemeye devam et.
       expiresAt:
         response.expires_at,
 
-      session:
-        response.session || null,
+      voice,
 
     });
 
@@ -143,7 +211,20 @@ cevabı uzatma ve onu dinlemeye devam et.
     );
 
 
-    return res.status(500).json({
+    const status =
+      Number.isInteger(
+        error?.status
+      )
+        ? error.status
+        : 500;
+
+
+    return res.status(
+      status >= 400 &&
+      status < 600
+        ? status
+        : 500
+    ).json({
 
       success: false,
 
