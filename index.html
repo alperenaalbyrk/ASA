@@ -15,6 +15,10 @@
 
 <style>
 
+/* =========================================================
+   RESET
+========================================================= */
+
 *{
   box-sizing:border-box;
   margin:0;
@@ -26,6 +30,7 @@
   --bg:#05040a;
   --panel:#11101a;
   --panel2:#171621;
+
   --text:#f7f5fb;
   --muted:#85818f;
   --muted2:#625f6c;
@@ -46,7 +51,7 @@ body{
   height:100%;
   overflow:hidden;
 
-  background:#05040a;
+  background:var(--bg);
   color:var(--text);
 
   font-family:
@@ -75,14 +80,17 @@ button{
   cursor:pointer;
 }
 
+
 /* =========================================================
    APP
 ========================================================= */
 
 .app{
   position:relative;
+
   width:100%;
   height:100dvh;
+
   overflow:hidden;
 
   background:
@@ -96,8 +104,9 @@ button{
       rgba(100,20,180,.10),
       transparent 35%
     ),
-    #05040a;
+    var(--bg);
 }
+
 
 /* =========================================================
    HEADER
@@ -105,6 +114,7 @@ button{
 
 .header{
   position:absolute;
+
   top:0;
   left:0;
   right:0;
@@ -118,6 +128,7 @@ button{
 
   display:flex;
   align-items:center;
+
   gap:14px;
 
   z-index:30;
@@ -139,18 +150,22 @@ button{
 .menuButton{
   width:56px;
   height:56px;
-  flex-shrink:0;
 
-  border-radius:18px;
+  flex-shrink:0;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
+  border-radius:18px;
+
   background:rgba(20,19,30,.82);
 
-  border:
-    1px solid var(--border);
+  border:1px solid var(--border);
+}
+
+.menuButton:active{
+  transform:scale(.96);
 }
 
 .menuLines{
@@ -165,16 +180,21 @@ button{
 .menuLines span{
   width:25px;
   height:2px;
+
   border-radius:2px;
+
   background:#f5f2f8;
 }
 
 .brandText{
   font-size:29px;
   line-height:1;
+
   font-weight:700;
+
   letter-spacing:.29em;
 }
+
 
 /* =========================================================
    CHAT
@@ -197,6 +217,7 @@ button{
     170px;
 
   overscroll-behavior:contain;
+
   scroll-behavior:smooth;
 }
 
@@ -205,11 +226,10 @@ button{
 }
 
 .chat::-webkit-scrollbar-thumb{
-  background:
-    rgba(180,50,255,.35);
-
+  background:rgba(180,50,255,.35);
   border-radius:10px;
 }
+
 
 /* =========================================================
    EMPTY
@@ -264,13 +284,16 @@ button{
   font-size:17px;
 }
 
+
 /* =========================================================
    MESSAGES
 ========================================================= */
 
 .message{
   width:100%;
+
   display:flex;
+
   margin-bottom:28px;
 }
 
@@ -306,8 +329,7 @@ button{
   line-height:1.5;
 
   box-shadow:
-    0 12px 35px
-    rgba(126,37,235,.15);
+    0 12px 35px rgba(126,37,235,.15);
 }
 
 .assistant .bubble{
@@ -351,12 +373,12 @@ button{
 
   border-radius:20px;
 
-  border:
-    1px solid rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.12);
 
   box-shadow:
     0 15px 50px rgba(0,0,0,.3);
 }
+
 
 /* =========================================================
    TYPING
@@ -401,6 +423,7 @@ button{
 
 }
 
+
 /* =========================================================
    INPUT
 ========================================================= */
@@ -422,17 +445,16 @@ button{
 
   display:flex;
   align-items:center;
+
   gap:3px;
 
   padding:6px;
 
   border-radius:24px;
 
-  background:
-    rgba(16,15,25,.96);
+  background:rgba(16,15,25,.96);
 
-  border:
-    1px solid rgba(255,255,255,.11);
+  border:1px solid rgba(255,255,255,.11);
 
   box-shadow:
     0 18px 55px rgba(0,0,0,.42),
@@ -482,19 +504,22 @@ button{
 
   border-radius:17px;
 
-  background:
-    rgba(255,255,255,.035);
+  background:rgba(255,255,255,.035);
 
-  border:
-    1px solid rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.08);
 
   font-size:29px;
   font-weight:300;
 }
 
+.plusButton:active{
+  transform:scale(.92);
+}
+
 .voiceButton{
   width:48px;
   height:50px;
+
   color:#f2eef8;
 }
 
@@ -516,6 +541,7 @@ button{
   opacity:.3;
 }
 
+
 /* =========================================================
    MICROPHONE ICON
 ========================================================= */
@@ -526,8 +552,7 @@ button{
   width:20px;
   height:26px;
 
-  border:
-    2px solid currentColor;
+  border:2px solid currentColor;
 
   border-radius:12px;
 }
@@ -545,11 +570,9 @@ button{
 
   transform:translateX(-50%);
 
-  border-bottom:
-    2px solid currentColor;
+  border-bottom:2px solid currentColor;
 
-  border-radius:
-    0 0 10px 10px;
+  border-radius:0 0 10px 10px;
 }
 
 .voiceIcon::after{
@@ -568,6 +591,7 @@ button{
   background:currentColor;
 }
 
+
 /* =========================================================
    PREVIEW
 ========================================================= */
@@ -581,6 +605,7 @@ button{
   bottom:76px;
 
   display:flex;
+
   gap:8px;
 
   padding:8px;
@@ -589,11 +614,9 @@ button{
 
   border-radius:18px;
 
-  background:
-    rgba(16,15,25,.97);
+  background:rgba(16,15,25,.97);
 
-  border:
-    1px solid rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.09);
 
   backdrop-filter:blur(18px);
 }
@@ -605,6 +628,10 @@ button{
   height:60px;
 
   flex-shrink:0;
+
+  border-radius:13px;
+
+  background:rgba(255,255,255,.05);
 }
 
 .previewItem img{
@@ -629,11 +656,11 @@ button{
 
   background:#111;
 
-  border:
-    1px solid rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.2);
 
   color:white;
 }
+
 
 /* =========================================================
    SIDEBAR
@@ -645,8 +672,7 @@ button{
 
   z-index:90;
 
-  background:
-    rgba(0,0,0,.6);
+  background:rgba(0,0,0,.6);
 
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
@@ -675,7 +701,7 @@ button{
 
   padding:
     calc(23px + var(--safe-top))
-    20px
+    16px
     calc(18px + var(--safe-bottom));
 
   background:
@@ -685,11 +711,9 @@ button{
       #080710
     );
 
-  border-right:
-    1px solid rgba(255,255,255,.09);
+  border-right:1px solid rgba(255,255,255,.09);
 
-  transform:
-    translateX(-105%);
+  transform:translateX(-105%);
 
   transition:
     transform .3s
@@ -707,7 +731,9 @@ button{
   display:flex;
   align-items:center;
 
-  margin-bottom:30px;
+  padding:0 4px;
+
+  margin-bottom:35px;
 }
 
 .sidebarBrand{
@@ -720,16 +746,14 @@ button{
 }
 
 .closeButton{
-  width:54px;
-  height:54px;
+  width:50px;
+  height:50px;
 
-  border-radius:18px;
+  border-radius:17px;
 
-  background:
-    rgba(255,255,255,.045);
+  background:rgba(255,255,255,.045);
 
-  border:
-    1px solid rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.07);
 
   font-size:30px;
 }
@@ -741,7 +765,7 @@ button{
 
   color:#777484;
 
-  font-size:11px;
+  font-size:10px;
   font-weight:800;
 
   letter-spacing:.35em;
@@ -749,7 +773,7 @@ button{
 
 .menuItem{
   width:100%;
-  min-height:59px;
+  min-height:57px;
 
   display:flex;
   align-items:center;
@@ -768,8 +792,7 @@ button{
 }
 
 .menuItem:active{
-  background:
-    rgba(255,255,255,.06);
+  background:rgba(255,255,255,.06);
 }
 
 .menuIcon{
@@ -786,10 +809,9 @@ button{
 .menuDivider{
   height:1px;
 
-  margin:16px 8px;
+  margin:17px 8px;
 
-  background:
-    rgba(255,255,255,.075);
+  background:rgba(255,255,255,.075);
 }
 
 .chatList{
@@ -801,7 +823,7 @@ button{
 }
 
 .historyGroup{
-  margin-bottom:20px;
+  margin-bottom:23px;
 }
 
 .historyDate{
@@ -819,23 +841,21 @@ button{
   position:relative;
 
   width:100%;
-  min-height:68px;
+  min-height:70px;
 
   padding:
-    12px
+    13px
     52px
-    12px
+    13px
     15px;
 
-  margin-bottom:7px;
+  margin-bottom:8px;
 
   border-radius:17px;
 
-  background:
-    rgba(255,255,255,.025);
+  background:rgba(255,255,255,.025);
 
-  border:
-    1px solid rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.055);
 }
 
 .historyItem.active{
@@ -846,8 +866,7 @@ button{
       rgba(81,21,130,.12)
     );
 
-  border-color:
-    rgba(169,51,255,.45);
+  border-color:rgba(169,51,255,.45);
 }
 
 .historyTitle{
@@ -882,8 +901,7 @@ button{
 
   border-radius:13px;
 
-  background:
-    rgba(255,255,255,.045);
+  background:rgba(255,255,255,.045);
 
   color:#aaa7b4;
 
@@ -901,14 +919,15 @@ button{
 }
 
 .sidebarFooter{
-  padding-top:15px;
+  padding-top:14px;
 
   color:#555260;
 
   text-align:center;
 
-  font-size:11px;
+  font-size:10px;
 }
+
 
 /* =========================================================
    CONTEXT MENU
@@ -927,8 +946,7 @@ button{
 
   background:#161520;
 
-  border:
-    1px solid rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.1);
 
   box-shadow:
     0 25px 70px rgba(0,0,0,.55);
@@ -954,12 +972,17 @@ button{
   font-size:14px;
 }
 
+.contextItem:active{
+  background:rgba(255,255,255,.06);
+}
+
 .contextItem.delete{
   color:#ff7183;
 }
 
+
 /* =========================================================
-   MODALS
+   MODAL SYSTEM
 ========================================================= */
 
 .modalOverlay{
@@ -971,16 +994,15 @@ button{
 
   display:none;
 
-  align-items:center;
+  align-items:flex-end;
   justify-content:center;
 
-  padding:22px;
+  padding:14px;
 
-  background:
-    rgba(0,0,0,.72);
+  background:rgba(0,0,0,.72);
 
-  backdrop-filter:blur(11px);
-  -webkit-backdrop-filter:blur(11px);
+  backdrop-filter:blur(13px);
+  -webkit-backdrop-filter:blur(13px);
 }
 
 .modalOverlay.open{
@@ -990,28 +1012,59 @@ button{
 .modal{
   width:min(470px,100%);
 
-  padding:26px;
+  max-height:
+    calc(100dvh - 28px);
+
+  overflow-y:auto;
+
+  padding:23px;
 
   border-radius:28px;
 
   background:
     linear-gradient(
       180deg,
-      #171622,
+      #171621,
       #11101a
     );
 
-  border:
-    1px solid rgba(255,255,255,.11);
+  border:1px solid rgba(255,255,255,.11);
 
   box-shadow:
     0 35px 100px rgba(0,0,0,.65);
+
+  animation:
+    modalUp .25s ease;
+}
+
+@keyframes modalUp{
+
+  from{
+    opacity:0;
+    transform:translateY(20px) scale(.98);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+
 }
 
 .modal h2{
+  margin-bottom:8px;
+
+  font-size:25px;
+  letter-spacing:-.02em;
+}
+
+.modalSubtitle{
   margin-bottom:20px;
 
-  font-size:24px;
+  color:#777483;
+
+  font-size:14px;
+  line-height:1.45;
 }
 
 .modalText{
@@ -1030,14 +1083,17 @@ button{
 
   background:#090811;
 
-  border:
-    1px solid rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.09);
 
   outline:0;
 
   color:white;
 
   font-size:17px;
+}
+
+.modalInput:focus{
+  border-color:rgba(193,60,255,.55);
 }
 
 .modalButtons{
@@ -1054,8 +1110,11 @@ button{
 
   border-radius:16px;
 
-  background:
-    rgba(255,255,255,.055);
+  background:rgba(255,255,255,.055);
+}
+
+.modalButton:active{
+  transform:scale(.98);
 }
 
 .modalButton.primary{
@@ -1071,141 +1130,101 @@ button{
   background:#a72b45;
 }
 
+
 /* =========================================================
-   SETTINGS — iOS STYLE
+   SETTINGS
 ========================================================= */
 
-.settingsModalBox{
-  width:min(520px,100%);
+.settingsHeader{
+  display:flex;
+  align-items:center;
 
-  max-height:
-    calc(100dvh - 44px);
+  gap:13px;
 
-  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.settingsHeaderIcon{
+  width:48px;
+  height:48px;
 
   display:flex;
-  flex-direction:column;
+  align-items:center;
+  justify-content:center;
 
-  border-radius:30px;
+  border-radius:16px;
 
   background:
     linear-gradient(
-      180deg,
-      #15141f,
-      #0e0d16
+      135deg,
+      rgba(163,49,255,.25),
+      rgba(193,60,255,.08)
     );
 
-  border:
-    1px solid rgba(255,255,255,.1);
+  border:1px solid rgba(193,60,255,.2);
 
-  box-shadow:
-    0 40px 110px rgba(0,0,0,.7);
+  font-size:22px;
 }
 
-.settingsHeader{
-  height:76px;
-
-  padding:0 18px;
-
+.settingsList{
   display:flex;
-  align-items:center;
+  flex-direction:column;
 
-  border-bottom:
-    1px solid rgba(255,255,255,.07);
+  gap:9px;
 }
 
-.settingsBack{
-  min-width:76px;
-  height:46px;
-
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-
-  background:transparent;
-
-  color:var(--accent2);
-
-  font-size:16px;
-}
-
-.settingsTitle{
-  flex:1;
-
-  text-align:center;
-
-  font-size:20px;
-  font-weight:700;
-}
-
-.settingsHeaderSpacer{
-  min-width:76px;
-}
-
-.settingsBody{
-  overflow-y:auto;
-
-  padding:18px;
-}
-
-.settingsGroup{
-  margin-bottom:22px;
-}
-
-.settingsGroupTitle{
-  padding:
-    0 10px
-    9px;
-
-  color:#777483;
-
-  font-size:11px;
-  font-weight:800;
-
-  letter-spacing:.28em;
-}
-
-.settingsCard{
-  overflow:hidden;
-
-  border-radius:20px;
-
-  background:
-    rgba(255,255,255,.035);
-
-  border:
-    1px solid rgba(255,255,255,.055);
-}
-
-.settingsRow{
+.settingOption{
   width:100%;
-  min-height:68px;
+  min-height:67px;
 
   padding:
-    0 17px;
+    10px
+    15px;
 
   display:flex;
   align-items:center;
-  gap:13px;
+  justify-content:space-between;
 
-  background:transparent;
+  gap:15px;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,.035);
+
+  border:1px solid rgba(255,255,255,.06);
 
   text-align:left;
+
+  transition:
+    background .18s,
+    border-color .18s,
+    transform .18s;
 }
 
-.settingsRow + .settingsRow{
-  border-top:
-    1px solid rgba(255,255,255,.055);
+.settingOption:active{
+  transform:scale(.985);
 }
 
-.settingsRow:active{
+.settingOption.active{
+  border-color:
+    rgba(169,51,255,.55);
+
   background:
-    rgba(255,255,255,.05);
+    rgba(148,44,245,.13);
 }
 
-.settingsRowIcon{
-  width:38px;
-  height:38px;
+.settingMain{
+  display:flex;
+  align-items:center;
+
+  gap:13px;
+
+  min-width:0;
+}
+
+.settingIcon{
+  width:40px;
+  height:40px;
 
   flex-shrink:0;
 
@@ -1213,27 +1232,27 @@ button{
   align-items:center;
   justify-content:center;
 
-  border-radius:12px;
+  border-radius:13px;
 
-  background:
-    rgba(163,49,255,.13);
+  background:rgba(255,255,255,.05);
 
-  color:var(--accent2);
+  color:#d8d3df;
 
-  font-size:19px;
+  font-size:18px;
 }
 
-.settingsRowContent{
-  flex:1;
-  min-width:0;
-}
+.settingName{
+  display:block;
 
-.settingsRowTitle{
+  color:#f3eff7;
+
   font-size:16px;
   font-weight:600;
 }
 
-.settingsRowValue{
+.settingDescription{
+  display:block;
+
   margin-top:3px;
 
   color:#777483;
@@ -1245,156 +1264,21 @@ button{
   text-overflow:ellipsis;
 }
 
-.settingsChevron{
-  color:#666270;
-  font-size:24px;
-}
+.settingArrow{
+  flex-shrink:0;
 
-.settingsFooter{
-  padding:4px 10px 15px;
+  color:#6f6b79;
 
-  color:#555260;
+  font-size:25px;
 
-  text-align:center;
-
-  font-size:11px;
-}
-
-/* =========================================================
-   SETTINGS OPTIONS
-========================================================= */
-
-.optionsModalBox{
-  width:min(500px,100%);
-
-  max-height:
-    calc(100dvh - 44px);
-
-  overflow:hidden;
-
-  display:flex;
-  flex-direction:column;
-
-  border-radius:30px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #15141f,
-      #0e0d16
-    );
-
-  border:
-    1px solid rgba(255,255,255,.1);
-
-  box-shadow:
-    0 40px 110px rgba(0,0,0,.7);
-}
-
-.optionHeader{
-  height:76px;
-
-  padding:0 18px;
-
-  display:flex;
-  align-items:center;
-
-  border-bottom:
-    1px solid rgba(255,255,255,.07);
-}
-
-.optionBack{
-  min-width:76px;
-  height:46px;
-
-  background:transparent;
-
-  color:var(--accent2);
-
-  text-align:left;
-
-  font-size:16px;
-}
-
-.optionTitle{
-  flex:1;
-
-  text-align:center;
-
-  font-size:20px;
-  font-weight:700;
-}
-
-.optionSpacer{
-  min-width:76px;
-}
-
-.optionBody{
-  overflow-y:auto;
-  padding:18px;
-}
-
-.optionCard{
-  overflow:hidden;
-
-  border-radius:20px;
-
-  background:
-    rgba(255,255,255,.035);
-
-  border:
-    1px solid rgba(255,255,255,.055);
-}
-
-.settingOption{
-  width:100%;
-  min-height:68px;
-
-  padding:
-    0 17px;
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  background:transparent;
-
-  text-align:left;
-}
-
-.settingOption + .settingOption{
-  border-top:
-    1px solid rgba(255,255,255,.055);
-}
-
-.settingOption:active{
-  background:
-    rgba(255,255,255,.05);
-}
-
-.settingOption.active{
-  background:
-    rgba(148,44,245,.11);
-}
-
-.settingName{
-  font-size:16px;
-  font-weight:600;
-}
-
-.settingDescription{
-  display:block;
-
-  margin-top:4px;
-
-  color:#777483;
-
-  font-size:12px;
+  line-height:1;
 }
 
 .settingCheck{
-  width:28px;
-  height:28px;
+  flex-shrink:0;
+
+  width:25px;
+  height:25px;
 
   display:flex;
   align-items:center;
@@ -1402,10 +1286,6 @@ button{
 
   border-radius:50%;
 
-  color:transparent;
-}
-
-.settingOption.active .settingCheck{
   color:white;
 
   background:
@@ -1414,7 +1294,11 @@ button{
       var(--accent),
       var(--accent2)
     );
+
+  font-size:13px;
+  font-weight:700;
 }
+
 
 /* =========================================================
    ATTACHMENT SHEET — APPLE STYLE
@@ -1428,23 +1312,25 @@ button{
   z-index:180;
 
   display:flex;
+
   align-items:flex-end;
 
+  justify-content:center;
+
   padding:
-    12px
-    12px
-    calc(12px + var(--safe-bottom));
+    10px
+    10px
+    calc(10px + var(--safe-bottom));
 
-  background:
-    rgba(0,0,0,.62);
+  background:rgba(0,0,0,.58);
 
-  backdrop-filter:blur(9px);
-  -webkit-backdrop-filter:blur(9px);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 
   opacity:0;
   pointer-events:none;
 
-  transition:.2s;
+  transition:opacity .22s ease;
 }
 
 .sheetOverlay.open{
@@ -1453,22 +1339,24 @@ button{
 }
 
 .attachmentSheet{
-  width:100%;
+  width:min(520px,100%);
 
   padding:8px;
 
-  border-radius:26px;
+  border-radius:27px;
 
   background:
-    rgba(22,21,31,.98);
+    rgba(25,24,34,.97);
 
-  border:
-    1px solid rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.11);
 
-  transform:translateY(20px);
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.65);
+
+  transform:translateY(25px);
 
   transition:
-    transform .25s
+    transform .28s
     cubic-bezier(.22,.8,.25,1);
 }
 
@@ -1478,75 +1366,93 @@ button{
 
 .sheetTitle{
   padding:
-    13px
     12px
-    10px;
+    13px
+    9px;
 
   color:#777483;
 
-  font-size:11px;
+  font-size:10px;
   font-weight:800;
 
-  letter-spacing:.25em;
+  letter-spacing:.24em;
 }
 
 .sheetItem{
   width:100%;
   min-height:58px;
 
-  padding:0 14px;
+  padding:0 15px;
 
   display:flex;
   align-items:center;
-  gap:13px;
+
+  gap:14px;
 
   background:transparent;
 
-  border-radius:16px;
+  border-radius:17px;
 
   text-align:left;
 
   font-size:17px;
 }
 
-.sheetItem:active{
-  background:
-    rgba(255,255,255,.07);
-}
-
-.sheetIcon{
-  width:34px;
-  height:34px;
+.sheetItem::before{
+  width:38px;
+  height:38px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  border-radius:10px;
+  flex-shrink:0;
 
-  background:
-    rgba(255,255,255,.06);
+  border-radius:12px;
+
+  background:rgba(255,255,255,.055);
 
   color:var(--accent2);
 
-  font-size:17px;
+  font-size:19px;
+}
+
+#photosButton::before{
+  content:"▧";
+}
+
+#cameraButton::before{
+  content:"●";
+  font-size:15px;
+}
+
+#filesButton::before{
+  content:"▱";
+}
+
+.sheetItem:active{
+  background:rgba(255,255,255,.07);
 }
 
 .sheetCancel{
   width:100%;
-  height:54px;
+  height:55px;
 
   margin-top:7px;
 
   border-radius:17px;
 
-  background:
-    rgba(255,255,255,.07);
+  background:rgba(255,255,255,.065);
 
   color:#aaa7b5;
 
   font-size:16px;
 }
+
+.sheetCancel:active{
+  background:rgba(255,255,255,.1);
+}
+
 
 /* =========================================================
    VOICE MODE
@@ -1613,13 +1519,15 @@ button{
 
   border-radius:19px;
 
-  background:
-    rgba(255,255,255,.05);
+  background:rgba(255,255,255,.05);
 
-  border:
-    1px solid rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.09);
 
   font-size:32px;
+}
+
+.voiceClose:active{
+  transform:scale(.93);
 }
 
 .voiceCenter{
@@ -1657,10 +1565,6 @@ button{
   box-shadow:
     0 0 60px rgba(163,48,255,.32),
     0 0 130px rgba(163,48,255,.12);
-
-  transition:
-    transform .25s,
-    box-shadow .25s;
 }
 
 .asaOrb::before{
@@ -1734,6 +1638,8 @@ button{
   font-size:17px;
 
   text-align:center;
+
+  min-height:24px;
 }
 
 .voiceBottom{
@@ -1746,6 +1652,7 @@ button{
     calc(35px + var(--safe-bottom));
 
   display:flex;
+
   justify-content:center;
   align-items:center;
 }
@@ -1779,10 +1686,13 @@ button{
 .voiceControl.off{
   background:
     rgba(255,255,255,.08);
+
+  box-shadow:none;
 }
 
+
 /* =========================================================
-   HIDDEN FILE INPUT
+   HIDDEN INPUT
 ========================================================= */
 
 .hiddenInput{
@@ -1796,11 +1706,17 @@ button{
   pointer-events:none;
 }
 
+
 /* =========================================================
    MOBILE
 ========================================================= */
 
 @media(max-width:600px){
+
+  .chat{
+    padding-left:15px;
+    padding-right:15px;
+  }
 
   .asaOrb{
     width:160px;
@@ -1812,15 +1728,32 @@ button{
   }
 
   .modalOverlay{
-    padding:12px;
+    padding:
+      8px
+      8px
+      calc(8px + var(--safe-bottom));
   }
 
-  .settingsModalBox,
-  .optionsModalBox{
-    max-height:
-      calc(100dvh - 24px);
-
+  .modal{
+    padding:21px;
     border-radius:27px;
+  }
+
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
   }
 
 }
@@ -1829,99 +1762,103 @@ button{
 
 </head>
 
+
 <body>
 
 <div class="app">
 
-  <!-- =====================================================
-       HEADER
-  ====================================================== -->
 
-  <header class="header">
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
+<header class="header">
+
+  <button
+    class="menuButton"
+    id="menuButton"
+    type="button"
+    aria-label="Menü"
+  >
+
+    <span class="menuLines">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+
+  </button>
+
+  <div class="brandText">
+    ASA
+  </div>
+
+</header>
+
+
+<!-- =======================================================
+     CHAT
+======================================================= -->
+
+<main
+  class="chat"
+  id="chat"
+></main>
+
+
+<!-- =======================================================
+     INPUT
+======================================================= -->
+
+<div class="inputArea">
+
+  <div
+    class="selectedPreview"
+    id="selectedPreview"
+    hidden
+  ></div>
+
+  <div class="inputBox">
 
     <button
-      class="menuButton"
-      id="menuButton"
+      class="plusButton"
+      id="plusButton"
       type="button"
-      aria-label="Menü"
+      aria-label="Ekle"
     >
-      <span class="menuLines">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
+      +
     </button>
 
-    <div class="brandText">
-      ASA
-    </div>
+    <input
+      class="input"
+      id="messageInput"
+      type="text"
+      autocomplete="off"
+      enterkeyhint="send"
+      placeholder="ASA'ya bir şey sor..."
+    >
 
-  </header>
+    <button
+      class="voiceButton"
+      id="voiceButton"
+      type="button"
+      aria-label="Sesli sohbet"
+    >
+      <span class="voiceIcon"></span>
+    </button>
 
-
-  <!-- =====================================================
-       CHAT
-  ====================================================== -->
-
-  <main
-    class="chat"
-    id="chat"
-  ></main>
-
-
-  <!-- =====================================================
-       INPUT
-  ====================================================== -->
-
-  <div class="inputArea">
-
-    <div
-      class="selectedPreview"
-      id="selectedPreview"
-      hidden
-    ></div>
-
-    <div class="inputBox">
-
-      <button
-        class="plusButton"
-        id="plusButton"
-        type="button"
-        aria-label="Ekle"
-      >
-        +
-      </button>
-
-      <input
-        class="input"
-        id="messageInput"
-        type="text"
-        autocomplete="off"
-        enterkeyhint="send"
-        placeholder="ASA'ya bir şey sor..."
-      >
-
-      <button
-        class="voiceButton"
-        id="voiceButton"
-        type="button"
-        aria-label="Sesli sohbet"
-      >
-        <span class="voiceIcon"></span>
-      </button>
-
-      <button
-        class="sendButton"
-        id="sendButton"
-        type="button"
-        aria-label="Gönder"
-      >
-        →
-      </button>
-
-    </div>
+    <button
+      class="sendButton"
+      id="sendButton"
+      type="button"
+      aria-label="Gönder"
+    >
+      →
+    </button>
 
   </div>
+
+</div>
 
 </div>
 
@@ -1955,7 +1892,7 @@ button{
 
 
 <!-- =======================================================
-     OVERLAY
+     SIDEBAR OVERLAY
 ======================================================= -->
 
 <div
@@ -2001,8 +1938,15 @@ button{
     id="newChatButton"
     type="button"
   >
-    <span class="menuIcon">+</span>
-    <span>Yeni Sohbet</span>
+
+    <span class="menuIcon">
+      +
+    </span>
+
+    <span>
+      Yeni Sohbet
+    </span>
+
   </button>
 
 
@@ -2011,8 +1955,15 @@ button{
     id="showChatsButton"
     type="button"
   >
-    <span class="menuIcon">≡</span>
-    <span>Sohbetler</span>
+
+    <span class="menuIcon">
+      ≡
+    </span>
+
+    <span>
+      Sohbetler
+    </span>
+
   </button>
 
 
@@ -2029,8 +1980,15 @@ button{
     id="memoryMenuButton"
     type="button"
   >
-    <span class="menuIcon">◉</span>
-    <span>Hafızam</span>
+
+    <span class="menuIcon">
+      ◉
+    </span>
+
+    <span>
+      Hafızam
+    </span>
+
   </button>
 
 
@@ -2039,8 +1997,15 @@ button{
     id="settingsMenuButton"
     type="button"
   >
-    <span class="menuIcon">⚙</span>
-    <span>Ayarlar</span>
+
+    <span class="menuIcon">
+      ⚙
+    </span>
+
+    <span>
+      Ayarlar
+    </span>
+
   </button>
 
 
@@ -2089,7 +2054,7 @@ button{
 
 
 <!-- =======================================================
-     APPLE STYLE ATTACHMENT SHEET
+     APPLE ATTACHMENT SHEET
 ======================================================= -->
 
 <div
@@ -2097,7 +2062,11 @@ button{
   id="sheetOverlay"
 >
 
-  <div class="attachmentSheet">
+  <div
+    class="attachmentSheet"
+    role="dialog"
+    aria-modal="true"
+  >
 
     <div class="sheetTitle">
       EKLE
@@ -2109,8 +2078,7 @@ button{
       id="photosButton"
       type="button"
     >
-      <span class="sheetIcon">▣</span>
-      <span>Fotoğraflar</span>
+      Fotoğraflar
     </button>
 
 
@@ -2119,8 +2087,7 @@ button{
       id="cameraButton"
       type="button"
     >
-      <span class="sheetIcon">◉</span>
-      <span>Kamera</span>
+      Kamera
     </button>
 
 
@@ -2129,8 +2096,7 @@ button{
       id="filesButton"
       type="button"
     >
-      <span class="sheetIcon">□</span>
-      <span>Dosyalar</span>
+      Dosyalar
     </button>
 
 
@@ -2148,7 +2114,7 @@ button{
 
 
 <!-- =======================================================
-     RENAME
+     RENAME MODAL
 ======================================================= -->
 
 <div
@@ -2161,6 +2127,10 @@ button{
     <h2>
       Sohbet başlığını değiştir
     </h2>
+
+    <p class="modalSubtitle">
+      Bu sohbetin adını istediğin gibi düzenleyebilirsin.
+    </p>
 
     <input
       class="modalInput"
@@ -2195,7 +2165,7 @@ button{
 
 
 <!-- =======================================================
-     DELETE
+     DELETE MODAL
 ======================================================= -->
 
 <div
@@ -2250,178 +2220,114 @@ button{
   id="settingsModal"
 >
 
-  <div class="settingsModalBox">
+  <div class="modal">
 
     <div class="settingsHeader">
 
+      <div class="settingsHeaderIcon">
+        ⚙
+      </div>
+
+      <div>
+
+        <h2>
+          Ayarlar
+        </h2>
+
+        <div class="modalSubtitle" style="margin:0;">
+          ASA'nın görünümünü ve sesini özelleştir.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="settingsList">
+
       <button
-        class="settingsBack"
+        class="settingOption"
+        id="voiceSettingsButton"
+        type="button"
+      >
+
+        <span class="settingMain">
+
+          <span class="settingIcon">
+            ◉
+          </span>
+
+          <span>
+
+            <span class="settingName">
+              Ses
+            </span>
+
+            <small
+              class="settingDescription"
+              id="currentVoiceDescription"
+            >
+              ASA'nın konuşma sesi
+            </small>
+
+          </span>
+
+        </span>
+
+        <span class="settingArrow">
+          ›
+        </span>
+
+      </button>
+
+
+      <button
+        class="settingOption"
+        id="themeSettingsButton"
+        type="button"
+      >
+
+        <span class="settingMain">
+
+          <span class="settingIcon">
+            ◐
+          </span>
+
+          <span>
+
+            <span class="settingName">
+              Tema
+            </span>
+
+            <small
+              class="settingDescription"
+              id="currentThemeDescription"
+            >
+              Görünüm ve renk
+            </small>
+
+          </span>
+
+        </span>
+
+        <span class="settingArrow">
+          ›
+        </span>
+
+      </button>
+
+    </div>
+
+
+    <div class="modalButtons">
+
+      <button
+        class="modalButton"
         id="settingsClose"
         type="button"
       >
         Kapat
       </button>
-
-      <div class="settingsTitle">
-        Ayarlar
-      </div>
-
-      <div class="settingsHeaderSpacer"></div>
-
-    </div>
-
-
-    <div class="settingsBody">
-
-      <div class="settingsGroup">
-
-        <div class="settingsGroupTitle">
-          ASA
-        </div>
-
-        <div class="settingsCard">
-
-          <button
-            class="settingsRow"
-            id="voiceSettingsButton"
-            type="button"
-          >
-
-            <span class="settingsRowIcon">
-              ♫
-            </span>
-
-            <span class="settingsRowContent">
-
-              <span class="settingsRowTitle">
-                Ses
-              </span>
-
-              <span
-                class="settingsRowValue"
-                id="currentVoiceValue"
-              >
-                Marin
-              </span>
-
-            </span>
-
-            <span class="settingsChevron">
-              ›
-            </span>
-
-          </button>
-
-
-          <button
-            class="settingsRow"
-            id="themeSettingsButton"
-            type="button"
-          >
-
-            <span class="settingsRowIcon">
-              ◐
-            </span>
-
-            <span class="settingsRowContent">
-
-              <span class="settingsRowTitle">
-                Tema
-              </span>
-
-              <span
-                class="settingsRowValue"
-                id="currentThemeValue"
-              >
-                Siyah · Mor
-              </span>
-
-            </span>
-
-            <span class="settingsChevron">
-              ›
-            </span>
-
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <div class="settingsGroup">
-
-        <div class="settingsGroupTitle">
-          UYGULAMA
-        </div>
-
-        <div class="settingsCard">
-
-          <button
-            class="settingsRow"
-            id="memorySettingsButton"
-            type="button"
-          >
-
-            <span class="settingsRowIcon">
-              ◉
-            </span>
-
-            <span class="settingsRowContent">
-
-              <span class="settingsRowTitle">
-                Hafıza
-              </span>
-
-              <span class="settingsRowValue">
-                ASA'nın kalıcı hafızası
-              </span>
-
-            </span>
-
-            <span class="settingsChevron">
-              ›
-            </span>
-
-          </button>
-
-
-          <button
-            class="settingsRow"
-            id="chatsSettingsButton"
-            type="button"
-          >
-
-            <span class="settingsRowIcon">
-              ≡
-            </span>
-
-            <span class="settingsRowContent">
-
-              <span class="settingsRowTitle">
-                Sohbetler
-              </span>
-
-              <span class="settingsRowValue">
-                Kayıtlı konuşmalar
-              </span>
-
-            </span>
-
-            <span class="settingsChevron">
-              ›
-            </span>
-
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <div class="settingsFooter">
-        ASA · Alperen'in kişisel yapay zeka asistanı
-      </div>
 
     </div>
 
@@ -2439,33 +2345,30 @@ button{
   id="voiceSettingsModal"
 >
 
-  <div class="optionsModalBox">
+  <div class="modal">
 
-    <div class="optionHeader">
+    <h2>
+      ASA'nın Sesi
+    </h2>
+
+    <p class="modalSubtitle">
+      Sesli sohbet sırasında ASA'nın kullanacağı sesi seç.
+    </p>
+
+    <div
+      class="settingsList"
+      id="voiceOptions"
+    ></div>
+
+    <div class="modalButtons">
 
       <button
-        class="optionBack"
+        class="modalButton"
         id="voiceSettingsClose"
         type="button"
       >
-        ‹ Ayarlar
+        Geri
       </button>
-
-      <div class="optionTitle">
-        Ses
-      </div>
-
-      <div class="optionSpacer"></div>
-
-    </div>
-
-
-    <div class="optionBody">
-
-      <div
-        class="optionCard"
-        id="voiceOptions"
-      ></div>
 
     </div>
 
@@ -2483,33 +2386,30 @@ button{
   id="themeSettingsModal"
 >
 
-  <div class="optionsModalBox">
+  <div class="modal">
 
-    <div class="optionHeader">
+    <h2>
+      ASA Teması
+    </h2>
+
+    <p class="modalSubtitle">
+      ASA'nın görünümünü ve vurgu rengini seç.
+    </p>
+
+    <div
+      class="settingsList"
+      id="themeOptions"
+    ></div>
+
+    <div class="modalButtons">
 
       <button
-        class="optionBack"
+        class="modalButton"
         id="themeSettingsClose"
         type="button"
       >
-        ‹ Ayarlar
+        Geri
       </button>
-
-      <div class="optionTitle">
-        Tema
-      </div>
-
-      <div class="optionSpacer"></div>
-
-    </div>
-
-
-    <div class="optionBody">
-
-      <div
-        class="optionCard"
-        id="themeOptions"
-      ></div>
 
     </div>
 
@@ -2570,13 +2470,19 @@ button{
       type="button"
       aria-label="Mikrofon"
     >
+
       <span class="voiceIcon"></span>
+
     </button>
 
   </div>
 
 </section>
 
+
+<!-- =======================================================
+     REMOTE AUDIO
+======================================================= -->
 
 <audio
   id="remoteAudio"
@@ -2585,22 +2491,21 @@ button{
 ></audio>
 
 
+<!-- =======================================================
+     MAIN FRONTEND
+======================================================= -->
+
 <script>
 
 "use strict";
-
-/* =========================================================
-   ASA FRONTEND
-   Realtime kodu burada YOK.
-   Realtime ayrı /realtime.js dosyasından çalışacak.
-========================================================= */
 
 
 /* =========================================================
    CONSTANTS
 ========================================================= */
 
-const API_URL = "/api/chat";
+const API_URL =
+  "/api/chat";
 
 const STORAGE_KEY =
   "asa_conversations_v5";
@@ -2617,32 +2522,47 @@ const SETTINGS_KEY =
 ========================================================= */
 
 let conversationId =
-  localStorage.getItem(ACTIVE_KEY) ||
+  localStorage.getItem(
+    ACTIVE_KEY
+  ) ||
   createId();
 
 let messages = [];
 
 let selectedFiles = [];
 
-let selectedConversationId = null;
+let selectedConversationId =
+  null;
+
 
 let settings = {
+
   voice:
     localStorage.getItem(
       "asa_voice_v5"
-    ) || "marin",
+    ) ||
+    localStorage.getItem(
+      "asa_voice_v4"
+    ) ||
+    "marin",
 
   theme:
     localStorage.getItem(
       "asa_theme_v5"
-    ) || "purple"
+    ) ||
+    "purple"
+
 };
 
 
 /*
-  realtime.js bunu kullanacak.
+  realtime.js localStorage üzerinden
+  v5 ayarını okuyabildiği için
+  ayrıca global olarak da açıyoruz.
 */
-window.settings = settings;
+
+window.settings =
+  settings;
 
 
 /* =========================================================
@@ -2653,30 +2573,35 @@ const THEMES = {
 
   purple:{
     name:"Siyah · Mor",
+    description:"ASA'nın klasik mor görünümü",
     accent:"#a331ff",
     accent2:"#c13cff"
   },
 
   red:{
     name:"Siyah · Kırmızı",
+    description:"Daha güçlü kırmızı vurgu",
     accent:"#ff315d",
     accent2:"#ff5578"
   },
 
   blue:{
     name:"Siyah · Mavi",
+    description:"Soğuk ve modern mavi",
     accent:"#287cff",
     accent2:"#4e9aff"
   },
 
   green:{
     name:"Siyah · Yeşil",
+    description:"Canlı yeşil vurgu",
     accent:"#19c985",
     accent2:"#39e8a0"
   },
 
   night:{
     name:"Gece",
+    description:"Daha sakin gece tonu",
     accent:"#7f8cff",
     accent2:"#9ca5ff"
   }
@@ -2734,52 +2659,84 @@ const VOICES = [
 ========================================================= */
 
 const chat =
-  document.getElementById("chat");
+  document.getElementById(
+    "chat"
+  );
 
 const input =
-  document.getElementById("messageInput");
+  document.getElementById(
+    "messageInput"
+  );
 
 const sendButton =
-  document.getElementById("sendButton");
+  document.getElementById(
+    "sendButton"
+  );
 
 const sidebar =
-  document.getElementById("sidebar");
+  document.getElementById(
+    "sidebar"
+  );
 
 const overlay =
-  document.getElementById("overlay");
+  document.getElementById(
+    "overlay"
+  );
 
 const chatList =
-  document.getElementById("chatList");
+  document.getElementById(
+    "chatList"
+  );
 
 const contextMenu =
-  document.getElementById("contextMenu");
+  document.getElementById(
+    "contextMenu"
+  );
 
 const renameModal =
-  document.getElementById("renameModal");
+  document.getElementById(
+    "renameModal"
+  );
 
 const renameInput =
-  document.getElementById("renameInput");
+  document.getElementById(
+    "renameInput"
+  );
 
 const deleteModal =
-  document.getElementById("deleteModal");
+  document.getElementById(
+    "deleteModal"
+  );
 
 const sheetOverlay =
-  document.getElementById("sheetOverlay");
+  document.getElementById(
+    "sheetOverlay"
+  );
 
 const selectedPreview =
-  document.getElementById("selectedPreview");
+  document.getElementById(
+    "selectedPreview"
+  );
 
 const photoInput =
-  document.getElementById("photoInput");
+  document.getElementById(
+    "photoInput"
+  );
 
 const cameraInput =
-  document.getElementById("cameraInput");
+  document.getElementById(
+    "cameraInput"
+  );
 
 const fileInput =
-  document.getElementById("fileInput");
+  document.getElementById(
+    "fileInput"
+  );
 
 const settingsModal =
-  document.getElementById("settingsModal");
+  document.getElementById(
+    "settingsModal"
+  );
 
 const voiceSettingsModal =
   document.getElementById(
@@ -2801,14 +2758,14 @@ const themeOptions =
     "themeOptions"
   );
 
-const currentVoiceValue =
+const currentVoiceDescription =
   document.getElementById(
-    "currentVoiceValue"
+    "currentVoiceDescription"
   );
 
-const currentThemeValue =
+const currentThemeDescription =
   document.getElementById(
-    "currentThemeValue"
+    "currentThemeDescription"
   );
 
 
@@ -2834,7 +2791,9 @@ function saveSettings(){
 
   localStorage.setItem(
     SETTINGS_KEY,
-    JSON.stringify(settings)
+    JSON.stringify(
+      settings
+    )
   );
 
   localStorage.setItem(
@@ -2847,7 +2806,8 @@ function saveSettings(){
     settings.theme
   );
 
-  window.settings = settings;
+  window.settings =
+    settings;
 
 }
 
@@ -2915,6 +2875,7 @@ function dateLabel(timestamp){
     yesterday.getDate() - 1
   );
 
+
   if(
     date.toDateString() ===
     today.toDateString()
@@ -2924,6 +2885,7 @@ function dateLabel(timestamp){
 
   }
 
+
   if(
     date.toDateString() ===
     yesterday.toDateString()
@@ -2932,6 +2894,7 @@ function dateLabel(timestamp){
     return "DÜN";
 
   }
+
 
   return date
     .toLocaleDateString(
@@ -2953,21 +2916,31 @@ function generateTitle(text){
       .replace(/\s+/g," ")
       .trim();
 
+
   if(!title){
     return "Yeni Sohbet";
   }
 
-  title =
-    title.replace(/[?!.]+$/,"");
 
-  if(title.length > 38){
+  title =
+    title.replace(
+      /[?!.]+$/,
+      ""
+    );
+
+
+  if(
+    title.length > 38
+  ){
 
     title =
       title
         .slice(0,38)
-        .trim() + "…";
+        .trim() +
+      "…";
 
   }
+
 
   return (
     title.charAt(0).toUpperCase() +
@@ -2984,8 +2957,11 @@ function generateTitle(text){
 function applyTheme(){
 
   const theme =
-    THEMES[settings.theme] ||
+    THEMES[
+      settings.theme
+    ] ||
     THEMES.purple;
+
 
   document.documentElement
     .style
@@ -2994,6 +2970,7 @@ function applyTheme(){
       theme.accent
     );
 
+
   document.documentElement
     .style
     .setProperty(
@@ -3001,8 +2978,17 @@ function applyTheme(){
       theme.accent2
     );
 
-  currentThemeValue.textContent =
-    theme.name;
+
+  if(
+    currentThemeDescription
+  ){
+
+    currentThemeDescription
+      .textContent =
+      theme.name;
+
+  }
+
 
   saveSettings();
 
@@ -3018,12 +3004,14 @@ function ensureChat(title){
   const chats =
     loadChats();
 
+
   let item =
     chats.find(
       x =>
         x.id ===
         conversationId
     );
+
 
   if(!item){
 
@@ -3045,12 +3033,16 @@ function ensureChat(title){
 
     };
 
-    chats.unshift(item);
+
+    chats.unshift(
+      item
+    );
 
   }else{
 
     item.updatedAt =
       Date.now();
+
 
     if(
       title &&
@@ -3065,7 +3057,11 @@ function ensureChat(title){
 
   }
 
-  saveChats(chats);
+
+  saveChats(
+    chats
+  );
+
 
   return item;
 
@@ -3086,7 +3082,10 @@ function renderChatList(){
           a.updatedAt
       );
 
-  chatList.innerHTML = "";
+
+  chatList.innerHTML =
+    "";
+
 
   if(!chats.length){
 
@@ -3100,59 +3099,73 @@ function renderChatList(){
 
   }
 
+
   const groups = {};
 
-  chats.forEach(item => {
 
-    const key =
-      new Date(
-        item.updatedAt
-      ).toDateString();
+  chats.forEach(
+    item => {
 
-    if(!groups[key]){
-      groups[key] = [];
+      const key =
+        new Date(
+          item.updatedAt
+        ).toDateString();
+
+
+      if(!groups[key]){
+        groups[key] = [];
+      }
+
+
+      groups[key].push(
+        item
+      );
+
     }
-
-    groups[key].push(item);
-
-  });
+  );
 
 
-  Object.entries(groups)
-    .forEach(
-      ([key,items]) => {
+  Object.entries(
+    groups
+  ).forEach(
+    ([key,items]) => {
 
-        const group =
-          document.createElement(
-            "div"
-          );
+      const group =
+        document.createElement(
+          "div"
+        );
 
-        group.className =
-          "historyGroup";
-
-
-        const date =
-          document.createElement(
-            "div"
-          );
-
-        date.className =
-          "historyDate";
-
-        date.textContent =
-          dateLabel(
-            items[0].updatedAt
-          );
-
-        group.appendChild(date);
+      group.className =
+        "historyGroup";
 
 
-        items.forEach(item => {
+      const date =
+        document.createElement(
+          "div"
+        );
+
+      date.className =
+        "historyDate";
+
+      date.textContent =
+        dateLabel(
+          items[0].updatedAt
+        );
+
+
+      group.appendChild(
+        date
+      );
+
+
+      items.forEach(
+        item => {
 
           const row =
             document.createElement(
               "div"
             );
+
 
           row.className =
             "historyItem" +
@@ -3205,9 +3218,17 @@ function renderChatList(){
             "•••";
 
 
-          row.appendChild(title);
-          row.appendChild(time);
-          row.appendChild(more);
+          row.appendChild(
+            title
+          );
+
+          row.appendChild(
+            time
+          );
+
+          row.appendChild(
+            more
+          );
 
 
           row.addEventListener(
@@ -3224,6 +3245,7 @@ function renderChatList(){
 
               }
 
+
               openConversation(
                 item.id
               );
@@ -3238,24 +3260,30 @@ function renderChatList(){
 
               event.stopPropagation();
 
+
               selectedConversationId =
                 item.id;
 
+
               const rect =
-                more
-                  .getBoundingClientRect();
+                more.getBoundingClientRect();
+
 
               contextMenu.style.left =
                 Math.max(
                   10,
                   rect.left - 175
-                ) + "px";
+                ) +
+                "px";
+
 
               contextMenu.style.top =
                 Math.min(
                   window.innerHeight - 120,
                   rect.bottom + 6
-                ) + "px";
+                ) +
+                "px";
+
 
               contextMenu.classList.add(
                 "open"
@@ -3265,15 +3293,20 @@ function renderChatList(){
           );
 
 
-          group.appendChild(row);
+          group.appendChild(
+            row
+          );
 
-        });
+        }
+      );
 
 
-        chatList.appendChild(group);
+      chatList.appendChild(
+        group
+      );
 
-      }
-    );
+    }
+  );
 
 }
 
@@ -3349,20 +3382,27 @@ function newConversation(){
   conversationId =
     createId();
 
+
   localStorage.setItem(
     ACTIVE_KEY,
     conversationId
   );
 
+
   messages = [];
 
   selectedFiles = [];
 
+
   updatePreview();
 
-  input.value = "";
+
+  input.value =
+    "";
+
 
   showEmpty();
+
 
   renderChatList();
 
@@ -3378,6 +3418,7 @@ document
     () => {
 
       newConversation();
+
       closeMenu();
 
     }
@@ -3388,21 +3429,29 @@ document
    OPEN CHAT
 ========================================================= */
 
-async function openConversation(id){
+async function openConversation(
+  id
+){
 
   conversationId =
     id;
+
 
   localStorage.setItem(
     ACTIVE_KEY,
     id
   );
 
+
   closeMenu();
 
-  chat.innerHTML = "";
+
+  chat.innerHTML =
+    "";
+
 
   addTyping();
+
 
   try{
 
@@ -3428,6 +3477,7 @@ async function openConversation(id){
 
     const data =
       await response.json();
+
 
     removeTyping();
 
@@ -3463,6 +3513,7 @@ async function openConversation(id){
 
     showEmpty();
 
+
     console.error(
       "ASA HISTORY:",
       error
@@ -3470,13 +3521,14 @@ async function openConversation(id){
 
   }
 
+
   renderChatList();
 
 }
 
 
 /* =========================================================
-   CONTEXT
+   CONTEXT MENU
 ========================================================= */
 
 document.addEventListener(
@@ -3521,25 +3573,31 @@ document
             selectedConversationId
         );
 
+
       if(!item){
         return;
       }
 
+
       renameInput.value =
         item.title;
+
 
       contextMenu.classList.remove(
         "open"
       );
 
+
       renameModal.classList.add(
         "open"
       );
+
 
       setTimeout(
         () => {
 
           renameInput.focus();
+
           renameInput.select();
 
         },
@@ -3577,12 +3635,15 @@ document
       const title =
         renameInput.value.trim();
 
+
       if(!title){
         return;
       }
 
+
       const chats =
         loadChats();
+
 
       const item =
         chats.find(
@@ -3590,6 +3651,7 @@ document
             x.id ===
             selectedConversationId
         );
+
 
       if(item){
 
@@ -3599,13 +3661,17 @@ document
         item.updatedAt =
           Date.now();
 
-        saveChats(chats);
+        saveChats(
+          chats
+        );
 
       }
+
 
       renameModal.classList.remove(
         "open"
       );
+
 
       renderChatList();
 
@@ -3623,6 +3689,7 @@ renameInput.addEventListener(
     ){
 
       event.preventDefault();
+
 
       document
         .getElementById(
@@ -3655,9 +3722,11 @@ document
             selectedConversationId
         );
 
+
       if(!item){
         return;
       }
+
 
       document
         .getElementById(
@@ -3666,9 +3735,11 @@ document
         .textContent =
         `"${item.title}" sohbeti silinecek.`;
 
+
       contextMenu.classList.remove(
         "open"
       );
+
 
       deleteModal.classList.add(
         "open"
@@ -3757,12 +3828,15 @@ document
         conversationId =
           createId();
 
+
         localStorage.setItem(
           ACTIVE_KEY,
           conversationId
         );
 
+
         messages = [];
+
 
         showEmpty();
 
@@ -3799,52 +3873,67 @@ async function sendMessage(){
     true;
 
 
-  const files =
-    await prepareFiles();
-
-
-  input.value = "";
-
-
-  const title =
-    text ||
-    files[0]?.name ||
-    "Görsel";
-
-
-  ensureChat(title);
-
-
-  const userMessage = {
-
-    role:"user",
-
-    content:text,
-
-    attachments:
-      files.map(
-        file => ({
-          name:file.name,
-          type:file.type,
-          size:file.size,
-          dataUrl:file.dataUrl
-        })
-      )
-
-  };
-
-
-  messages.push(
-    userMessage
-  );
-
-
-  renderMessages();
-
-  addTyping();
-
-
   try{
+
+    const files =
+      await prepareFiles();
+
+
+    input.value =
+      "";
+
+
+    const title =
+      text ||
+      files[0]?.name ||
+      "Görsel";
+
+
+    ensureChat(
+      title
+    );
+
+
+    const userMessage = {
+
+      role:
+        "user",
+
+      content:
+        text,
+
+      attachments:
+        files.map(
+          file => ({
+
+            name:
+              file.name,
+
+            type:
+              file.type,
+
+            size:
+              file.size,
+
+            dataUrl:
+              file.dataUrl
+
+          })
+        )
+
+    };
+
+
+    messages.push(
+      userMessage
+    );
+
+
+    renderMessages();
+
+
+    addTyping();
+
 
     const response =
       await fetch(
@@ -3859,11 +3948,13 @@ async function sendMessage(){
 
           body:
             JSON.stringify({
+
               conversationId,
 
               messages:[
                 userMessage
               ]
+
             })
         }
       );
@@ -3901,28 +3992,38 @@ async function sendMessage(){
     }else{
 
       messages.push({
-        role:"assistant",
+
+        role:
+          "assistant",
+
         content:
-          data.answer || ""
+          data.answer ||
+          ""
+
       });
 
     }
 
 
-    selectedFiles = [];
+    selectedFiles =
+      [];
+
 
     updatePreview();
 
+
     ensureChat();
+
 
     renderMessages();
 
-    renderChatList();
 
+    renderChatList();
 
   }catch(error){
 
     removeTyping();
+
 
     console.error(
       "ASA CHAT:",
@@ -3932,7 +4033,8 @@ async function sendMessage(){
 
     messages.push({
 
-      role:"assistant",
+      role:
+        "assistant",
 
       content:
         "ASA'ya bağlanırken bir sorun oluştu. Birazdan tekrar deneyelim."
@@ -4039,9 +4141,11 @@ sheetOverlay.addEventListener(
 );
 
 
-/* =========================================================
-   FILE PICKERS
-========================================================= */
+/*
+  iPhone Safari için input.click()
+  doğrudan kullanıcı hareketinin
+  içinde çağrılıyor.
+*/
 
 document
   .getElementById(
@@ -4097,11 +4201,13 @@ photoInput.addEventListener(
 
     addFiles(
       Array.from(
-        event.target.files || []
+        event.target.files ||
+        []
       )
     );
 
-    event.target.value = "";
+    event.target.value =
+      "";
 
   }
 );
@@ -4113,11 +4219,13 @@ cameraInput.addEventListener(
 
     addFiles(
       Array.from(
-        event.target.files || []
+        event.target.files ||
+        []
       )
     );
 
-    event.target.value = "";
+    event.target.value =
+      "";
 
   }
 );
@@ -4129,11 +4237,13 @@ fileInput.addEventListener(
 
     addFiles(
       Array.from(
-        event.target.files || []
+        event.target.files ||
+        []
       )
     );
 
-    event.target.value = "";
+    event.target.value =
+      "";
 
   }
 );
@@ -4145,15 +4255,22 @@ fileInput.addEventListener(
 
 function addFiles(files){
 
-  if(!files.length){
+  if(
+    !files.length
+  ){
+
     return;
+
   }
+
 
   selectedFiles.push(
     ...files
   );
 
+
   updatePreview();
+
 
   input.focus();
 
@@ -4165,8 +4282,10 @@ function updatePreview(){
   selectedPreview.innerHTML =
     "";
 
+
   if(
-    selectedFiles.length === 0
+    selectedFiles.length ===
+    0
   ){
 
     selectedPreview.hidden =
@@ -4189,6 +4308,7 @@ function updatePreview(){
           "div"
         );
 
+
       item.className =
         "previewItem";
 
@@ -4205,10 +4325,17 @@ function updatePreview(){
             "img"
           );
 
+
         image.src =
           URL.createObjectURL(
             file
           );
+
+
+        image.alt =
+          file.name ||
+          "Görsel";
+
 
         item.appendChild(
           image
@@ -4225,6 +4352,9 @@ function updatePreview(){
         item.style.justifyContent =
           "center";
 
+        item.style.fontSize =
+          "25px";
+
         item.textContent =
           "📄";
 
@@ -4235,6 +4365,7 @@ function updatePreview(){
         document.createElement(
           "button"
         );
+
 
       remove.className =
         "previewRemove";
@@ -4265,6 +4396,7 @@ function updatePreview(){
         remove
       );
 
+
       selectedPreview.appendChild(
         item
       );
@@ -4283,13 +4415,20 @@ function fileToDataURL(file){
       const reader =
         new FileReader();
 
+
       reader.onload =
-        () => resolve(
-          reader.result
-        );
+        () =>
+          resolve(
+            reader.result
+          );
+
 
       reader.onerror =
-        () => resolve(null);
+        () =>
+          resolve(
+            null
+          );
+
 
       reader.readAsDataURL(
         file
@@ -4305,6 +4444,7 @@ async function prepareFiles(){
 
   const result = [];
 
+
   for(
     const file of selectedFiles
   ){
@@ -4314,16 +4454,24 @@ async function prepareFiles(){
         file
       );
 
+
     result.push({
 
-      name:file.name,
-      type:file.type,
-      size:file.size,
+      name:
+        file.name,
+
+      type:
+        file.type,
+
+      size:
+        file.size,
+
       dataUrl
 
     });
 
   }
+
 
   return result;
 
@@ -4336,7 +4484,9 @@ async function prepareFiles(){
 
 function escapeHtml(text){
 
-  return String(text || "")
+  return String(
+    text || ""
+  )
     .replaceAll(
       "&",
       "&amp;"
@@ -4364,7 +4514,9 @@ function escapeHtml(text){
 function formatAnswer(text){
 
   let result =
-    escapeHtml(text);
+    escapeHtml(
+      text
+    );
 
 
   result =
@@ -4399,7 +4551,9 @@ function renderMessages(){
     "";
 
 
-  if(!messages.length){
+  if(
+    !messages.length
+  ){
 
     showEmpty();
 
@@ -4412,8 +4566,10 @@ function renderMessages(){
     message => {
 
       if(
-        message.role !== "user" &&
-        message.role !== "assistant"
+        message.role !==
+          "user" &&
+        message.role !==
+          "assistant"
       ){
 
         return;
@@ -4425,6 +4581,7 @@ function renderMessages(){
         document.createElement(
           "div"
         );
+
 
       row.className =
         "message " +
@@ -4440,6 +4597,7 @@ function renderMessages(){
         document.createElement(
           "div"
         );
+
 
       bubble.className =
         "bubble";
@@ -4458,7 +4616,8 @@ function renderMessages(){
 
           <div class="assistantText">
             ${formatAnswer(
-              message.content || ""
+              message.content ||
+              ""
             )}
           </div>
 
@@ -4489,15 +4648,19 @@ function renderMessages(){
                   "img"
                 );
 
+
               image.className =
                 "messageImage";
+
 
               image.src =
                 attachment.dataUrl;
 
+
               image.alt =
                 attachment.name ||
                 "Görsel";
+
 
               bubble.appendChild(
                 image
@@ -4509,15 +4672,19 @@ function renderMessages(){
         );
 
 
-        if(message.content){
+        if(
+          message.content
+        ){
 
           const text =
             document.createElement(
               "div"
             );
 
+
           text.textContent =
             message.content;
+
 
           bubble.appendChild(
             text
@@ -4531,6 +4698,7 @@ function renderMessages(){
       row.appendChild(
         bubble
       );
+
 
       chat.appendChild(
         row
@@ -4578,8 +4746,10 @@ function addTyping(){
       "div"
     );
 
+
   row.className =
     "message assistant";
+
 
   row.id =
     "typing";
@@ -4645,39 +4815,67 @@ function scrollBottom(){
    SETTINGS
 ========================================================= */
 
-function openSettings(){
-
-  closeMenu();
-
-  currentVoiceValue.textContent =
-    VOICES.find(
-      voice =>
-        voice[0] ===
-        settings.voice
-    )?.[1] ||
-    settings.voice;
-
-  currentThemeValue.textContent =
-    THEMES[
-      settings.theme
-    ]?.name ||
-    "Siyah · Mor";
-
-  settingsModal.classList.add(
-    "open"
-  );
-
-}
-
-
 document
   .getElementById(
     "settingsMenuButton"
   )
   .addEventListener(
     "click",
-    openSettings
+    () => {
+
+      closeMenu();
+
+      updateSettingsDescriptions();
+
+      settingsModal.classList.add(
+        "open"
+      );
+
+    }
   );
+
+
+function updateSettingsDescriptions(){
+
+  const voice =
+    VOICES.find(
+      item =>
+        item[0] ===
+        settings.voice
+    );
+
+
+  if(
+    currentVoiceDescription
+  ){
+
+    currentVoiceDescription
+      .textContent =
+      voice
+        ? `${voice[1]} · ${voice[2]}`
+        : "ASA'nın konuşma sesi";
+
+  }
+
+
+  const theme =
+    THEMES[
+      settings.theme
+    ] ||
+    THEMES.purple;
+
+
+  if(
+    currentThemeDescription
+  ){
+
+    currentThemeDescription
+      .textContent =
+      theme.name;
+
+  }
+
+}
 
 
 document
@@ -4708,7 +4906,9 @@ document
         "open"
       );
 
+
       renderVoiceOptions();
+
 
       voiceSettingsModal.classList.add(
         "open"
@@ -4730,7 +4930,9 @@ document
         "open"
       );
 
+
       renderThemeOptions();
+
 
       themeSettingsModal.classList.add(
         "open"
@@ -4752,7 +4954,13 @@ document
         "open"
       );
 
-      openSettings();
+
+      updateSettingsDescriptions();
+
+
+      settingsModal.classList.add(
+        "open"
+      );
 
     }
   );
@@ -4770,7 +4978,13 @@ document
         "open"
       );
 
-      openSettings();
+
+      updateSettingsDescriptions();
+
+
+      settingsModal.classList.add(
+        "open"
+      );
 
     }
   );
@@ -4790,13 +5004,16 @@ function renderVoiceOptions(){
           "button"
         );
 
+
       button.className =
         "settingOption" +
         (
-          settings.voice === id
+          settings.voice ===
+          id
             ? " active"
             : ""
         );
+
 
       button.type =
         "button";
@@ -4804,21 +5021,31 @@ function renderVoiceOptions(){
 
       button.innerHTML = `
 
-        <span>
+        <span class="settingMain">
 
-          <span class="settingName">
-            ${name}
+          <span class="settingIcon">
+            ◉
           </span>
 
-          <small class="settingDescription">
-            ${description}
-          </small>
+          <span>
+
+            <span class="settingName">
+              ${name}
+            </span>
+
+            <small class="settingDescription">
+              ${description}
+            </small>
+
+          </span>
 
         </span>
 
-        <span class="settingCheck">
-          ✓
-        </span>
+        ${
+          settings.voice === id
+            ? `<span class="settingCheck">✓</span>`
+            : `<span class="settingArrow">›</span>`
+        }
 
       `;
 
@@ -4830,12 +5057,14 @@ function renderVoiceOptions(){
           settings.voice =
             id;
 
+
           saveSettings();
 
-          currentVoiceValue.textContent =
-            name;
 
           renderVoiceOptions();
+
+
+          updateSettingsDescriptions();
 
         }
       );
@@ -4857,28 +5086,38 @@ function renderThemeOptions(){
     "";
 
 
-  Object.entries(THEMES)
-    .forEach(
-      ([id,theme]) => {
+  Object.entries(
+    THEMES
+  ).forEach(
+    ([id,theme]) => {
 
-        const button =
-          document.createElement(
-            "button"
-          );
-
-        button.className =
-          "settingOption" +
-          (
-            settings.theme === id
-              ? " active"
-              : ""
-          );
-
-        button.type =
-          "button";
+      const button =
+        document.createElement(
+          "button"
+        );
 
 
-        button.innerHTML = `
+      button.className =
+        "settingOption" +
+        (
+          settings.theme ===
+          id
+            ? " active"
+            : ""
+        );
+
+
+      button.type =
+        "button";
+
+
+      button.innerHTML = `
+
+        <span class="settingMain">
+
+          <span class="settingIcon">
+            ◐
+          </span>
 
           <span>
 
@@ -4886,45 +5125,55 @@ function renderThemeOptions(){
               ${theme.name}
             </span>
 
+            <small class="settingDescription">
+              ${theme.description}
+            </small>
+
           </span>
 
-          <span class="settingCheck">
-            ✓
-          </span>
+        </span>
 
-        `;
+        ${
+          settings.theme === id
+            ? `<span class="settingCheck">✓</span>`
+            : `<span class="settingArrow">›</span>`
+        }
 
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            settings.theme =
-              id;
-
-            applyTheme();
-
-            currentThemeValue.textContent =
-              theme.name;
-
-            renderThemeOptions();
-
-          }
-        );
+      `;
 
 
-        themeOptions.appendChild(
-          button
-        );
+      button.addEventListener(
+        "click",
+        () => {
 
-      }
-    );
+          settings.theme =
+            id;
+
+
+          applyTheme();
+
+
+          renderThemeOptions();
+
+
+          updateSettingsDescriptions();
+
+        }
+      );
+
+
+      themeOptions.appendChild(
+        button
+      );
+
+    }
+  );
 
 }
 
 
 /* =========================================================
-   MEMORY / CHAT SETTINGS
+   MEMORY
 ========================================================= */
 
 document
@@ -4945,25 +5194,9 @@ document
   );
 
 
-document
-  .getElementById(
-    "memorySettingsButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      settingsModal.classList.remove(
-        "open"
-      );
-
-      alert(
-        "ASA'nın kalıcı hafızası Redis üzerinde çalışıyor."
-      );
-
-    }
-  );
-
+/* =========================================================
+   SHOW CHATS
+========================================================= */
 
 document
   .getElementById(
@@ -4974,24 +5207,6 @@ document
     () => {
 
       renderChatList();
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "chatsSettingsButton"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      settingsModal.classList.remove(
-        "open"
-      );
-
-      openMenu();
 
     }
   );
@@ -5033,6 +5248,42 @@ document
 
 
 /* =========================================================
+   ESC / BACKDROP
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      closeSheet();
+
+      contextMenu.classList.remove(
+        "open"
+      );
+
+      document
+        .querySelectorAll(
+          ".modalOverlay.open"
+        )
+        .forEach(
+          modal =>
+            modal.classList.remove(
+              "open"
+            )
+        );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
    INITIALIZATION
 ========================================================= */
 
@@ -5041,6 +5292,8 @@ applyTheme();
 renderVoiceOptions();
 
 renderThemeOptions();
+
+updateSettingsDescriptions();
 
 renderChatList();
 
@@ -5063,17 +5316,39 @@ if(existingChat){
 
 }
 
+
+/* =========================================================
+   REALTIME
+========================================================= */
+
+/*
+  ÖNEMLİ:
+
+  Realtime kodu artık burada YOK.
+
+  Ayrı realtime.js dosyası:
+  - mikrofon
+  - WebRTC
+  - OpenAI Realtime
+  - voice mode
+  - remote audio
+  işlemlerini yönetiyor.
+
+  Bu script yalnızca realtime.js'yi yükler.
+*/
+
 </script>
 
 
 <!-- =======================================================
-     REALTIME
-     TEK REALTIME DOSYASI
+     REALTIME JS
 ======================================================= -->
 
 <script
   src="/realtime.js"
+  defer
 ></script>
+
 
 </body>
 </html>
